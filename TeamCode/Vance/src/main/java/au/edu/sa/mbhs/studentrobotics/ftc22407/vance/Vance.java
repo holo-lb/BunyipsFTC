@@ -160,7 +160,7 @@ public class Vance extends RobotConfig {
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
 
-        // TODO: tune from ManualFeedforwardTuner
+        // TODO: tune from ManualFeedbackTuner
         driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
                 .setTrackWidthTicks(7670.3069265030135)
@@ -168,6 +168,7 @@ public class Vance extends RobotConfig {
         motionProfile = new MotionProfile.Builder()
                 .setKv(0.00036598312090223767)
                 .setKs(1.0174842402300985)
+                .setKa(0.00005)
                 .build();
         mecanumGains = new MecanumGains.Builder()
                 .build();
