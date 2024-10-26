@@ -46,22 +46,22 @@ public class CellphoneMotuh extends BunyipsOpMode {
     @Override
     protected void onInit() {
         phone.init();
-        phone.dummy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        phone.dummy.setRunToPositionController(new ProfiledPIDController(kP, 0, 0, new TrapezoidProfile.Constraints(mVelo, mAccel)));
-        phone.dummy.getEncoder().setAccelLowPassGain(ACC_LP_GAIN);
+        phone.dummyMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        phone.dummyMotor.setRunToPositionController(new ProfiledPIDController(kP, 0, 0, new TrapezoidProfile.Constraints(mVelo, mAccel)));
+        phone.dummyMotor.getEncoder().setAccelLowPassGain(ACC_LP_GAIN);
         t.setMsTransmissionInterval(10);
     }
 
     @Override
     protected void activeLoop() {
-        phone.dummy.setDirection(DIRECTION);
-        phone.dummy.setTargetPosition(SETPOINT);
-        phone.dummy.setPower(1);
+        phone.dummyMotor.setDirection(DIRECTION);
+        phone.dummyMotor.setTargetPosition(SETPOINT);
+        phone.dummyMotor.setPower(1);
 
-        t.addData("power", phone.dummy.getPower());
+        t.addData("power", phone.dummyMotor.getPower());
         t.addData("setpoint", SETPOINT);
-        t.addData("pos", phone.dummy.getCurrentPosition());
-        t.addData("velo", phone.dummy.getVelocity());
-        t.addData("accel", phone.dummy.getAcceleration());
+        t.addData("pos", phone.dummyMotor.getCurrentPosition());
+        t.addData("velo", phone.dummyMotor.getVelocity());
+        t.addData("accel", phone.dummyMotor.getAcceleration());
     }
 }

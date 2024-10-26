@@ -1,5 +1,29 @@
 package au.edu.sa.mbhs.studentrobotics.cellphone.components;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.AngularVelConstraint;
+import com.acmerobotics.roadrunner.DualNum;
+import com.acmerobotics.roadrunner.MinVelConstraint;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Pose2dDual;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.ProfileParams;
+import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.Time;
+import com.acmerobotics.roadrunner.TimeTrajectory;
+import com.acmerobotics.roadrunner.TimeTurn;
+import com.acmerobotics.roadrunner.TrajectoryBuilderParams;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.acmerobotics.roadrunner.TurnConstraints;
+import com.acmerobotics.roadrunner.Twist2dDual;
+import com.acmerobotics.roadrunner.Vector2dDual;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
@@ -14,10 +38,19 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import java.util.Arrays;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.Localizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Accumulator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.RoadRunnerDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.Constants;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 
 /**
  * Cellphone
@@ -34,7 +67,11 @@ public class CellphoneConfig extends RobotConfig {
     /**
      * Dummy motor, not a real device
      */
-    public Motor dummy;
+    public Motor dummyMotor;
+    /**
+     * Dummy drive, not a real drive
+     */
+    public RoadRunnerDrive dummyDrive;
 
     @Override
     protected void onRuntime() {
@@ -42,9 +79,147 @@ public class CellphoneConfig extends RobotConfig {
         cameraF = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.FRONT);
 
         DummyMotor m = new DummyMotor();
-        dummy = new Motor(new DcMotorImpl(m, -1));
+        dummyMotor = new Motor(new DcMotorImpl(m, -1));
+
+        dummyDrive = new DummyHDrive();
 
         BunyipsOpMode.ifRunning(o -> o.onActiveLoop(m::update));
+    }
+
+
+    private static class DummyHDrive implements RoadRunnerDrive {
+        private PoseVelocity2d target = Geometry.zeroVel();
+
+        private Localizer localizer = new Localizer() {
+            private Rotation2d lastHeading;
+            @NonNull
+            @Override
+            public Twist2dDual<Time> update() {
+                lastHeading = accumulator.getPose().heading;
+                return new Twist2dDual<>(
+                        Vector2dDual.constant(target.linearVel.times(30 * BunyipsOpMode.getInstance().timer.deltaTime().in(Seconds)), 2),
+                        DualNum.constant(accumulator.getPose().heading.minus(lastHeading) + target.angVel * 3 * BunyipsOpMode.getInstance().timer.deltaTime().in(Seconds), 2)
+                );
+            }
+        };
+
+        private Accumulator accumulator = new Accumulator();
+
+        private class Turn implements Action {
+            private final TimeTurn t;
+            private ElapsedTime timer;
+
+            public Turn(TimeTurn timeTurn) {
+                t = timeTurn;
+            }
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (timer == null)
+                    timer = new ElapsedTime();
+                if (timer.seconds() >= t.duration)
+                    return false;
+                Pose2dDual<Time> txWorldTarget = t.get(timer.seconds());
+                setPose(txWorldTarget.value());
+                periodic();
+                return true;
+            }
+        }
+
+        private class Trajectory implements Action {
+            private final TimeTrajectory t;
+            private ElapsedTime timer;
+
+            public Trajectory(TimeTrajectory timeTrajectory) {
+                t = timeTrajectory;
+            }
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (timer == null)
+                    timer = new ElapsedTime();
+                if (timer.seconds() >= t.duration)
+                    return false;
+                Pose2dDual<Time> txWorldTarget = t.get(timer.seconds());
+                setPose(txWorldTarget.value());
+                periodic();
+                return true;
+            }
+        }
+
+        @NonNull
+        @Override
+        public Constants getConstants() {
+            return new Constants(
+                    new DriveModel.Builder().build(),
+                    new MotionProfile.Builder().build(),
+                    Turn::new,
+                    Trajectory::new,
+                    new TrajectoryBuilderParams(
+                            1.0e-6,
+                            new ProfileParams(
+                                    0.25, 0.1, 1.0e-2
+                            )
+                    ),
+                    0,
+                    new TurnConstraints(3, -3, 3),
+                    new MinVelConstraint(Arrays.asList(new TranslationalVelConstraint(30), new AngularVelConstraint(3))),
+                    new ProfileAccelConstraint(-30, 30)
+            );
+        }
+
+        @Override
+        public void periodic() {
+            accumulator.accumulate(localizer.update());
+        }
+
+        @NonNull
+        @Override
+        public RoadRunnerDrive withLocalizer(@NonNull Localizer localizer) {
+            this.localizer = localizer;
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public Localizer getLocalizer() {
+            return localizer;
+        }
+
+        @NonNull
+        @Override
+        public RoadRunnerDrive withAccumulator(@NonNull Accumulator accumulator) {
+            this.accumulator = accumulator;
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public Accumulator getAccumulator() {
+            return accumulator;
+        }
+
+        @Override
+        public void setPower(@NonNull PoseVelocity2d target) {
+            this.target = target;
+        }
+
+        @Nullable
+        @Override
+        public Pose2d getPose() {
+            return accumulator.getPose();
+        }
+
+        @Override
+        public void setPose(@NonNull Pose2d newPose) {
+            accumulator.setPose(newPose);
+        }
+
+        @Nullable
+        @Override
+        public PoseVelocity2d getVelocity() {
+            return accumulator.getVelocity();
+        }
     }
 
     @SuppressWarnings({"all", "deprecation"})
