@@ -86,9 +86,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 
         verticalArm.setDefaultTask(verticalArm.tasks.control(() -> -gamepad2.lsy));
         horizontalArm.setDefaultTask(horizontalArm.tasks.control(() -> -gamepad2.rsy));
-        drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false)
-                    .withTranslationalPID(0.1, 0, 0)
-                    .withRotationalPID(1, 0, 0.0001));
+        drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false));
     }
 
     @Override
