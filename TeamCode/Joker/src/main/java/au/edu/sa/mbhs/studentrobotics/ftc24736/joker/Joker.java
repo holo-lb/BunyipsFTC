@@ -154,6 +154,9 @@ public class Joker extends RobotConfig {
                 .withBottomSwitch(intakeInStop)
                 .withTopSwitch(intakeOutStop)
                 .enableUserSetpointControl(() -> 8)
+                // TODO: map limit switch
+//                .map(handoverPoint, 100)
+                // TODO: power clamps are not the best strategy, switch to full user setpoint control
                 .withPowerClamps(INTAKE_ARM_LOWER_POWER_CLAMP, INTAKE_ARM_UPPER_POWER_CLAMP);
         drive = new SimpleMecanumDrive(frontLeft, backLeft, backRight, frontRight);
         lift = new HoldableActuator(liftMotor)
