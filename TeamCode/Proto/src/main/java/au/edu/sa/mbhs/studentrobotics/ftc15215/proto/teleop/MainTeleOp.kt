@@ -1,11 +1,11 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.Companion.rising
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 
 /**
