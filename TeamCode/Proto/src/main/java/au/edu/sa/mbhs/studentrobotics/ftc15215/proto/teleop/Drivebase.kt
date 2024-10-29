@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 /**
  * Drivebase and localizer only TeleOp with auto-lock.
  */
-@TeleOp(name = "Drivebase Control and Localizer Auto-Lock")
+@TeleOp(name = "Drivebase Control")
 class Drivebase : CommandBasedBunyipsOpMode() {
     private val robot = Proto()
 

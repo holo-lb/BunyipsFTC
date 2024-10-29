@@ -7,12 +7,14 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.defa
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 /**
  * Primary TeleOp for Proto.
  *
  * @author Lucas Bubner, 2024
  */
+@TeleOp(name = "Main TeleOp")
 class MainTeleOp : CommandBasedBunyipsOpMode() {
     private val robot = Proto()
 
