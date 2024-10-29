@@ -1,5 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -10,7 +11,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -21,7 +25,24 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
  *
  * @author Lachlan Paul, 2024
  */
+@Config
 public class Vance extends RobotConfig {
+    // TODO: convert subsystems into RobotConfig components
+
+    // TODO: tune these
+    /**
+     * Vertical arm kP
+     */
+    public static double va_kP = 0.35;
+    /**
+     * Vertical arm kD
+     */
+    public static double va_kD = 0.0001;
+    /**
+     * Vertical arm kG
+     */
+    public static double va_kG = 0.1;
+
     /**
      * Internally mounted on I2C C0 "imu"
      */
@@ -65,7 +86,7 @@ public class Vance extends RobotConfig {
     /**
      * Expansion 1: va
      */
-    public DcMotorEx verticalArm;
+    public Motor verticalArm;
 
     /**
      * Expansion 0: ha
@@ -148,7 +169,13 @@ public class Vance extends RobotConfig {
         dwright = getHardware("fl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         dwx = getHardware("bl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        verticalArm = getHardware("va", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        verticalArm = getHardware("va", Motor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            // kF is just our kG term and since the other terms are 0 we can just call it kF
+            PIDFController pidf = new PIDFController(va_kP, 0, va_kD, va_kG);
+            d.setRunToPositionController(pidf);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pidf.setCoefficients(va_kP, 0.0, va_kD, va_kG)));
+        });
         horizontalArm = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         leftClaw = getHardware("lc", Servo.class);
@@ -160,17 +187,20 @@ public class Vance extends RobotConfig {
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
 
-        // TODO: tune from LateralRampLogger and ManualFeedbackTuner
         driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
+                .setLateralInPerTick(0.001498916323279902)
                 .setTrackWidthTicks(7670.3069265030135)
                 .build();
         motionProfile = new MotionProfile.Builder()
-                .setKv(0.00036598312090223767)
-                .setKs(1.0174842402300985)
-                .setKa(0.00005)
+                .setKv(0.00035)
+                .setKs(1)
+                .setKa(0.00007)
                 .build();
         mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(2)
+                .setLateralGain(2)
+                .setHeadingGain(4)
                 .build();
         localiserParams = new ThreeWheelLocalizer.Params.Builder()
                 .setPar0YTicks(-1274.4310945248199)
