@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.PIDFFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
@@ -180,7 +180,9 @@ public class Vance extends RobotConfig {
 
         verticalArm = getHardware("va", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            PIDFFController controller = new PIDFFController(new PIDController(va_kP, va_kI, va_kD), new ElevatorFeedforward(0.0, va_kG, va_kV), d.getEncoder());
+            PIDController pid = new PIDController(va_kP, va_kI, va_kD);
+            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, va_kV, 0, d::getVelocity, d::getAcceleration);
+            CompositeController controller = pid.compose(ff, Double::sum);
             d.setRunToPositionController(controller);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> controller.setCoefficients(va_kP, va_kI, va_kD, 0.0, 0.0, va_kG, va_kV, 0.0)));
         });
