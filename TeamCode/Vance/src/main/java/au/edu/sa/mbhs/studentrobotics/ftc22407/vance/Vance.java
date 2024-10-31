@@ -13,7 +13,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.PIDFFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -29,15 +31,22 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 public class Vance extends RobotConfig {
     // TODO: convert subsystems into RobotConfig components
 
-    // TODO: tune these
     /**
      * Vertical arm kP
      */
     public static double va_kP = 0.35;
     /**
+     * Vertical arm kI
+     */
+    public static double va_kI = 0;
+    /**
      * Vertical arm kD
      */
     public static double va_kD = 0.0001;
+    /**
+     * Vertical arm kV
+     */
+    public static double va_kV = 0.0001;
     /**
      * Vertical arm kG
      */
@@ -171,10 +180,9 @@ public class Vance extends RobotConfig {
 
         verticalArm = getHardware("va", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            // kF is just our kG term and since the other terms are 0 we can just call it kF
-            PIDFController pidf = new PIDFController(va_kP, 0, va_kD, va_kG);
-            d.setRunToPositionController(pidf);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pidf.setCoefficients(va_kP, 0.0, va_kD, va_kG)));
+            PIDFFController controller = new PIDFFController(new PIDController(va_kP, va_kI, va_kD), new ElevatorFeedforward(0.0, va_kG, va_kV), d.getEncoder());
+            d.setRunToPositionController(controller);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> controller.setCoefficients(va_kP, va_kI, va_kD, 0.0, 0.0, va_kG, va_kV, 0.0)));
         });
         horizontalArm = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
