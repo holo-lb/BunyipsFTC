@@ -22,7 +22,7 @@ public class DriveTest extends BunyipsOpMode {
 
                 .build();
         robot.drive
-                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu));
+                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu.get()));
         webcam = new Vision(robot.camera);
         AprilTag at = new AprilTag();
         webcam.init(at);

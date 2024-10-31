@@ -10,7 +10,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
-import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.components.GoToHandoverPoint;
 
 @Autonomous(name = "Autonomous")
 public class Auto extends AutonomousBunyipsOpMode {
@@ -23,11 +22,11 @@ public class Auto extends AutonomousBunyipsOpMode {
 
                 .build();
         robot.drive
-                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu));
+                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu.get()));
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-        addTask(new GoToHandoverPoint(robot.lift, robot.handoverPoint));
+        addTask(robot.lift.tasks.goTo(robot.handoverPoint));
     }
 }

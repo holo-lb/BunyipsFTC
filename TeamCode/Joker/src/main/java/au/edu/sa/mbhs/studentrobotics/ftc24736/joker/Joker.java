@@ -1,11 +1,12 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -14,9 +15,13 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 @Config
 public class Joker extends RobotConfig {
@@ -85,7 +90,7 @@ public class Joker extends RobotConfig {
     /**
      * Internally connected
      */
-    public IMU imu;
+    public LazyImu imu;
 
     /**
      * Intake Arm HoldableActuator
@@ -94,7 +99,7 @@ public class Joker extends RobotConfig {
     /**
      * 4-Wheels SimpleMecanumDrive
      */
-    public SimpleMecanumDrive drive;
+    public MecanumDrive drive;
     /**
      * Outtake Lift HoldableActuator
      */
@@ -146,21 +151,39 @@ public class Joker extends RobotConfig {
         intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         handoverPoint = getHardware("handoverPoint", TouchSensor.class);
         camera = getHardware("webcam", WebcamName.class);
-        imu = getHardware("imu", IMU.class,
-                (d) -> d.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD))));
+        imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
                 .withTopSwitch(intakeOutStop)
-                .enableUserSetpointControl(() -> 8)
-                // TODO: map limit switch
-//                .map(handoverPoint, 100)
-                // TODO: power clamps are not the best strategy, switch to full user setpoint control
-                .withPowerClamps(INTAKE_ARM_LOWER_POWER_CLAMP, INTAKE_ARM_UPPER_POWER_CLAMP);
-        drive = new SimpleMecanumDrive(frontLeft, backLeft, backRight, frontRight);
+                .enableUserSetpointControl(() -> 4);
+
+        DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick(123.5 / 6454.75)
+                .setLateralInPerTick(125 / 5090.25)
+                .setTrackWidthTicks(1562.8653888336344)
+                .build();
+        MotionProfile motionProfile = new MotionProfile.Builder()
+                .setKv(0.004)
+                .setKs(1.2071095031375727)
+                .setKa(0.001)
+                .build();
+        MecanumGains mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(2)
+                .setHeadingGain(3)
+                .setLateralGain(2)
+                .build();
+
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, frontLeft, backLeft, backRight, frontRight, imu, hardwareMap.voltageSensor);
+        MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
+        localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        localizer.leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        localizer.rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        localizer.rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         lift = new HoldableActuator(liftMotor)
                 .withBottomSwitch(liftBotStop)
+                .map(handoverPoint, 1500)
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
                         LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT);
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.RED);
