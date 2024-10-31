@@ -1,7 +1,5 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.teleop;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -21,7 +19,7 @@ public class VancePID extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
         ac = new HoldableActuator(robot.verticalArm);
-        ac.enableUserSetpointControl(() -> 100 * timer.deltaTime().in(Seconds));
+        ac.enableUserSetpointControl((dt) -> 100 * dt);
     }
 
     @Override

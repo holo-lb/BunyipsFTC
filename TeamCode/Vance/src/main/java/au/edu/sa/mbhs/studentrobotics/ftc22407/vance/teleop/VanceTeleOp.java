@@ -55,7 +55,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .withName("Drive");
         verticalArm = new HoldableActuator(robot.verticalArm)
                 .withPowerClamps(-0.5, 0.5)
-                .enableUserSetpointControl(() -> 100 * timer.deltaTime().in(Seconds))
+                .enableUserSetpointControl((dt) -> 100 * dt)
                 .withName("Vertical Arm");
         horizontalArm = new HoldableActuator(robot.horizontalArm)
                 .withPowerClamps(-0.5, 0.5)

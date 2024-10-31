@@ -157,7 +157,7 @@ public class Joker extends RobotConfig {
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
                 .withTopSwitch(intakeOutStop)
-                .enableUserSetpointControl(() -> 4);
+                .enableUserSetpointControl((dt) -> 4);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(123.5 / 6454.75)
