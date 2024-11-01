@@ -1,6 +1,9 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
@@ -27,7 +30,7 @@ class Proto : RobotConfig() {
     /**
      * Non-subsystem hardware instances.
      */
-    val hw: Hardware = Hardware()
+    val hw = Hardware()
 
     /**
      * RoadRunner Mecanum Drive with Two-Wheel Localization.
@@ -59,33 +62,39 @@ class Proto : RobotConfig() {
         hw.imu = getLazyImu(
             orientationOnRobot = RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
             )
         )
         hw.fl = getHardware("fl", DcMotorEx::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
         }
         hw.bl = getHardware("bl", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.REVERSE
+            it.direction = DcMotorSimple.Direction.FORWARD
         }
         hw.br = getHardware("br", DcMotorEx::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
         }
         hw.fr = getHardware("fr", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.REVERSE
+            it.direction = DcMotorSimple.Direction.FORWARD
         }
 
         // REV Through Bore Encoders
         hw.pe = getHardware("pe", RawEncoder::class.java) {
-            it.direction = DcMotorSimple.Direction.REVERSE
+            it.direction = DcMotorSimple.Direction.FORWARD
         }
         hw.ppe = getHardware("ppe", RawEncoder::class.java) {
-            it.direction = DcMotorSimple.Direction.FORWARD
+            it.direction = DcMotorSimple.Direction.REVERSE
         }
 
         // End effectors
-        hw.leftClaw = getHardware("lc", Servo::class.java)
-        hw.rightClaw = getHardware("rc", Servo::class.java)
+        hw.leftClaw = getHardware("lc", Servo::class.java) {
+            it.direction = Servo.Direction.REVERSE
+            it.scaleRange(0.0, 0.3)
+        }
+        hw.rightClaw = getHardware("rc", Servo::class.java) {
+            it.direction = Servo.Direction.FORWARD
+            it.scaleRange(0.0, 0.75)
+        }
         hw.clawRotator = getHardware("cr", Servo::class.java) {
             // TODO: clawRotator limits (scale range)
             it.scaleRange(0.0, 1.0)
@@ -101,27 +110,24 @@ class Proto : RobotConfig() {
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
-            .setInPerTick(0.0)
-            .setLateralInPerTick(0.0)
-            .setTrackWidthTicks(0.0)
+            .setDistPerTick(123.5 of Inches, 134005.0)
+            .setLateralInPerTick(0.0007201181372108113)
+            .setTrackWidthTicks(15480.209096658593)
             .build()
         val mp = MotionProfile.Builder()
-            // TODO: constraints and tuning
-            .setKs(0.0)
-            .setKv(0.0)
-            .setKa(0.0)
+            .setMaxWheelVel(40.0 of InchesPerSecond)
+            .setKs(0.93)
+            .setKv(0.00022)
+            .setKa(0.00001)
             .build()
         val mg = MecanumGains.Builder()
-            .setAxialGain(0.0)
-            .setLateralGain(0.0)
-            .setHeadingGain(0.0)
-            .setAxialVelGain(0.0)
-            .setLateralVelGain(0.0)
-            .setHeadingVelGain(0.0)
+            .setAxialGain(2.5)
+            .setLateralGain(2.5)
+            .setHeadingGain(4.0)
             .build()
         val twl = TwoWheelLocalizer.Params.Builder()
-            .setParYTicks(0.0)
-            .setPerpXTicks(0.0)
+            .setParYTicks(-2109.055102501924)
+            .setPerpXTicks(-5279.813561122253)
             .build()
 
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
@@ -165,7 +171,7 @@ class Proto : RobotConfig() {
         var pe: RawEncoder? = null
 
         /**
-         * Control 2: Perpendicular Encoder "ppe"
+         * Control 0: Perpendicular Encoder "ppe"
          */
         var ppe: RawEncoder? = null
 
@@ -175,17 +181,17 @@ class Proto : RobotConfig() {
         var imu: LazyImu? = null
 
         /**
-         * ?: Left Claw "lc"
+         * Control 1: Left Claw "lc"
          */
         var leftClaw: Servo? = null
 
         /**
-         * ?: Right Claw "rc"
+         * Control 0: Right Claw "rc"
          */
         var rightClaw: Servo? = null
 
         /**
-         * ?: Claw Rotator "cr"
+         * Control 2: Claw Rotator "cr"
          */
         var clawRotator: Servo? = null
 
