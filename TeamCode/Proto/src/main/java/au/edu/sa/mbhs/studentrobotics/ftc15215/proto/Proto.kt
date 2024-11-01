@@ -124,15 +124,15 @@ class Proto : RobotConfig() {
             .setPerpXTicks(0.0)
             .build()
 
-        drive = MecanumDrive(dm, mp, mg, hw.fr!!, hw.fl!!, hw.br!!, hw.bl!!, hw.imu!!, hardwareMap.voltageSensor)
-            .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe!!, hw.ppe!!, hw.imu!!.get()))
+        drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
+            .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
-        claws = DualServos(hw.leftClaw!!, hw.rightClaw!!)
-            .withName("Claws")
-        clawRotator = Switch(hw.clawRotator!!)
-            .withName("Claw Rotator")
-        clawLift = HoldableActuator(hw.clawLift!!)
-            .withName("Claw Lift")
+//        claws = DualServos(hw.leftClaw, hw.rightClaw)
+//            .withName("Claws")
+//        clawRotator = Switch(hw.clawRotator)
+//            .withName("Claw Rotator")
+//        clawLift = HoldableActuator(hw.clawLift)
+//            .withName("Claw Lift")
     }
 
     /**

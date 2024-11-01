@@ -12,7 +12,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 class Tuning : RoadRunnerTuningOpMode() {
     override fun getDrive(): RoadRunnerDrive {
         val proto = Proto()
-        proto.init()
+        proto.init(this)
         return proto.drive
     }
 }

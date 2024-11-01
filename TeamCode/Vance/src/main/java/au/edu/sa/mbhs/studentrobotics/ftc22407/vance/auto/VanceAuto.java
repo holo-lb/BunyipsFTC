@@ -11,9 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MessageTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
@@ -28,15 +25,11 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 @Autonomous
 public class VanceAuto extends AutonomousBunyipsOpMode {
     private final Vance robot = new Vance();
-    private MecanumDrive drive;
     private MessageTask waitMessage;
 
     @Override
     protected void onInitialise() {
         robot.init();
-        drive = new MecanumDrive(robot.driveModel, robot.motionProfile, robot.mecanumGains, robot.fl, robot.bl, robot.br, robot.fr, robot.imu, hardwareMap.voltageSensor)
-                .withLocalizer(new ThreeWheelLocalizer(robot.driveModel, robot.localiserParams, robot.dwleft, robot.dwright, robot.dwx))
-                .withAccumulator(new PeriodicIMUAccumulator(robot.imu.get(), Seconds.of(5)));
 
         setOpModes(
                 StartingConfiguration.redLeft().tile(2),
@@ -53,7 +46,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.require();
 
-        drive.setPose(startingPosition.toFieldPose());
+        robot.drive.setPose(startingPosition.toFieldPose());
 
         // We need to wait for other robots when we're far away from the basket, so we use a message task to delay our cross-country road trip
         if (startingPosition.isRight()) {
@@ -67,12 +60,12 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         //  Might not be able to test fully until after room renos and the new field arrives.
         if (startingPosition.isRed()) {
             if (startingPosition.isLeft()) {
-                drive.setPose(new Vector2d(-1.46, -2.71), FieldTiles, 90, Degrees);
+                robot.drive.setPose(new Vector2d(-1.46, -2.71), FieldTiles, 90, Degrees);
             } else { // always right
-                drive.setPose(new Vector2d(1.56, -2.70), FieldTiles, 90, Degrees);
+                robot.drive.setPose(new Vector2d(1.56, -2.70), FieldTiles, 90, Degrees);
             }
 
-            drive.makeTrajectory()
+            robot.drive.makeTrajectory()
                     .splineTo(new Vector2d(1.47, -2.14), FieldTiles, 99.06, Degrees)
                     .splineTo(new Vector2d(-0.95, -1.56), FieldTiles, 168.05, Degrees)
                     // todo: arm
@@ -80,12 +73,12 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
                     .addTask();
         } else {  // always blue
             if (startingPosition.isLeft()) {
-                drive.setPose(new Vector2d(1.53, 2.66), FieldTiles, 270, Degrees);
+                robot.drive.setPose(new Vector2d(1.53, 2.66), FieldTiles, 270, Degrees);
             } else { // this is always right, isn't that right, Mr Wright?
-                drive.setPose(new Vector2d(-1.50, 2.60), FieldTiles, 270, Degrees);
+                robot.drive.setPose(new Vector2d(-1.50, 2.60), FieldTiles, 270, Degrees);
             }
 
-            drive.makeTrajectory()
+            robot.drive.makeTrajectory()
                     .splineTo(new Vector2d(2.42, 2.39), FieldTiles, 50.00, Degrees)
                     .splineTo(new Vector2d(1.78, 1.63), FieldTiles, 229.80, Degrees)
                     // todo: arm
