@@ -1,5 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.cellphone.debug;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Second;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.Localizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Accumulator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.AprilTagRelocalizingAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dashboard;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
@@ -42,7 +44,7 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
                     DualNum.constant(timer.deltaTime().in(Second), 2));
         }
     };
-    private final Accumulator a = new Accumulator(Geometry.zeroPose());
+    private Accumulator a;
 
     @Override
     protected void onInit() {
@@ -50,16 +52,24 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
         Vision vision = new Vision(config.cameraB);
         AprilTagMetadata meta = new AprilTagMetadata(14, "test", 1.5, new VectorF(0, 0, 0), DistanceUnit.INCH,
                 new QuaternionMaker(0, 0, 0).make());
-        AprilTag aprilTag = new AprilTag((b) -> b.setTagLibrary(new AprilTagLibrary.Builder().setAllowOverwrite(true).addTags(AprilTagGameDatabase.getCurrentGameTagLibrary()).addTag(meta).build()));
+        AprilTag aprilTag = new AprilTag((b) -> {
+            b.setTagLibrary(new AprilTagLibrary.Builder().setAllowOverwrite(true).addTags(AprilTagGameDatabase.getCurrentGameTagLibrary()).addTag(meta).build());
+            AprilTag.setCameraPose(b)
+                    .forward(Inches.of(9))
+//                    .left(Inches.of(9))
+//                    .yaw(Degrees.of(90))
+                    .apply();
+            return b;
+        });
         vision.init(aprilTag).start(aprilTag);
         vision.startPreview();
-//        AprilTagPoseEstimator.enable(aprilTag, l).setHeadingEstimate(false);
+        a = new AprilTagRelocalizingAccumulator(aprilTag);
     }
 
     @Override
     protected void activeLoop() {
         a.accumulate(l.update());
-        telemetry.add("pose: %", a.getPose());
+        telemetry.add("pose: %", Geometry.toUserString(a.getPose()));
         telemetry.dashboardFieldOverlay().setStroke("#FF0000");
         telemetry.dashboardFieldOverlay().strokeCircle(a.getPose().position.x, a.getPose().position.y, 1)
                 .strokeCircle(0,0,24);
