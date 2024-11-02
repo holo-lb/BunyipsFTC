@@ -1,6 +1,8 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -165,6 +167,7 @@ public class Joker extends RobotConfig {
                 .setTrackWidthTicks(1562.8653888336344)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
+                .setMaxWheelVel(InchesPerSecond.of(40))
                 .setKv(0.004)
                 .setKs(1.2071095031375727)
                 .setKa(0.001)
