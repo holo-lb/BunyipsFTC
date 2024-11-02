@@ -13,7 +13,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
  *
  * @author Lachlan Paul, 2024
  */
-@TeleOp
+@TeleOp(name = "RoadRunner Tuning")
 public class VanceRoadRunnerTuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override

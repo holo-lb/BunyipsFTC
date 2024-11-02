@@ -24,11 +24,12 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
 
     override fun assignCommands() {
         robot.drive default HolonomicVectorDriveTask(gamepad1, robot.drive)
-        robot.clawLift default robot.clawLift.tasks.control { -gamepad1.lsy.toDouble() }
-        robot.ascent default robot.ascent.tasks.control { -gamepad1.rsy.toDouble() }
-        robot.clawRotator default robot.clawRotator.tasks.controlPosition { gamepad1.rt.toDouble() }
-
-        operator() whenPressed Controls.A run robot.claws.tasks.toggleBoth()
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, robot.drive) finishIf { gamepad1 rising Controls.BACK }
+
+        robot.clawLift default robot.clawLift.tasks.control { -gamepad2.lsy.toDouble() }
+        robot.ascent default robot.ascent.tasks.control { -gamepad2.rsy.toDouble() }
+        robot.clawRotator default robot.clawRotator.tasks.controlPosition { gamepad2.rt.toDouble() }
+        operator() whenPressed Controls.A run robot.claws.tasks.toggleBoth()
+        operator() whenRising (Controls.Analog.RIGHT_TRIGGER to { v -> v == 1.0f }) run robot.claws.tasks.openBoth()
     }
 }

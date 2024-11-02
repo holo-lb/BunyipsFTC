@@ -170,9 +170,9 @@ public class Joker extends RobotConfig {
                 .setKa(0.001)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-                .setAxialGain(2)
-                .setHeadingGain(3)
-                .setLateralGain(2)
+                .setAxialGain(3.5)
+                .setLateralGain(3.5)
+                .setHeadingGain(2)
                 .build();
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, frontLeft, backLeft, backRight, frontRight, imu, hardwareMap.voltageSensor);

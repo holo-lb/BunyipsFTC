@@ -15,7 +15,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PDController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
@@ -39,11 +41,15 @@ public class Vance extends RobotConfig {
     /**
      * Vertical arm kP
      */
-    public static double va_kP = 0.3;
+    public static double va_kP = 0.015;
     /**
-     * Vertical arm kD
+     * Vertical arm kG
      */
-    public static double va_kD = 0.0001;
+    public static double va_kG = 0.3;
+    /**
+     * Vertical arm TPS
+     */
+    public static double va_TPS = 400;
 
     /**
      * Vance hardware
@@ -106,10 +112,13 @@ public class Vance extends RobotConfig {
 
         hw.verticalLift = getHardware("va", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            PIDController pid = new PDController(va_kP, va_kD);
-            d.setRunToPositionController(pid);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pid.setCoefficients(va_kP, 0.0, va_kD, 0.0)));
+            PIDController pid = new PController(va_kP);
+            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, 0.0, 0.0, () -> 0, () -> 0);
+            CompositeController c = pid.compose(ff, Double::sum);
+            d.setRunToPositionController(c);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
         });
+        hw.bottomLimit = getHardware("bottom", TouchSensor.class);
         hw.horizontalLift = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         hw.leftClaw = getHardware("lc", Servo.class);
@@ -135,6 +144,7 @@ public class Vance extends RobotConfig {
                 .setAxialGain(2)
                 .setLateralGain(2)
                 .setHeadingGain(4)
+                .setPathFollowing(true)
                 .build();
         ThreeWheelLocalizer.Params localiserParams = new ThreeWheelLocalizer.Params.Builder()
                 .setPar0YTicks(-1274.4310945248199)
@@ -147,7 +157,8 @@ public class Vance extends RobotConfig {
                 .withAccumulator(new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5)))
                 .withName("Drive");
         verticalLift = new HoldableActuator(hw.verticalLift)
-                .withLowerPowerClamp(-0.3)
+                .withBottomSwitch(hw.bottomLimit)
+                .enableUserSetpointControl((dt) -> dt * va_TPS)
                 .withName("Vertical Arm");
         horizontalLift = new HoldableActuator(hw.horizontalLift)
                 .withPowerClamps(-0.5, 0.5)
@@ -241,7 +252,7 @@ public class Vance extends RobotConfig {
         public RevBlinkinLedDriver lights;
 
         /**
-         * Control Digital 1: Limit Switch "bottom"
+         * Control Digital 1: Limit Switch "bottom" for vertical arm
          */
         public TouchSensor bottomLimit;
     }

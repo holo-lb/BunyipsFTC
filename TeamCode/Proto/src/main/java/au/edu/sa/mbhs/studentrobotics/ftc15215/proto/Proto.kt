@@ -1,10 +1,15 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -78,35 +83,48 @@ class Proto : RobotConfig() {
             it.direction = DcMotorSimple.Direction.FORWARD
         }
 
-        // REV Through Bore Encoders
-        hw.pe = getHardware("pe", RawEncoder::class.java) {
+        // REV Through Bore Encoders attached on ports 0 and 3 with the motors
+        hw.pe = getHardware("fr", RawEncoder::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
         }
-        hw.ppe = getHardware("ppe", RawEncoder::class.java) {
+        hw.ppe = getHardware("br", RawEncoder::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
         }
 
         // End effectors
         hw.leftClaw = getHardware("lc", Servo::class.java) {
             it.direction = Servo.Direction.REVERSE
-            it.scaleRange(0.0, 0.3)
+            it.scaleRange(0.6, 1.0)
         }
         hw.rightClaw = getHardware("rc", Servo::class.java) {
             it.direction = Servo.Direction.FORWARD
-            it.scaleRange(0.0, 0.75)
+            it.scaleRange(0.0, 0.4)
         }
-        hw.clawRotator = getHardware("cr", Servo::class.java) {
-            // TODO: clawRotator limits (scale range)
-            it.scaleRange(0.0, 1.0)
+        hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
+            it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
+            it.direction = Servo.Direction.REVERSE
+            it.scaleRange(0.6, 1.0)
         }
 
-        // TODO: kG and PID
-        hw.clawLift = getHardware("cl", Motor::class.java)
+        hw.clawLift = getHardware("cl", Motor::class.java) {
+            it.direction = DcMotorSimple.Direction.REVERSE
+            val p = PController(Constants.cl_kP)
+            val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
+            val c = p.compose(ff) { a, b -> a + b }
+            it.runToPositionController = c
+            BunyipsOpMode.ifRunning { o -> o.onActiveLoop({ c.setCoefficients(Constants.cl_kP, 0.0, 0.0, 0.0, 0.0, Constants.cl_kG, 0.0, 0.0) }) }
+        }
 
         hw.leftAscent = getHardware("la", Motor::class.java) {
-            // TODO: configuration
+            it.direction = DcMotorSimple.Direction.FORWARD
+            val c = PController(Constants.a_kP)
+            it.runToPositionController = c
+            BunyipsOpMode.ifRunning { o -> o.onActiveLoop({ c.setCoefficients(Constants.a_kP, 0.0, 0.0, 0.0) })}
         }
-        hw.rightAscent = getHardware("ra", Motor::class.java) // child of leftAscent, controller configured in LinkedLift
+        hw.rightAscent = getHardware("ra", Motor::class.java) {
+            // Child of leftAscent, controller configured in LinkedLift
+            it.direction = DcMotorSimple.Direction.REVERSE
+        }
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
@@ -133,12 +151,15 @@ class Proto : RobotConfig() {
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
-//        claws = DualServos(hw.leftClaw, hw.rightClaw)
-//            .withName("Claws")
-//        clawRotator = Switch(hw.clawRotator)
-//            .withName("Claw Rotator")
-//        clawLift = HoldableActuator(hw.clawLift)
-//            .withName("Claw Lift")
+        claws = DualServos(hw.leftClaw, hw.rightClaw)
+            .withName("Claws")
+        clawRotator = Switch(hw.clawRotator)
+            .withName("Claw Rotator")
+        clawLift = HoldableActuator(hw.clawLift)
+            .enableUserSetpointControl { dt -> dt * Constants.cl_TPS }
+            .withName("Claw Lift")
+        ascent = LinkedLift(hw.leftAscent, hw.rightAscent)
+            .withName("Ascender")
     }
 
     /**
@@ -166,12 +187,12 @@ class Proto : RobotConfig() {
         var bl: DcMotorEx? = null
 
         /**
-         * Control 3: Parallel Encoder "pe"
+         * Expansion 3: Parallel Encoder "fr" (on motor)
          */
         var pe: RawEncoder? = null
 
         /**
-         * Control 0: Perpendicular Encoder "ppe"
+         * Expansion 0: Perpendicular Encoder "br" (on motor)
          */
         var ppe: RawEncoder? = null
 
@@ -181,32 +202,32 @@ class Proto : RobotConfig() {
         var imu: LazyImu? = null
 
         /**
-         * Control 1: Left Claw "lc"
+         * Control S1: Left Claw "lc"
          */
         var leftClaw: Servo? = null
 
         /**
-         * Control 0: Right Claw "rc"
+         * Control S0: Right Claw "rc"
          */
         var rightClaw: Servo? = null
 
         /**
-         * Control 2: Claw Rotator "cr"
+         * Control S2: Claw Rotator "cr"
          */
         var clawRotator: Servo? = null
 
         /**
-         * ?: Claw Lift "cl"
+         * Control 1: Claw Lift "cl"
          */
         var clawLift: Motor? = null
 
         /**
-         * ?: Left Ascent "la"
+         * Control 3: Left Ascent "la"
          */
         var leftAscent: Motor? = null
 
         /**
-         * ?: Right Ascent "ra"
+         * Control 0: Right Ascent "ra"
          */
         var rightAscent: Motor? = null
     }

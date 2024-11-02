@@ -2,8 +2,6 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.debug;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile;
@@ -15,8 +13,8 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
  *
  * @author Lucas Bubner, 2024
  */
-@Config
-@TeleOp
+//@Config
+//@TeleOp
 public class VanceTestPF extends BunyipsOpMode {
     /**
      * velocity

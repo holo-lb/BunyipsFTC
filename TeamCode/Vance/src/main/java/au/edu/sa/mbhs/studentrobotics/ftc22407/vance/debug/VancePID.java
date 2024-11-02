@@ -1,6 +1,4 @@
-package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.teleop;
-
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.debug;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
@@ -9,7 +7,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 /**
  * PID Testing
  */
-@TeleOp
+//@TeleOp
 public class VancePID extends BunyipsOpMode {
     private final Vance robot = new Vance();
 

@@ -9,15 +9,17 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
  *
  * @author Lucas Bubner, 2024
  */
-class LinkedLift(private val motor1: Motor, private val motor2: Motor) : HoldableActuator(motor1) {
+class LinkedLift(private val motor1: Motor?, private val motor2: Motor?) : HoldableActuator(motor1) {
     init {
+        require(motor1 != null && motor2 != null)
         motor2.runToPositionController = motor1.runToPositionController
         motor2.zeroPowerBehavior = motor1.zeroPowerBehavior
-        motor2.encoder.reset()
+        motor2.encoder.setKnownPosition(motor1.currentPosition)
     }
 
     override fun periodic() {
         super.periodic()
+        require(motor1 != null && motor2 != null)
         motor2.power = motor1.power
     }
 }
