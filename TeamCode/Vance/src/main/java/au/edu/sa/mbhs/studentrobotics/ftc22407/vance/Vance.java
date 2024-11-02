@@ -144,7 +144,6 @@ public class Vance extends RobotConfig {
                 .setAxialGain(2)
                 .setLateralGain(2)
                 .setHeadingGain(4)
-                .setPathFollowing(true)
                 .build();
         ThreeWheelLocalizer.Params localiserParams = new ThreeWheelLocalizer.Params.Builder()
                 .setPar0YTicks(-1274.4310945248199)
