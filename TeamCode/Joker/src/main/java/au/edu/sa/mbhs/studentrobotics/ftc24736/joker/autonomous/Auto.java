@@ -27,6 +27,6 @@ public class Auto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-        addTask(robot.lift.tasks.goTo(robot.handoverPoint));
+        add(robot.lift.tasks.goTo(robot.handoverPoint));
     }
 }

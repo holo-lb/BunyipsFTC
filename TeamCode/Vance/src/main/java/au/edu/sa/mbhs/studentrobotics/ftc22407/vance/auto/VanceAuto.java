@@ -50,7 +50,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 
         // We need to wait for other robots when we're far away from the basket, so we use a message task to delay our cross-country road trip
         if (startingPosition.isRight()) {
-            addTask(waitMessage);
+            add(waitMessage);
         }
 
         // Vance is a goofy mf(marquee function) so we need to manually set it's pose.
