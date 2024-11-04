@@ -48,7 +48,7 @@ public class CellphoneMotuh extends BunyipsOpMode {
         phone.init();
         phone.dummyMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         phone.dummyMotor.setRunToPositionController(new ProfiledPIDController(kP, 0, 0, new TrapezoidProfile.Constraints(mVelo, mAccel)));
-        phone.dummyMotor.getEncoder().setAccelLowPassGain(ACC_LP_GAIN);
+        phone.dummyMotor.encoder.setAccelLowPassGain(ACC_LP_GAIN);
         t.setMsTransmissionInterval(10);
     }
 

@@ -54,7 +54,7 @@ public class Vance extends RobotConfig {
     /**
      * Vance hardware
      */
-    public Hardware hw = new Hardware();
+    public final Hardware hw = new Hardware();
 
     /**
      * Mecanum drive
