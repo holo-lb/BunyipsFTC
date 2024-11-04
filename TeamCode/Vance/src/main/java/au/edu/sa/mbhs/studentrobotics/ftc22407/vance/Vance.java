@@ -158,6 +158,8 @@ public class Vance extends RobotConfig {
         verticalLift = new HoldableActuator(hw.verticalLift)
                 .withBottomSwitch(hw.bottomLimit)
                 .enableUserSetpointControl((dt) -> dt * va_TPS)
+                .withUpperLimit(900)
+                .withHomingPower(0.3)
                 .withName("Vertical Arm");
         horizontalLift = new HoldableActuator(hw.horizontalLift)
                 .withPowerClamps(-0.5, 0.5)

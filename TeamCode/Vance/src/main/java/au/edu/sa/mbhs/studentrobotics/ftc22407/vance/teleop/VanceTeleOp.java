@@ -55,11 +55,13 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         operator().whenPressed(Controls.X)
-                        .run(robot.claws.tasks.toggleBoth());
+                .run(robot.claws.tasks.toggleBoth());
         operator().whenPressed(Controls.A)
-                        .run(robot.clawRotator.tasks.toggle());
+                .run(robot.clawRotator.tasks.toggle());
         operator().whenPressed(Controls.Y)
-                        .run(robot.basketRotator.tasks.toggle());
+                .run(robot.basketRotator.tasks.toggle());
+        operator().whenPressed(Controls.B)
+                .run(robot.verticalLift.tasks.home());
 
 //        operator().whenPressed(Controls.RIGHT_BUMPER)
 //                .run(new SampleToBasket(verticalLift, horizontalLift, clawRotator, claws));
