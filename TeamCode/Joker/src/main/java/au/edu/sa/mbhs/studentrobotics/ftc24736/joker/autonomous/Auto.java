@@ -28,5 +28,21 @@ public class Auto extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         add(robot.lift.tasks.goTo(robot.handoverPoint));
+
+        /*
+        //MeepMeep path (drops preloaded sample in the basket, then grabs and places 2 more):
+
+        drive.makeTrajectory(new Pose2d(24*1.5, 24*3-Math.sqrt(81*2), Math.toRadians(45)))
+        .strafeTo(new Vector2d(24*2, 24*2), Inches)
+        .waitSeconds(2)
+        .strafeToLinearHeading(new Vector2d(24*2+0.5, 40), Inches, 270, Degrees)
+        .waitSeconds(2)
+        .strafeToLinearHeading(new Vector2d(24*2, 24*2), Inches, 45, Degrees)
+        .waitSeconds(2)
+        .strafeToLinearHeading(new Vector2d(24*2.5-1.5, 40), Inches, 270, Degrees)
+        .waitSeconds(2)
+        .strafeToLinearHeading(new Vector2d(24*2, 24*2), Inches, 45, Degrees)
+        .addTask();
+        */
     }
 }

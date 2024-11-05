@@ -99,7 +99,7 @@ public class Joker extends RobotConfig {
      */
     public HoldableActuator intake;
     /**
-     * 4-Wheels SimpleMecanumDrive
+     * 4-Wheels MecanumDrive
      */
     public MecanumDrive drive;
     /**
@@ -107,7 +107,7 @@ public class Joker extends RobotConfig {
      */
     public HoldableActuator lift;
     /**
-     * Light Strips HoldableActuator
+     * Light Strips BlinkinLights
      */
     public BlinkinLights lights;
 
