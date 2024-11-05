@@ -18,10 +18,10 @@ public class SampleToBasket extends SequentialTaskGroup {
      * Makes sure the claw rotator and arm are in the correct position for sample dropping, if not, move it<br>
      * Drop the sample<br>
      * Move the claw rotator back to the front<br>
-     * @param verticalArm the vertical arm
+     * @param verticalArm   the vertical arm
      * @param horizontalArm the horizontal arm
-     * @param clawRotator the claw rotator
-     * @param claws       the claws
+     * @param clawRotator   the claw rotator
+     * @param claws         the claws
      */
     public SampleToBasket(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, DualServos claws) {
         super(
@@ -29,7 +29,8 @@ public class SampleToBasket extends SequentialTaskGroup {
                 clawRotator.tasks.close(),
                 verticalArm.tasks.home(),
                 clawRotator.tasks.open(),
-                claws.tasks.openBoth()
+                claws.tasks.openBoth(),
+                verticalArm.tasks.goTo(60)  // get the arm up a little bit
         );
     }
 }

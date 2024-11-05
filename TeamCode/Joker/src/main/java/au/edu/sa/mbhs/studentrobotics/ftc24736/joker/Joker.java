@@ -25,6 +25,15 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
+/**
+ * who am i? hmmmm, hm hm hm
+ * im the joker, baby! hm hm hm
+ * im the, f#%@ joker, i make cool jokes, i
+ * AAAAAAAAAAAAAA, AAAAAAAAAAAAAAAA
+ * THE PIANO
+ * IT FELL ON ME
+ * AAAAAAAAAAAAAAAAAAAA
+ */
 @Config
 public class Joker extends RobotConfig {
     /**
