@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
@@ -129,6 +131,7 @@ public class Vance extends RobotConfig {
 
         // Fancy lights
         hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
+        hw.camera = getHardware("webcam", WebcamName.class);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
@@ -256,5 +259,10 @@ public class Vance extends RobotConfig {
          * Control Digital 1: Limit Switch "bottom" for vertical arm
          */
         public TouchSensor bottomLimit;
+
+        /**
+         * Control USB 3.0: Webcam on back
+         */
+        public WebcamName camera;
     }
 }
