@@ -11,6 +11,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerS
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.AprilTagRelocalizingAccumulator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile
@@ -18,6 +19,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.components.LinkedLift
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
@@ -25,6 +28,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.TouchSensor
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -61,6 +66,11 @@ class Proto : RobotConfig() {
      * Linked ascension mechanism for the claw lift.
      */
     lateinit var ascent: LinkedLift
+
+    /**
+     * Backwards camera.
+     */
+    lateinit var backCamera: Vision
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -117,14 +127,17 @@ class Proto : RobotConfig() {
 
         hw.leftAscent = getHardware("la", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.encoder.direction = DcMotorSimple.Direction.REVERSE
             val c = PController(Constants.a_kP)
             it.runToPositionController = c
             BunyipsOpMode.ifRunning { o -> o.onActiveLoop({ c.setCoefficients(Constants.a_kP, 0.0, 0.0, 0.0) })}
         }
         hw.rightAscent = getHardware("ra", Motor::class.java) {
             // Child of leftAscent, controller configured in LinkedLift
-            it.direction = DcMotorSimple.Direction.REVERSE
+            it.direction = DcMotorSimple.Direction.FORWARD
         }
+
+        hw.camera = getHardware("webcam", WebcamName::class.java)
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
@@ -148,14 +161,27 @@ class Proto : RobotConfig() {
             .setPerpXTicks(-5279.813561122253)
             .build()
 
+        val at = AprilTag {
+            AprilTag.setCameraPose(it)
+                .forward(Inches.of(8.0))
+                .right(Inches.one())
+                .apply()
+        }
+        backCamera = Vision(hw.camera)
+            .init(at)
+            .start(at)
+            .flip()
+        backCamera.startPreview()
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
+            .withAccumulator(AprilTagRelocalizingAccumulator(at))
             .withName("Drive")
         claws = DualServos(hw.leftClaw, hw.rightClaw)
             .withName("Claws")
         clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
+            .withBottomSwitch(hw.bottom)
             .enableUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withName("Claw Lift")
         ascent = LinkedLift(hw.leftAscent, hw.rightAscent)
@@ -222,6 +248,11 @@ class Proto : RobotConfig() {
         var clawLift: Motor? = null
 
         /**
+         * Control Digital 1: "bottom" limit for claw lift
+         */
+        var bottom: TouchSensor? = null
+
+        /**
          * Control 3: Left Ascent "la"
          */
         var leftAscent: Motor? = null
@@ -230,5 +261,10 @@ class Proto : RobotConfig() {
          * Control 0: Right Ascent "ra"
          */
         var rightAscent: Motor? = null
+
+        /**
+         * Control USB 3.0: Webcam
+         */
+        var camera: WebcamName? = null
     }
 }
