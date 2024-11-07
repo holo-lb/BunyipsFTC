@@ -131,6 +131,7 @@ class Proto : RobotConfig() {
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
         hw.leftAscent = getHardware("la", Motor::class.java) {
+            // TODO: revamp LinkedLift system
             it.direction = DcMotorSimple.Direction.FORWARD
             it.encoder.direction = DcMotorSimple.Direction.REVERSE
             val c = PController(Constants.a_kP)
