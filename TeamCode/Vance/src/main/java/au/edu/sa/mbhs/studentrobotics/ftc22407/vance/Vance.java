@@ -160,12 +160,14 @@ public class Vance extends RobotConfig {
                 .withName("Drive");
         verticalLift = new HoldableActuator(hw.verticalLift)
                 .withBottomSwitch(hw.bottomLimit)
-                .enableUserSetpointControl((dt) -> dt * va_TPS)
+//                .enableUserSetpointControl((dt) -> dt * va_TPS)
+                .withTolerance(10, true)
                 .withUpperLimit(900)
-                .withHomingPower(0.3)
+                .withHomingPower(0.7)
                 .withName("Vertical Arm");
         horizontalLift = new HoldableActuator(hw.horizontalLift)
                 .withPowerClamps(-0.5, 0.5)
+                .withBottomSwitch(hw.horizontalLimit)
                 .withName("Horizontal Arm");
         clawRotator = new Switch(hw.clawRotator)
                 .withName("Claw Rotator");
@@ -259,6 +261,11 @@ public class Vance extends RobotConfig {
          * Control Digital 1: Limit Switch "bottom" for vertical arm
          */
         public TouchSensor bottomLimit;
+
+        /**
+         * ???: Limit switch "horizontal" for horizontal arm
+         */
+        public TouchSensor horizontalLimit;
 
         /**
          * Control USB 3.0: Webcam on back

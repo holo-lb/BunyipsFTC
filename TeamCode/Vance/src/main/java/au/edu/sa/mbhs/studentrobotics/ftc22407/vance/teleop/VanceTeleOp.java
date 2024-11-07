@@ -14,6 +14,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
+import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.SampleToBasket;
 
 /**
  * TeleOp for Vance
@@ -63,8 +64,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.B)
                 .run(robot.verticalLift.tasks.home());
 
-//        operator().whenPressed(Controls.RIGHT_BUMPER)
-//                .run(new SampleToBasket(verticalLift, horizontalLift, clawRotator, claws));
+        operator().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new SampleToBasket(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.lsy));
         robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.rsy));

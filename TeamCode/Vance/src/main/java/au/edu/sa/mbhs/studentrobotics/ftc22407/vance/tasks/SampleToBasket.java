@@ -21,16 +21,19 @@ public class SampleToBasket extends SequentialTaskGroup {
      * @param verticalArm   the vertical arm
      * @param horizontalArm the horizontal arm
      * @param clawRotator   the claw rotator
+     * @param basketRotator the basket that the sample is placed in
      * @param claws         the claws
      */
-    public SampleToBasket(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, DualServos claws) {
+    public SampleToBasket(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws) {
         super(
                 // TODO: measure correct distance that the claw arm will have to be at for proper placement
                 clawRotator.tasks.close(),
                 verticalArm.tasks.home(),
+                basketRotator.tasks.open(),  // check if this needs to open or close
+                horizontalArm.tasks.home(),
                 clawRotator.tasks.open(),
                 claws.tasks.openBoth(),
-                verticalArm.tasks.goTo(60)  // get the arm up a little bit
+                verticalArm.tasks.goTo(200)  // get the arm up a little bit
         );
     }
 }
