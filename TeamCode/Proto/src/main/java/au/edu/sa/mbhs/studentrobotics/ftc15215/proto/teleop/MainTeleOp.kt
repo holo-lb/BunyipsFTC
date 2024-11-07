@@ -1,6 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToContourTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
@@ -25,6 +26,7 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
     override fun assignCommands() {
         robot.drive default HolonomicVectorDriveTask(gamepad1, robot.drive)
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, robot.drive) finishIf { gamepad1 rising Controls.BACK }
+        driver() whenPressed Controls.RIGHT_BUMPER run AlignToContourTask(gamepad1, robot.drive, robot.ys::getData) finishIf { gamepad1 rising Controls.RIGHT_BUMPER }
 
         robot.clawLift default robot.clawLift.tasks.control { -gamepad2.lsy.toDouble() }
         robot.ascent default robot.ascent.tasks.control { -gamepad2.rsy.toDouble() }

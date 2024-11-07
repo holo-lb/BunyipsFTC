@@ -59,13 +59,13 @@ public class RedTeamProp extends ColourThreshold {
 
     @NonNull
     @Override
-    protected Scalar setLower() {
+    protected Scalar getLowerThreshold() {
         return LOWER;
     }
 
     @NonNull
     @Override
-    protected Scalar setUpper() {
+    protected Scalar getUpperThreshold() {
         return UPPER;
     }
 

@@ -11,7 +11,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerS
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.AprilTagRelocalizingAccumulator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile
@@ -20,7 +19,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.YellowSample
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.components.LinkedLift
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
@@ -68,9 +67,14 @@ class Proto : RobotConfig() {
     lateinit var ascent: LinkedLift
 
     /**
-     * Backwards camera.
+     * Forward camera.
      */
-    lateinit var backCamera: Vision
+    lateinit var camera: Vision
+
+    /**
+     * Yellow sample detector
+     */
+    lateinit var ys: YellowSample
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -161,20 +165,20 @@ class Proto : RobotConfig() {
             .setPerpXTicks(-5279.813561122253)
             .build()
 
-        val at = AprilTag {
-            AprilTag.setCameraPose(it)
-                .forward(Inches.of(8.0))
-                .right(Inches.one())
-                .apply()
-        }
-        backCamera = Vision(hw.camera)
-            .init(at)
-            .start(at)
+//        val at = AprilTag {
+//            AprilTag.setCameraPose(it)
+//                .forward(Inches.of(8.0))
+//                .right(Inches.one())
+//                .apply()
+//        }
+        ys = YellowSample()
+        camera = Vision(hw.camera)
+            .init(ys)
+            .start(ys)
             .flip()
-        backCamera.startPreview()
+        camera.startPreview()
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
-            .withAccumulator(AprilTagRelocalizingAccumulator(at))
             .withName("Drive")
         claws = DualServos(hw.leftClaw, hw.rightClaw)
             .withName("Claws")
