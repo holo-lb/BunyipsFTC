@@ -130,16 +130,10 @@ class Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-        hw.leftAscent = getHardware("la", Motor::class.java) {
-            // TODO: revamp LinkedLift system
+        hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
-            it.encoder.direction = DcMotorSimple.Direction.REVERSE
-            val c = PController(Constants.a_kP)
-            it.runToPositionController = c
-            BunyipsOpMode.ifRunning { o -> o.onActiveLoop({ c.setCoefficients(Constants.a_kP, 0.0, 0.0, 0.0) })}
         }
-        hw.rightAscent = getHardware("ra", Motor::class.java) {
-            // Child of leftAscent, controller configured in LinkedLift
+        hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
         }
 
@@ -190,7 +184,7 @@ class Proto : RobotConfig() {
             .withBottomSwitch(hw.bottom)
             .enableUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withName("Claw Lift")
-        ascent = LinkedLift(hw.leftAscent, hw.rightAscent)
+        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
             .withName("Ascender")
     }
 
@@ -261,12 +255,12 @@ class Proto : RobotConfig() {
         /**
          * Control 3: Left Ascent "la"
          */
-        var leftAscent: Motor? = null
+        var leftAscent: DcMotorEx? = null
 
         /**
          * Control 0: Right Ascent "ra"
          */
-        var rightAscent: Motor? = null
+        var rightAscent: DcMotorEx? = null
 
         /**
          * Control USB 3.0: Webcam

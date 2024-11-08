@@ -1,7 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.components
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
+import com.qualcomm.robotcore.hardware.DcMotorEx
 
 /**
  * Dual version of `HoldableActuator` for the Proto suspension lift.
@@ -9,17 +9,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
  *
  * @author Lucas Bubner, 2024
  */
-class LinkedLift(private val motor1: Motor?, private val motor2: Motor?) : HoldableActuator(motor1) {
-    init {
-        require(motor1 != null && motor2 != null)
-        motor2.runToPositionController = motor1.runToPositionController
-        motor2.zeroPowerBehavior = motor1.zeroPowerBehavior
-        motor2.encoder.setKnownPosition(motor1.currentPosition)
-    }
-
+class LinkedLift(private val motor1: DcMotorEx, private val motor2: DcMotorEx) : HoldableActuator(motor1) {
     override fun periodic() {
         super.periodic()
-        require(motor1 != null && motor2 != null)
         motor2.power = motor1.power
     }
 }

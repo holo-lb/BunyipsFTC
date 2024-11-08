@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 final class Constants {
-    public static double a_kP = 0.01;
     public static double cl_kP = 0.02;
     public static double cl_kG = 0.17;
     public static double cl_TPS = 250;
