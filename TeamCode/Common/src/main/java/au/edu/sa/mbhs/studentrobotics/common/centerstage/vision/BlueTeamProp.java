@@ -38,44 +38,17 @@ public class BlueTeamProp extends ColourThreshold {
      * lower and upper scalars will be based on.
      */
     public BlueTeamProp() {
-        super(ColourSpace.YCrCb);
+        setColourSpace(ColourSpace.YCrCb);
+        setContourAreaMinPercent(() -> MIN);
+        setContourAreaMaxPercent(() -> MAX);
+        setLowerThreshold(() -> LOWER);
+        setUpperThreshold(() -> UPPER);
+        setBoxColour(0xff0000ff);
     }
 
     @NonNull
     @Override
-    public String toString() {
+    public String getId() {
         return "blueteamprop";
-    }
-
-    @Override
-    public double getContourAreaMinPercent() {
-        return MIN;
-    }
-
-    @Override
-    public double getContourAreaMaxPercent() {
-        return MAX;
-    }
-
-    @NonNull
-    @Override
-    protected Scalar getLowerThreshold() {
-        return LOWER;
-    }
-
-    @NonNull
-    @Override
-    protected Scalar getUpperThreshold() {
-        return UPPER;
-    }
-
-    @Override
-    public int getBoxColour() {
-        return 0xff0000ff;
-    }
-
-    @Override
-    public boolean showMaskedInput() {
-        return true;
     }
 }

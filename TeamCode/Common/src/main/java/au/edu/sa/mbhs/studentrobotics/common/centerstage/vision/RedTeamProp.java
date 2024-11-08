@@ -38,44 +38,17 @@ public class RedTeamProp extends ColourThreshold {
      * lower and upper scalars will be based on.
      */
     public RedTeamProp() {
-        super(ColourSpace.YCrCb);
+        setColourSpace(ColourSpace.YCrCb);
+        setContourAreaMinPercent(() -> MIN);
+        setContourAreaMaxPercent(() -> MAX);
+        setLowerThreshold(() -> LOWER);
+        setUpperThreshold(() -> UPPER);
+        setBoxColour(0xffff0000);
     }
 
     @NonNull
     @Override
-    public String toString() {
+    public String getId() {
         return "redteamprop";
-    }
-
-    @Override
-    public double getContourAreaMinPercent() {
-        return MIN;
-    }
-
-    @Override
-    public double getContourAreaMaxPercent() {
-        return MAX;
-    }
-
-    @NonNull
-    @Override
-    protected Scalar getLowerThreshold() {
-        return LOWER;
-    }
-
-    @NonNull
-    @Override
-    protected Scalar getUpperThreshold() {
-        return UPPER;
-    }
-
-    @Override
-    public int getBoxColour() {
-        return 0xffff0000;
-    }
-
-    @Override
-    public boolean showMaskedInput() {
-        return true;
     }
 }
