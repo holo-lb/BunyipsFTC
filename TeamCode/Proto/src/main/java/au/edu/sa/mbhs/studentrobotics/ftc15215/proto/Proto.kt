@@ -121,6 +121,7 @@ class Proto : RobotConfig() {
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
+            // TODO: encoder dir
             it.direction = DcMotorSimple.Direction.REVERSE
             val p = PController(Constants.cl_kP)
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
