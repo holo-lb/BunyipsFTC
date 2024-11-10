@@ -14,6 +14,7 @@ public class TeleOperation extends BunyipsOpMode {
     @Override
     protected void onInit() {
         robot.init();
+        robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
     }
 
     @Override
