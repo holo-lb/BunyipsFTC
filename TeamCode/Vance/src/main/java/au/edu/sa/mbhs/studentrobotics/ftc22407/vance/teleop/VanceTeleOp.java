@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Accumulator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -66,6 +68,9 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                     Task c = robot.drive.getCurrentTask();
                     if (c instanceof HolonomicVectorDriveTask)
                         ((HolonomicVectorDriveTask) c).setHeadingTarget(Degrees.zero());
+                    Accumulator a = robot.drive.getAccumulator();
+                    if (a instanceof PeriodicIMUAccumulator)
+                        ((PeriodicIMUAccumulator) a).setOrigin(Degrees.zero());
                 });
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
