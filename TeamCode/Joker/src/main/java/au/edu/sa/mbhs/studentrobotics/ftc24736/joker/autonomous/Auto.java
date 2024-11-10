@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
@@ -70,13 +69,13 @@ public class Auto extends AutonomousBunyipsOpMode {
                 .build()
                 .with(robot.lift.tasks.goTo(4900)));
 
-        add(new RunTask(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION)));
+        run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
         robot.drive.makeTrajectory(new Pose2d(24*2.25, 24*2.25, Math.toRadians(45)))
                 .strafeTo(new Vector2d(24*2.3, 24*2.3), Inches)
                 //.waitSeconds(0.2)
                 .addTask();
-        add(new RunTask(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION)));
+        run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
 
         add(robot.drive.makeTrajectory(new Pose2d(24*2.3, 24*2.3, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(24*1.5, 24*1.5), Inches, 270, Degrees)

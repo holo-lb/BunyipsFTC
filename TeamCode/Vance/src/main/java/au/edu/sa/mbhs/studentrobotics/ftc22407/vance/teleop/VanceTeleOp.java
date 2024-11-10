@@ -17,18 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.SampleToBasket;
 
 /**
- * TeleOp for Vance
- * <p></p>
- * <b>gamepad1:</b><br>
- * Left Stick X: Strafe<br>
- * Left Stick Y: Forward/Back<br>
- * <p></p>
- * <b>gamepad2:</b><br>
- * Left Stick Y: Vertical Arm<br>
- * Right Stick Y: Horizontal Arm<br>
- * X: Toggle Both Claws<br>
- * A: Toggle Claw Rotator<br>
- * Y: Toggle Basket Rotator<br>
+ * TeleOp for Vance.
  *
  * @author Lachlan Paul, 2024
  */
@@ -57,21 +46,22 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.basketRotator.tasks.toggle());
         operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(robot.verticalLift.tasks.home());
-
-        operator().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new SampleToBasket(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
-        // TODO: autonomousbunyipsopmode addTask runnable
         driver().whenPressed(Controls.A)
                 .run("Zero Yaw", () -> {
                     robot.drive.setPose(new Pose2d(robot.drive.getPose().position, 0));
                     robot.hw.imu.get().resetYaw();
                     Task c = robot.drive.getCurrentTask();
+                    // Have to also zero out the HVDT heading target and IMU accumulator origin otherwise they will
+                    // try to correct for the change in heading.
                     if (c instanceof HolonomicVectorDriveTask)
                         ((HolonomicVectorDriveTask) c).setHeadingTarget(Degrees.zero());
                     Accumulator a = robot.drive.getAccumulator();
                     if (a instanceof PeriodicIMUAccumulator)
                         ((PeriodicIMUAccumulator) a).setOrigin(Degrees.zero());
                 });
+
+        operator().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new SampleToBasket(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
         robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));
