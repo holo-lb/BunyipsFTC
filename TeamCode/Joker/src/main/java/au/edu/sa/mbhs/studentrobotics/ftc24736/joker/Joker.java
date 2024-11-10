@@ -120,8 +120,6 @@ public class Joker extends RobotConfig {
      */
     public BlinkinLights lights;
 
-
-
     public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
 
@@ -150,7 +148,7 @@ public class Joker extends RobotConfig {
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            d.setRunToPositionController(new PIDController(0.02, 0, 0));
+            d.setRunToPositionController(new PIDController(0.01, 0, 0.00001));
         });
         liftMotor = getHardware("liftMotor", DcMotor.class);
         outtakeAlign = getHardware("outtakeAlign", Servo.class);
@@ -187,7 +185,7 @@ public class Joker extends RobotConfig {
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
                 //.withTopSwitch(intakeOutStop)
-                .enableUserSetpointControl((dt) -> 4)
+                .enableUserSetpointControl((dt) -> 8)
                 .withName("intake");
         MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
         localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
