@@ -8,6 +8,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PControlle
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
@@ -24,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.components.LinkedLift
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
@@ -121,7 +123,6 @@ class Proto : RobotConfig() {
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
-            // TODO: encoder dir
             it.direction = DcMotorSimple.Direction.REVERSE
             val p = PController(Constants.cl_kP)
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
@@ -132,10 +133,12 @@ class Proto : RobotConfig() {
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
         hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.FORWARD
+            it.direction = DcMotorSimple.Direction.REVERSE
+            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         }
         hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.FORWARD
+            it.direction = DcMotorSimple.Direction.REVERSE
+            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         }
 
         hw.camera = getHardware("webcam", WebcamName::class.java)
@@ -184,6 +187,8 @@ class Proto : RobotConfig() {
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
             .enableUserSetpointControl { dt -> dt * Constants.cl_TPS }
+            .withMaxSteadyStateTime(10 of Seconds)
+            .withUpperLimit(900)
             .withName("Claw Lift")
         ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
             .withName("Ascender")

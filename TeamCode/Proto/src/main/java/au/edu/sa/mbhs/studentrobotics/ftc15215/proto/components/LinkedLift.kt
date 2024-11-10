@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 class LinkedLift(private val motor1: DcMotorEx, private val motor2: DcMotorEx) : HoldableActuator(motor1) {
     override fun periodic() {
         super.periodic()
+        motor2.targetPosition = motor1.targetPosition
+        motor2.mode = motor1.mode
         motor2.power = motor1.power
     }
 }
