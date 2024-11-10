@@ -1,15 +1,12 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.teleop;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Accumulator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -47,17 +44,10 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(robot.verticalLift.tasks.home());
         driver().whenPressed(Controls.A)
-                .run("Zero Yaw", () -> {
-                    robot.drive.setPose(new Pose2d(robot.drive.getPose().position, 0));
-                    robot.hw.imu.get().resetYaw();
-                    Task c = robot.drive.getCurrentTask();
-                    // Have to also zero out the HVDT heading target and IMU accumulator origin otherwise they will
-                    // try to correct for the change in heading.
-                    if (c instanceof HolonomicVectorDriveTask)
-                        ((HolonomicVectorDriveTask) c).setHeadingTarget(Degrees.zero());
-                    Accumulator a = robot.drive.getAccumulator();
-                    if (a instanceof PeriodicIMUAccumulator)
-                        ((PeriodicIMUAccumulator) a).setOrigin(Degrees.zero());
+                .run("Reset FC Offset", () -> {
+                    Task t = robot.drive.getCurrentTask();
+                    if (t instanceof HolonomicVectorDriveTask)
+                        ((HolonomicVectorDriveTask) t).setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.log()));
                 });
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
