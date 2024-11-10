@@ -38,8 +38,8 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
         @NonNull
         @Override
         public Twist2dDual<Time> update() {
-            return new Twist2dDual<>(Vector2dDual.constant(new Vector2d(12 * timer.deltaTime().in(Second), 12 * timer.deltaTime().in(Second)), 2),
-                    DualNum.constant(timer.deltaTime().in(Second), 2));
+            return new Twist2dDual<>(Vector2dDual.constant(new Vector2d(-gamepad1.lsy * 24 * timer.deltaTime().in(Second), -gamepad1.lsx * 24 * timer.deltaTime().in(Second)), 2),
+                    DualNum.constant(-gamepad1.rsx * 3.14 * timer.deltaTime().in(Second), 2));
         }
     };
 //    private final Localizer l = new NullLocalizer();
@@ -70,8 +70,8 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
         a.accumulate(l.update());
         telemetry.add("pose: %", Geometry.toUserString(a.getPose()));
         telemetry.dashboardFieldOverlay().setStroke("#FF0000");
-        telemetry.dashboardFieldOverlay().strokeCircle(a.getPose().position.x, a.getPose().position.y, 1)
-                .strokeCircle(0,0,24);
+//        telemetry.dashboardFieldOverlay().strokeCircle(a.getPose().position.x, a.getPose().position.y, 1)
+//                .strokeCircle(0,0,24);
         Dashboard.drawRobot(telemetry.dashboardFieldOverlay(), a.getPose());
     }
 

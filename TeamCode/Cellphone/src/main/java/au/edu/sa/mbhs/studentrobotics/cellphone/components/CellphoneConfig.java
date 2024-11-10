@@ -26,7 +26,7 @@ import com.acmerobotics.roadrunner.Twist2dDual;
 import com.acmerobotics.roadrunner.Vector2dDual;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
-import com.qualcomm.robotcore.hardware.DcMotorImpl;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -79,7 +79,7 @@ public class CellphoneConfig extends RobotConfig {
         cameraF = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.FRONT);
 
         DummyMotor m = new DummyMotor();
-        dummyMotor = new Motor(new DcMotorImpl(m, -1));
+        dummyMotor = new Motor(new DcMotorImplEx(m, -1));
 
         dummyDrive = new DummyHDrive();
 
