@@ -1,7 +1,5 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -24,8 +22,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PControlle
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.AprilTagRelocalizingAccumulator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.CompositeAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -35,7 +31,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
@@ -90,10 +85,6 @@ public class Vance extends RobotConfig {
      * Backward camera
      */
     public Vision backVision;
-    /**
-     * AprilTag processor attached to backVision
-     */
-    public AprilTag aprilTag;
 
     @Override
     protected void onRuntime() {
@@ -163,17 +154,14 @@ public class Vance extends RobotConfig {
                 .setPerpXTicks(-3361.673151430961)
                 .build();
 
-        aprilTag = new AprilTag(b -> AprilTag.setCameraPose(b)
-                .backward(Inches.of(10))
-                .yaw(Degrees.of(180))
-                .up(Inches.of(3))
-                .apply());
+//        aprilTag = new AprilTag(b -> AprilTag.setCameraPose(b)
+//                .backward(Inches.of(10))
+//                .yaw(Degrees.of(180))
+//                .up(Inches.of(3))
+//                .apply());
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new ThreeWheelLocalizer(driveModel, localiserParams, hw.dwleft, hw.dwright, hw.dwx))
-                .withAccumulator(new CompositeAccumulator(
-                        new AprilTagRelocalizingAccumulator(aprilTag).setHeadingEstimate(false),
-                        new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5))
-                ))
+                .withAccumulator(new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5)))
                 .withName("Drive");
         verticalLift = new HoldableActuator(hw.verticalLift)
                 .withBottomSwitch(hw.bottomLimit)
@@ -192,8 +180,6 @@ public class Vance extends RobotConfig {
                 .withName("Basket Rotator");
         claws = new DualServos(hw.leftClaw, hw.rightClaw);
         backVision = new Vision(hw.camera);
-        backVision.init(aprilTag);
-        backVision.start(aprilTag);
     }
 
     /**

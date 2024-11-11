@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.SampleToBasket;
@@ -44,7 +44,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new SampleToBasket(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
 
-        HolonomicDriveTask hvdt = new HolonomicDriveTask(gamepad1, robot.drive, () -> FC);
+        HolonomicVectorDriveTask hvdt = new HolonomicVectorDriveTask(gamepad1, robot.drive, () -> FC);
         robot.drive.setDefaultTask(hvdt);
         driver().whenPressed(Controls.A)
                 .run("Reset FC Offset", () -> hvdt.resetFieldCentricOrigin(robot.drive.getPose()));
