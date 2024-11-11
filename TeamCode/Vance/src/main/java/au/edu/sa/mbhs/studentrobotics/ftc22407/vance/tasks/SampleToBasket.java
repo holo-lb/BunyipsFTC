@@ -1,8 +1,11 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 /**
@@ -29,10 +32,12 @@ public class SampleToBasket extends SequentialTaskGroup {
                 // TODO: measure correct distance that the claw arm will have to be at for proper placement
                 clawRotator.tasks.close(),
                 verticalArm.tasks.home(),
-                basketRotator.tasks.open(),  // check if this needs to open or close
-                horizontalArm.tasks.home(),
+                basketRotator.tasks.close(),  // check if this needs to open or close
                 clawRotator.tasks.open(),
+                horizontalArm.tasks.goTo(240),
+                new WaitTask(Seconds.of(1)),
                 claws.tasks.openBoth(),
+                horizontalArm.tasks.goTo(250),
                 verticalArm.tasks.goTo(200)  // get the arm up a little bit
         );
     }

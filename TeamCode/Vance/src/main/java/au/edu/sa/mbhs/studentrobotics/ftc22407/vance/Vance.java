@@ -120,6 +120,7 @@ public class Vance extends RobotConfig {
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
         });
         hw.bottomLimit = getHardware("bottom", TouchSensor.class);
+        hw.horizontalLimit = getHardware("hori", TouchSensor.class);
         hw.horizontalLift = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         hw.leftClaw = getHardware("lc", Servo.class, (d) -> {
@@ -268,7 +269,7 @@ public class Vance extends RobotConfig {
         public TouchSensor bottomLimit;
 
         /**
-         * ???: Limit switch "horizontal" for horizontal arm
+         * hori: Limit switch "horizontal" for horizontal arm
          */
         public TouchSensor horizontalLimit;
 
