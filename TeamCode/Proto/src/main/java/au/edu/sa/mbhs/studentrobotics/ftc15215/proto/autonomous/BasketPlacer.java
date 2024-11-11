@@ -41,7 +41,7 @@ public class BasketPlacer extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(56, 56), Math.PI / 4)
                 .build()
                 .with(robot.clawLift.tasks.goTo(900).withTimeout(Seconds.of(3))));
-        add(robot.clawRotator.tasks.setClipped(0.2));
+        add(robot.clawRotator.tasks.setTo(0.2));
         add(new WaitTask(1, Second));
         add(robot.claws.tasks.openBoth());
     }

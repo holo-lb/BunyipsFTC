@@ -50,7 +50,7 @@ public class TransferSample extends SequentialTaskGroup {
                                 .then(horizontalArm.tasks.home()),
                         verticalArm.tasks.goTo(200)
                                 .withTimeout(Seconds.of(2)),
-                        clawRotator.tasks.setClipped(0.5)
+                        clawRotator.tasks.setTo(0.5)
                 ),
                 clawRotator.tasks.close(),
                 claws.tasks.closeBoth()
