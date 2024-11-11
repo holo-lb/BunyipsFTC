@@ -126,7 +126,7 @@ class Proto : RobotConfig() {
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
             val c = p.compose(ff) { a, b -> a + b }
             it.runToPositionController = c
-            BunyipsOpMode.ifRunning { o -> o.onActiveLoop({ c.setCoefficients(Constants.cl_kP, 0.0, 0.0, 0.0, 0.0, Constants.cl_kG, 0.0, 0.0) }) }
+            BunyipsOpMode.ifRunning { o -> o.onActiveLoop { c.setCoefficients(Constants.cl_kP, 0.0, 0.0, 0.0, 0.0, Constants.cl_kG, 0.0, 0.0) } }
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 

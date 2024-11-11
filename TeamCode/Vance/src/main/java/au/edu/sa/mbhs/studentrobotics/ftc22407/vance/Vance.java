@@ -173,7 +173,9 @@ public class Vance extends RobotConfig {
                 .withName("Vertical Arm");
         horizontalLift = new HoldableActuator(hw.horizontalLift)
                 .withPowerClamps(-0.5, 0.5)
+                .withTolerance(10, true)
                 .withBottomSwitch(hw.horizontalLimit)
+                .withTolerance(7, true)
                 .withName("Horizontal Arm");
         clawRotator = new Switch(hw.clawRotator)
                 .withName("Claw Rotator");
