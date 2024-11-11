@@ -25,9 +25,9 @@ public class TransferSample extends SequentialTaskGroup {
      * 6. Wait for 0.6 seconds<br>
      * 7. Open the claws<br>
      * 8. Wait for 0.3 seconds<br>
-     * 9. Move the horizontal arm to 270 degrees and the vertical arm to 200 degrees, and set the claw rotator to 0.5<br>
-     * 10. Close the claw rotator<br>
-     * 11. Close the claws
+     * 9. Move arms out of the way and retract the horizontal arm, move claw rotator to halfway to not hit the submersible<br>
+     * 10. Close the claw rotator completely<br>
+     * 11. Close the claws for space
      * @param verticalArm   the vertical arm
      * @param horizontalArm the horizontal arm
      * @param clawRotator   the claw rotator

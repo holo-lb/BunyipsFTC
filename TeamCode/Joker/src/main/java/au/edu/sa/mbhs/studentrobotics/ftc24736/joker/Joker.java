@@ -185,7 +185,7 @@ public class Joker extends RobotConfig {
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
                 //.withTopSwitch(intakeOutStop)
-                .enableUserSetpointControl((dt) -> 8)
+                .withUserSetpointControl((dt) -> 8)
                 .withName("intake");
         MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
         localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -197,7 +197,7 @@ public class Joker extends RobotConfig {
                 .map(handoverPoint, 1500)
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
                         LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT)
-                .enableUserSetpointControl((dt) -> 1800 * dt)
+                .withUserSetpointControl((dt) -> 1800 * dt)
 //                .withUpperLimit(4950)
                 .withName("lift");
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.RED)

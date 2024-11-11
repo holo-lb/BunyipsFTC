@@ -6,6 +6,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfi
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -35,7 +36,7 @@ public class CellphoneTestAuto extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
         assert selectedOpMode != null;
         telemetry.log(((StartingConfiguration.Position) selectedOpMode.require()).toFieldPose());
 //        for (int i = 0; i < 100; i++) {

@@ -1,10 +1,8 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PDController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MoveToContourTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
@@ -27,10 +25,8 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
     override fun assignCommands() {
         robot.drive default HolonomicVectorDriveTask(gamepad1, robot.drive)
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, robot.drive) finishIf { gamepad1 rising Controls.BACK }
-        driver() whenPressed Controls.RIGHT_BUMPER run MoveToContourTask(gamepad1, robot.drive, robot.ys::getData)
-            .withPitchTarget(-0.6)
-            .withXController(PDController(0.3, 0.0001))
-            .withRController(PDController(0.4, 0.0001)) finishIf { gamepad1 rising Controls.RIGHT_BUMPER }
+//        driver() whenPressed Controls.RIGHT_BUMPER run AlignToContourTask(gamepad1, robot.drive, yellowSampleDetector)
+//            .withController(PDController(0.4, 0.0001)) finishIf { !gamepad1.rb }
 
         robot.clawLift default robot.clawLift.tasks.control { -gamepad2.lsy.toDouble() }
 //        robot.ascent default robot.ascent.tasks.control { -gamepad2.rsy.toDouble() / 2.0 }

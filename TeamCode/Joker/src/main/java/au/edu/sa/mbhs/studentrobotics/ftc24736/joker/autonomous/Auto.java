@@ -3,6 +3,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.autonomous;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.Pose2d;
@@ -28,7 +29,7 @@ public class Auto extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
         //add(robot.lift.tasks.goTo(robot.handoverPoint));
 
         /*

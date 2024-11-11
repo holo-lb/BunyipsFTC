@@ -20,7 +20,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.YellowSample
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
@@ -70,11 +69,6 @@ class Proto : RobotConfig() {
      * Forward camera.
      */
     lateinit var camera: Vision
-
-    /**
-     * Yellow sample detector
-     */
-    lateinit var ys: YellowSample
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -169,12 +163,7 @@ class Proto : RobotConfig() {
 //                .right(Inches.one())
 //                .apply()
 //        }
-        ys = YellowSample()
         camera = Vision(hw.camera)
-            .init(ys)
-            .start(ys)
-            .flip()
-        camera.startPreview()
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
@@ -184,7 +173,7 @@ class Proto : RobotConfig() {
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
-            .enableUserSetpointControl { dt -> dt * Constants.cl_TPS }
+            .withUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(900)
             .withName("Claw Lift")
