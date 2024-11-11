@@ -21,11 +21,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.YellowSample
-import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.components.LinkedLift
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
@@ -63,10 +61,10 @@ class Proto : RobotConfig() {
      */
     lateinit var clawLift: HoldableActuator
 
-    /**
-     * Linked ascension mechanism for the claw lift.
-     */
-    lateinit var ascent: LinkedLift
+//    /**
+//     * Linked ascension mechanism for the claw lift.
+//     */
+//    lateinit var ascent: LinkedLift
 
     /**
      * Forward camera.
@@ -132,14 +130,14 @@ class Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-        hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.REVERSE
-            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
-        hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
-            it.direction = DcMotorSimple.Direction.REVERSE
-            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
+//        hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
+//            it.direction = DcMotorSimple.Direction.REVERSE
+//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//        }
+//        hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
+//            it.direction = DcMotorSimple.Direction.REVERSE
+//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+//        }
 
         hw.camera = getHardware("webcam", WebcamName::class.java)
 
@@ -190,8 +188,8 @@ class Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(900)
             .withName("Claw Lift")
-        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
-            .withName("Ascender")
+//        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
+//            .withName("Ascender")
     }
 
     /**
@@ -258,15 +256,15 @@ class Proto : RobotConfig() {
          */
         var bottom: TouchSensor? = null
 
-        /**
-         * Control 3: Left Ascent "la"
-         */
-        var leftAscent: DcMotorEx? = null
-
-        /**
-         * Control 0: Right Ascent "ra"
-         */
-        var rightAscent: DcMotorEx? = null
+//        /**
+//         * Control 3: Left Ascent "la"
+//         */
+//        var leftAscent: DcMotorEx? = null
+//
+//        /**
+//         * Control 0: Right Ascent "ra"
+//         */
+//        var rightAscent: DcMotorEx? = null
 
         /**
          * Control USB 3.0: Webcam
