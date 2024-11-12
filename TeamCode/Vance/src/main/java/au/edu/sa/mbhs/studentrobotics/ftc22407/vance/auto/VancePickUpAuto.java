@@ -2,7 +2,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.auto;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTiles;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +18,12 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 
 /**
- * Simple Auto to score pre-loaded elements
+ * Auto that picks up extra scoring elements
  *
  * @author Lachlan Paul, 2024
  */
 @Autonomous
-public class VanceAuto extends AutonomousBunyipsOpMode {
+public class VancePickUpAuto extends AutonomousBunyipsOpMode {
     private final Vance robot = new Vance();
     private MessageTask waitMessage;
 
@@ -59,30 +59,26 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         //  The blue pathing will most likely be almost identical so we won't worry about that till the whole thing is written.
         if (startingPosition.isRed()) {
             if (startingPosition.isLeft()) {
-                robot.drive.setPose(new Vector2d(-1.46, -2.71), FieldTiles, 90, Degrees);
+
             } else { // always right
-                robot.drive.setPose(new Vector2d(1.56, -2.70), FieldTiles, 90, Degrees);
+
             }
 
-            robot.drive.makeTrajectory()
-                    .splineTo(new Vector2d(1.47, -2.14), FieldTiles, 99.06, Degrees)
-                    .splineTo(new Vector2d(-0.95, -1.56), FieldTiles, 168.05, Degrees)
-                    // todo: arm
-                    .splineTo(new Vector2d(-2.45, -2.46), FieldTiles, 230.00, Degrees)
-                    .addTask();
         } else {  // always blue
             if (startingPosition.isLeft()) {
-                robot.drive.setPose(new Vector2d(1.53, 2.66), FieldTiles, 270, Degrees);
-            } else { // this is always right, isn't that right, Mr Wright?
-                robot.drive.setPose(new Vector2d(-1.50, 2.60), FieldTiles, 270, Degrees);
-            }
 
-            robot.drive.makeTrajectory()
-                    .splineTo(new Vector2d(2.42, 2.39), FieldTiles, 50.00, Degrees)
-                    .splineTo(new Vector2d(1.78, 1.63), FieldTiles, 229.80, Degrees)
-                    // todo: arm
-                    .splineTo(new Vector2d(1.09, 0.41), FieldTiles, 240.85, Degrees)
-                    .addTask();
+            } else { // this is always right, isn't that right, Mr Wright?
+                robot.drive.makeTrajectory(new Vector2d(34.91, 61.78), Inches, 270.00, Degrees)
+                        .splineTo(new Vector2d(55.24, 55.48), Inches, 40.00, Degrees)
+                        .strafeToLinearHeading(new Vector2d(48.16, 39.13), Inches, 270.00, Degrees)
+                        .strafeToLinearHeading(new Vector2d(56.44, 50.26), Inches, 58.39, Degrees)
+                        .strafeToLinearHeading(new Vector2d(57.62, 37.33), Inches, 270.00, Degrees)
+                        .strafeToLinearHeading(new Vector2d(58.01, 53.24), Inches, 65.0, Degrees)
+//                .strafeToLinearHeading(new Vector2d(58.80, 54.27), Inches, 90.00, Degrees)
+//                .strafeToLinearHeading(new Vector2d(58.01, 27.87), Inches, 0.00, Degrees)
+                        .strafeToLinearHeading(new Vector2d(27.68, 10.74), Inches, 235.43, Degrees)
+                        .addTask();
+            }
         }
     }
 }
