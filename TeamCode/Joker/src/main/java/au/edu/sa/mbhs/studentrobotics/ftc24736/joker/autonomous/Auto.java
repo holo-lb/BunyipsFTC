@@ -24,7 +24,7 @@ public class Auto extends AutonomousBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
-        robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override

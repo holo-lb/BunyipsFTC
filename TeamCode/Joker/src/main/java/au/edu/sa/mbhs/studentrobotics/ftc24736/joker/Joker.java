@@ -204,7 +204,7 @@ public class Joker extends RobotConfig {
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.RED)
                 .withName("lights");
         intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-        outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
+        outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
     }
 
     public void toggleIntakeGrip() {
