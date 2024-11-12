@@ -63,28 +63,22 @@ public class Auto extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)));
 
-        add(robot.drive.makeTrajectory(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)))
-                .strafeTo(new Vector2d(0, 33), Inches)
-                .build()
-                .with(robot.lift.tasks.goTo(4900)));
+        robot.drive.makeTrajectory(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)))
+            .strafeTo(new Vector2d(24*1.5, 35), Inches)
+            .strafeTo(new Vector2d(24*1.5, 8), Inches)
+            .strafeTo(new Vector2d(24*2, 8), Inches)
+            .strafeTo(new Vector2d(24*2, 24*3-(9+3.5+2)), Inches)
+            .strafeTo(new Vector2d(24*2, 8), Inches)
+            .strafeTo(new Vector2d(24*2.5, 8), Inches)
+            .strafeTo(new Vector2d(24*2.5, 24*2.2+1), Inches)
+            .strafeTo(new Vector2d(24*2.5, 8), Inches)
+            .strafeTo(new Vector2d(24*3, 8), Inches)
+            .strafeTo(new Vector2d(24*3, 24*2-2), Inches)
+            .strafeTo(new Vector2d(24*2.5, 24*1.5), Inches)
+            .addTask();
 
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
-        run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
-
-        add(robot.drive.makeTrajectory(new Pose2d(0, 33, Math.toRadians(270)))
-                .strafeTo(new Vector2d(24*1.5, 35), Inches)
-                .strafeTo(new Vector2d(24*1.5, 8), Inches)
-                .strafeTo(new Vector2d(24*2, 8), Inches)
-                .strafeTo(new Vector2d(24*2, 24*3-(9+3.5+2)), Inches)
-                .strafeTo(new Vector2d(24*2, 8), Inches)
-                .strafeTo(new Vector2d(24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(24*2.5, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(24*3, 8), Inches)
-                .strafeTo(new Vector2d(24*3, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*2.5, 24*1.5), Inches)
-                .build()
-                .with(robot.lift.tasks.home()));
+        //run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
     }
 }

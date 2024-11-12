@@ -25,7 +25,10 @@ public class TeleOperation extends BunyipsOpMode {
         double gp2LeftStickY = -gamepad2.left_stick_y;
         double gp2RightStickY = -gamepad2.right_stick_y;
         if (gamepad2.getDebounced(Controls.A)) {
-            robot.toggleGrips();
+            robot.toggleIntakeGrip();
+        }
+        if (gamepad2.getDebounced(Controls.X)) {
+            robot.toggleOuttakeGrip();
         }
         //if (gamepad2.getDebounced(Controls.X)) {
             //robot.toggleOuttake();
