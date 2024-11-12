@@ -117,6 +117,7 @@ class Proto : RobotConfig() {
         hw.clawLift = getHardware("cl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
             val p = PController(Constants.cl_kP)
+            // TOOD: retune pid? consider hot motor situation
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
             val c = p.compose(ff) { a, b -> a + b }
             it.runToPositionController = c
