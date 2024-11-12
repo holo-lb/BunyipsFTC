@@ -5,6 +5,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -259,11 +260,10 @@ public class Vance extends RobotConfig {
          */
         public Servo basketRotator;
 
-        // Disabled: PWM breaks the hardware
-//        /**
-//         * Control Servo 5: Blinkin Lights "lights"
-//         */
-//        public RevBlinkinLedDriver lights;
+        /**
+         * Control Servo 5: Blinkin Lights "lights"
+         */
+        public RevBlinkinLedDriver lights;
 
         /**
          * Control Digital 1: Limit Switch "bottom" for vertical arm
