@@ -61,10 +61,10 @@ public class Joker extends RobotConfig {
      */
     public DcMotor liftMotor;
 
-    /**
-     * Control Hub 0: outtakeAlign
-     */
-    public Servo outtakeAlign;
+    ///**
+    // * Control Hub 0: outtakeAlign
+    // */
+    //public Servo outtakeAlign;
     /**
      * Control Hub 1: outtakeGrip
      */
@@ -126,8 +126,8 @@ public class Joker extends RobotConfig {
     public static int OUTTAKE_GRIP_OPEN_POSITION = 1;
     public static int OUTTAKE_GRIP_CLOSED_POSITION = 0;
 
-    public static int OUTTAKE_ALIGN_IN_POSITION = 1;
-    public static int OUTTAKE_ALIGN_OUT_POSITION = 0;
+    //public static int OUTTAKE_ALIGN_IN_POSITION = 1;
+    //public static int OUTTAKE_ALIGN_OUT_POSITION = 0;
 
     public static double INTAKE_ARM_LOWER_POWER_CLAMP = -0.35;
     public static double INTAKE_ARM_UPPER_POWER_CLAMP = 0.35;
@@ -138,7 +138,7 @@ public class Joker extends RobotConfig {
     public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
     private boolean intakeGripClosed = false;
-    private boolean outtakeFacingOut = false;
+    //private boolean outtakeFacingOut = false;
 
     @Override
     protected void onRuntime() {
@@ -151,7 +151,7 @@ public class Joker extends RobotConfig {
             d.setRunToPositionController(new PIDController(0.01, 0, 0.00001));
         });
         liftMotor = getHardware("liftMotor", DcMotor.class);
-        outtakeAlign = getHardware("outtakeAlign", Servo.class);
+        //outtakeAlign = getHardware("outtakeAlign", Servo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         lightsHardware = getHardware("lights", RevBlinkinLedDriver.class);
@@ -219,14 +219,13 @@ public class Joker extends RobotConfig {
         }
     }
 
-    public void toggleOuttake() {
-        if (outtakeFacingOut) {
-            outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
-            outtakeFacingOut = false;
-        }
-        else {
-            outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
-            outtakeFacingOut = true;
-        }
+    //public void toggleOuttake() {
+        //if (outtakeFacingOut) {
+            //outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
+            //outtakeFacingOut = false;
+        //}
+        //else {
+            //outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
+            //outtakeFacingOut = true;
+        //}
     }
-}

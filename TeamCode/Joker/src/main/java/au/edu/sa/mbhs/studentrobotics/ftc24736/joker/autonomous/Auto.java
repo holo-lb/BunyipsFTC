@@ -1,6 +1,5 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.autonomous;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.NonNull;
@@ -65,21 +64,16 @@ public class Auto extends AutonomousBunyipsOpMode {
         robot.drive.setPose(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)));
 
         add(robot.drive.makeTrajectory(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)))
-                .strafeTo(new Vector2d(24*1.5, 54))
-                .strafeToLinearHeading(new Vector2d(24*2.25, 24*2.25), Inches, 45, Degrees)
+                .strafeTo(new Vector2d(0, 33), Inches)
                 .build()
                 .with(robot.lift.tasks.goTo(4900)));
 
-        run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
+        //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
-        robot.drive.makeTrajectory(new Pose2d(24*2.25, 24*2.25, Math.toRadians(45)))
-                .strafeTo(new Vector2d(24*2.3, 24*2.3), Inches)
-                //.waitSeconds(0.2)
-                .addTask();
         run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
 
-        add(robot.drive.makeTrajectory(new Pose2d(24*2.3, 24*2.3, Math.toRadians(45)))
-                .strafeToLinearHeading(new Vector2d(24*1.5, 24*1.5), Inches, 270, Degrees)
+        add(robot.drive.makeTrajectory(new Pose2d(0, 33, Math.toRadians(270)))
+                .strafeTo(new Vector2d(24*1.5, 35), Inches)
                 .strafeTo(new Vector2d(24*1.5, 8), Inches)
                 .strafeTo(new Vector2d(24*2, 8), Inches)
                 .strafeTo(new Vector2d(24*2, 24*3-(9+3.5+2)), Inches)

@@ -14,7 +14,7 @@ public class TeleOperation extends BunyipsOpMode {
     @Override
     protected void onInit() {
         robot.init();
-        robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
+        //robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
     }
 
     @Override
@@ -27,9 +27,9 @@ public class TeleOperation extends BunyipsOpMode {
         if (gamepad2.getDebounced(Controls.A)) {
             robot.toggleGrips();
         }
-        if (gamepad2.getDebounced(Controls.X)) {
-            robot.toggleOuttake();
-        }
+        //if (gamepad2.getDebounced(Controls.X)) {
+            //robot.toggleOuttake();
+        //}
         if (robot.handoverPoint.isPressed()) {
             robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
