@@ -26,12 +26,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
 
 /**
- * 0+4 Autonomous for Neutral Samples.
+ * 0+3 Autonomous for Neutral Samples and Preload.
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "0+4 Quad Basket Placer")
-class QuadBasketPlacer : AutonomousBunyipsOpMode() {
+@Autonomous(name = "0+3 Tri Basket Placer")
+class ThreeBasketPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
     private val yellowSampleDetector = YellowSample()
 
@@ -54,18 +54,6 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         if (selectedOpMode == null) return
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
         robot.drive.pose = startLocation.toFieldPose()
-
-        /*
-            drive.makeTrajectory(new Pose2d(36, 61, 0))
-                .strafeToLinearHeading(new Vector2d(56, 56), Math.PI / 4)
-                .strafeToLinearHeading(new Vector2d(40, 40), Inches, 310, Degrees)
-                .strafeToLinearHeading(new Vector2d(56, 56), Math.PI / 4)
-                .strafeToLinearHeading(new Vector2d(55, 39), Inches, -70, Degrees)
-                .strafeToLinearHeading(new Vector2d(56, 56), Math.PI / 4)
-                .strafeToLinearHeading(new Vector2d(58, 38), Inches, -50, Degrees)
-                .strafeToLinearHeading(new Vector2d(56, 56), Math.PI / 4)
-                .addTask();
-         */
 
         val waypoints = listOf(
             Pose2d(37.0, 41.0, 310.0.degToRad()),
