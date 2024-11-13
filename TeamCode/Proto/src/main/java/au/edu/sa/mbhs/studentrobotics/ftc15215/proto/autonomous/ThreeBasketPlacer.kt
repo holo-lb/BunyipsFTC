@@ -16,7 +16,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.YellowSample
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.IdentityPoseMap
@@ -81,10 +80,7 @@ class ThreeBasketPlacer : AutonomousBunyipsOpMode() {
             add(
                 ParallelTaskGroup(
                     Task.defer {
-                        robot.drive.makeTrajectory(
-                            Storage.memory().lastKnownPosition,
-                            if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
-                        )
+                        robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                             .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
                             .build()
                     },
@@ -104,10 +100,7 @@ class ThreeBasketPlacer : AutonomousBunyipsOpMode() {
             add(
                 ParallelTaskGroup(
                     Task.defer {
-                        robot.drive.makeTrajectory(
-                            Storage.memory().lastKnownPosition,
-                            if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
-                        )
+                        robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                             .strafeToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4)
                             .build()
                     },
