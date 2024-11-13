@@ -86,14 +86,14 @@ public class Joker extends RobotConfig {
      * Control Hub 2-3 (3 used): intakeInStop
      */
     public TouchSensor intakeInStop;
-    ///**
+    //**
      //* Control Hub 4-5 (5 used): intakeOutStop
      //*/
     //public TouchSensor intakeOutStop;
-    /**
-     * Control Hub 6-7 (7 used): handoverPoint
-     */
-    public TouchSensor handoverPoint;
+    //**
+     //* Control Hub 6-7 (7 used): handoverPoint
+     //*/
+    //public TouchSensor handoverPoint;
     /**
      * Control Hub USB-3.0: webcam
      */
@@ -132,10 +132,10 @@ public class Joker extends RobotConfig {
     public static double INTAKE_ARM_LOWER_POWER_CLAMP = -0.35;
     public static double INTAKE_ARM_UPPER_POWER_CLAMP = 0.35;
 
-    public static int LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT = -1;
-    public static int LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT = 1;
-    public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
-    public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
+    public static int LIFT_LOWER_POWER_CLAMP = -1;
+    public static int LIFT_UPPER_POWER_CLAMP = 1;
+    //public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
+    //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
     private boolean intakeGripClosed = false;
     private boolean outtakeGripClosed = false;
@@ -159,7 +159,7 @@ public class Joker extends RobotConfig {
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
         //intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
-        handoverPoint = getHardware("handoverPoint", TouchSensor.class);
+        //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
         camera = getHardware("webcam", WebcamName.class);
         imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
@@ -195,13 +195,13 @@ public class Joker extends RobotConfig {
         localizer.rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         lift = new HoldableActuator(liftMotor)
                 .withBottomSwitch(liftBotStop)
-                .map(handoverPoint, 1500)
-                .withPowerClamps(LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
-                        LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT)
+                //.map(handoverPoint, 1500)
+                .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
+                        LIFT_UPPER_POWER_CLAMP)
                 .withUserSetpointControl((dt) -> 1800 * dt)
-//                .withUpperLimit(4950)
+                //.withUpperLimit(4950)
                 .withName("lift");
-        lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.RED)
+        lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
         intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
         outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);

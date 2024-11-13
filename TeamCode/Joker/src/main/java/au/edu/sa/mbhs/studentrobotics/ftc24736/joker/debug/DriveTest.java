@@ -1,5 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.debug;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -33,6 +34,7 @@ public class DriveTest extends BunyipsOpMode {
 //                .setCameraOffset(new Pose2d(8.5, 0, 0))
 //                .setHeadingEstimate(false)
 //                .setKalmanGains(4, 0.1);
+        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
     }
 
     @Override

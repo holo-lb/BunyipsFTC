@@ -14,6 +14,7 @@ public class TeleOperation extends BunyipsOpMode {
     @Override
     protected void onInit() {
         robot.init();
+        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
         //robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
     }
 
@@ -33,16 +34,16 @@ public class TeleOperation extends BunyipsOpMode {
         //if (gamepad2.getDebounced(Controls.X)) {
             //robot.toggleOuttake();
         //}
-        if (robot.handoverPoint.isPressed()) {
-            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
-                    Joker.LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT);
-        }
-        else {
-            robot.lights.resetPattern();
-            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
-                    Joker.LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT);
-        }
+        //if (robot.handoverPoint.isPressed()) {
+            //robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            //robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
+                    //Joker.LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT);
+        //}
+        //else {
+            //robot.lights.resetPattern();
+            //robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP,
+                    //Joker.LIFT_UPPER_POWER_CLAMP);
+        //}
         robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
         robot.intake.setPower(gp2LeftStickY);
         robot.lift.setPower(gp2RightStickY);
