@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -180,6 +181,12 @@ class Proto : RobotConfig() {
             .withName("Claw Lift")
 //        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
 //            .withName("Ascender")
+
+        BunyipsOpMode.ifRunning {
+            it.onActiveLoop {
+                it.telemetry.addData("Vertical Lift Current (A)", hw.clawLift?.getCurrent(CurrentUnit.AMPS))
+            }
+        }
     }
 
     /**

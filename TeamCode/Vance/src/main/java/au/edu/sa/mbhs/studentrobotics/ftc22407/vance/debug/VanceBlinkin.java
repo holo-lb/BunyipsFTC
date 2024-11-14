@@ -2,6 +2,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.debug;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
@@ -19,6 +20,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
  */
 @TeleOp
 @Config
+@Disabled
 public class VanceBlinkin extends BunyipsOpMode {
     /**
      * selected pattern to respect

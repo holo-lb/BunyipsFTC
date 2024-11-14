@@ -27,6 +27,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Perio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
@@ -86,6 +87,10 @@ public class Vance extends RobotConfig {
      * Backward camera
      */
     public Vision backVision;
+    /**
+     * Lights
+     */
+    public BlinkinLights lights;
 
     @Override
     protected void onRuntime() {
@@ -134,6 +139,7 @@ public class Vance extends RobotConfig {
         hw.basketRotator = getHardware("bk", Servo.class);
 
         hw.camera = getHardware("webcam", WebcamName.class);
+        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
@@ -184,6 +190,7 @@ public class Vance extends RobotConfig {
                 .withName("Basket Rotator");
         claws = new DualServos(hw.leftClaw, hw.rightClaw);
         backVision = new Vision(hw.camera);
+        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
     }
 
     /**
