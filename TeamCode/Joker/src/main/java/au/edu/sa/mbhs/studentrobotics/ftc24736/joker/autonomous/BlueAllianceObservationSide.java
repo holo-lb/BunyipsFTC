@@ -35,20 +35,20 @@ public class BlueAllianceObservationSide extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory(new Pose2d(-24*1.5, 24*3-9, Math.toRadians(270)))
                 .strafeTo(new Vector2d(-24*1.5, 8), Inches)
                 .strafeTo(new Vector2d(-24*2, 8), Inches)
-                .strafeTo(new Vector2d(-24*2, 24*3-(9+3.5+2)), Inches)
+                .strafeTo(new Vector2d(-24*2, 24*3-(9+3.5+3)), Inches)
                 .strafeTo(new Vector2d(-24*2, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.5, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*3+4, 24*2.2-4), Inches)
+                .strafeTo(new Vector2d(-24*2.75, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.75, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.75, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.4, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.4, 24*2.2+2), Inches)
+                .strafeTo(new Vector2d(-24*3.4+4, 24*2.2-4), Inches)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(-24*3+4, 24*2.2-4, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-24*2, 54), Inches, 90, Degrees)
+        add(robot.drive.makeTrajectory(new Pose2d(-24*3.4+4, 24*2.2-4, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
                 .build()
-                .with(robot.lift.tasks.goTo(3000))
+                .with(robot.lift.tasks.home())
         );
 
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
