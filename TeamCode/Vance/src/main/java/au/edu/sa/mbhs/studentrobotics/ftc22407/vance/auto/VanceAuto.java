@@ -27,10 +27,18 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.BasketPlacer;
  */
 @Autonomous
 public class VanceAuto extends AutonomousBunyipsOpMode {
-    private final Vance robot = new Vance();
+    protected final Vance robot = new Vance();
     private MessageTask waitMessage;
     private SymmetricPoseMap symmetricPoseMap;
     private boolean isRed;
+
+    protected void park() {
+        // for now we've decided to set up shop in front of the basket until auto is open
+//        robot.drive.makeTrajectory(isRed ? symmetricPoseMap : new IdentityPoseMap())
+//                .strafeToLinearHeading(new Vector2d(34.5, 10.0), Inches, 270.00, Degrees)
+//                .strafeToLinearHeading(new Vector2d(27.0, 10.0), Inches, 270.00, Degrees)
+//                .addTask();
+    }
 
     // An autonomous period has started in FTC INTO THE DEEP
     // Start the initialisation!
@@ -81,10 +89,8 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         // Score the pre-load!
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
 
-        // And park in the dedicated zone!
-        robot.drive.makeTrajectory(isRed ? symmetricPoseMap : new IdentityPoseMap())
-                .strafeToLinearHeading(new Vector2d(26.51, 24.81), Inches, 270.00, Degrees)
-                .addTask();
+        // And park in the dedicated zone!  (actually false here but shhhh i wanna keep the funny comments)
+        park();
 
         // The new autonomous collection from MBHS Mulyawonks
     }
