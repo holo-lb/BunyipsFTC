@@ -4,6 +4,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Deg
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 /**
  * VanceAuto but also parks in parking position
@@ -11,6 +12,7 @@ import com.acmerobotics.roadrunner.Vector2d;
  *
  * @author Lachlan Paul, 2024
  */
+@Autonomous
 public class VanceAutoPark extends VanceAuto {
     @Override
     protected void park() {

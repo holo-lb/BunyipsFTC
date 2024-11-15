@@ -45,6 +45,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
+        robot.verticalLift.withTolerance(25, true);
 
         setOpModes(
                 StartingConfiguration.redLeft().tile(2),
@@ -71,7 +72,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
             add(waitMessage);
 
             // Get a bit closer to the basket so our robot doesn't just beeline towards it, likely ramming into someone else's robot
-            robot.drive.makeTrajectory(new Vector2d(-35.76, 61.30), Inches, 270.00, Degrees, isRed ? symmetricPoseMap : new IdentityPoseMap())
+            robot.drive.makeTrajectory(/**new Vector2d(-35.76, 61.30), Inches, 270.00, Degrees,**/ isRed ? symmetricPoseMap : new IdentityPoseMap())
                     .splineTo(new Vector2d(-8.51, 41.35), Inches, -46.42, Degrees)
                     .splineTo(new Vector2d(26.51, 37.95), Inches, 1.62, Degrees)
                     .addTask();
@@ -80,7 +81,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         // HEY!
         // Build the trajectory!
         robot.drive.makeTrajectory(isRed ? symmetricPoseMap : new IdentityPoseMap())
-                .splineTo(new Vector2d(53.03, 54.00), Inches, 40.00, Degrees)
+                .splineTo(new Vector2d(60.03, 59.00), Inches, 40.00, Degrees)
                 .addTask();
         // And off to the scoring basket!
 
@@ -89,7 +90,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         // Score the pre-load!
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
 
-        // And park in the dedicated zone!  (actually false here but shhhh i wanna keep the funny comments)
+        // And park in the dedicated zone! (actually false here but shhhh i wanna keep the funny comments)
         park();
 
         // The new autonomous collection from MBHS Mulyawonks
