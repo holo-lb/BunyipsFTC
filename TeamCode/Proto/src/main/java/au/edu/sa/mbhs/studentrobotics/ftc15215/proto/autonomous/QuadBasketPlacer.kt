@@ -29,6 +29,7 @@ import kotlin.math.PI
 @Autonomous(name = "0+4 Quad Basket Placer, Left")
 class QuadBasketPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
+    private val maxTicks = au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants.cl_MAX.toInt()
 
     override fun onInitialise() {
         robot.init()
@@ -40,7 +41,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
 
         robot.clawLift.withTolerance(20, true)
 
-        // TODO: localizer self test for auto? or just check manually
+//        setInitTask(SwitchableLocalizer(robot.drive.localizer, robot.drive.localizer).tasks.manualTestMainLocalizer())
     }
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
@@ -62,7 +63,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                     .strafeToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4)
                     .build(),
-                robot.clawLift.tasks.goTo(750) timeout (3 of Seconds)
+                robot.clawLift.tasks.goTo(maxTicks) timeout (4 of Seconds)
             )
         )
         // Angle claw rotator down and drop sample
@@ -84,8 +85,8 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 )
             )
             // Yoink
-            add(robot.clawRotator.tasks.close().forAtLeast(0.25, Seconds))
-            add(robot.claws.tasks.closeBoth().forAtLeast(0.1, Seconds))
+            add(robot.clawRotator.tasks.close().forAtLeast(0.2, Seconds))
+            add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
             add(robot.clawRotator.tasks.open())
             // Go back and place
             add(
@@ -94,15 +95,15 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                         val t =
                             robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                         if (i < 1) {
-                            t.strafeToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4)
+                            t.strafeToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4)
                         } else {
                             t.setReversed(true)
                                 .splineTo(Vector2d(50.0, 48.0), tangent = 125.0.degToRad())
-                                .splineToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4, tangent = PI / 4)
+                                .splineToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4, tangent = PI / 4)
                         }
                         t.build()
                     },
-                    robot.clawLift.tasks.goTo(750) timeout (3 of Seconds)
+                    robot.clawLift.tasks.goTo(maxTicks) timeout (4 of Seconds)
                 )
             )
             add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
@@ -111,7 +112,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         }
 
 //        add(
-//            robot.drive.makeTrajectory(Pose2d(56.0, 56.0, PI / 4))
+//            robot.drive.makeTrajectory(Pose2d(55.0, 55.0, PI / 4))
 //            .turnTo(225.0, Degrees)
 //            .splineTo(Vector2d(24.26, 11.25), Inches, 180.00, Degrees)
 //            .build()

@@ -9,6 +9,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PControlle
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
@@ -157,6 +158,7 @@ class Proto : RobotConfig() {
             .build()
         val mp = MotionProfile.Builder()
             .setMaxWheelVel(40.0 of InchesPerSecond)
+            .setMaxProfileAccel(60.0 of InchesPerSecondPerSecond)
             .setKs(0.93)
             .setKv(0.00022)
             .setKa(0.00001)
@@ -190,7 +192,7 @@ class Proto : RobotConfig() {
             .withBottomSwitch(hw.bottom)
             .withUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withMaxSteadyStateTime(10 of Seconds)
-            .withUpperLimit(900)
+            .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
 //        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
 //            .withName("Ascender")
