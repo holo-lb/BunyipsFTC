@@ -66,19 +66,19 @@ public class BlueAllianceBasketSide extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory(new Pose2d(24*1.5, 24*3-9, Math.toRadians(270)))
                 .strafeTo(new Vector2d(24*1.5, 8), Inches)
                 .strafeTo(new Vector2d(24*2, 8), Inches)
-                .strafeTo(new Vector2d(24*2, 24*3-(9+3.5-4)), Inches)
+                .strafeTo(new Vector2d(24*2, 24*3-(9+3.5-2.5)), Inches)
                 .strafeTo(new Vector2d(24*2, 8), Inches)
-                .strafeTo(new Vector2d(24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(24*2.5, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(24*2.5, 8), Inches)
-                .strafeTo(new Vector2d(24*3, 8), Inches)
-                .strafeTo(new Vector2d(24*3, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*3-4, 24*2-6), Inches)
+                .strafeTo(new Vector2d(24*2.6, 8), Inches)
+                .strafeTo(new Vector2d(24*2.6, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(24*2.6, 8), Inches)
+                .strafeTo(new Vector2d(24*3.1, 8), Inches)
+                .strafeTo(new Vector2d(24*3.1, 24*2-2), Inches)
+                .strafeTo(new Vector2d(24*3.1-6, 24*2-2-6), Inches)
                 .addTask();
 
         run(robot::toggleOuttakeGrip);
 
-        add(robot.drive.makeTrajectory(new Pose2d(24*3-4, 24*2-4, Math.toRadians(270)))
+        add(robot.drive.makeTrajectory(new Pose2d(24*3.1-6, 24*2-2-6, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
                 .build()
                 .with(robot.lift.tasks.goTo(2600))
