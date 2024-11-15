@@ -16,7 +16,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
-@Autonomous(name = "Red Basket Side")
+@Autonomous(name = "Red Basket Side", preselectTeleOp = "TeleOp")
 public class RedAllianceBasketSide extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
 
