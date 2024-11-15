@@ -1,9 +1,9 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.debug
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 /**
  * No-op to init hardware and print timer status.

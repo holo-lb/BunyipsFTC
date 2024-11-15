@@ -18,6 +18,6 @@ class VerticalLiftTest : BunyipsOpMode() {
     override fun activeLoop() {
         robot.clawLift.setPower(-gamepad1.lsy.toDouble())
         robot.clawLift.update()
-        EncoderTicks.debug(robot.hw.clawLift!!, t)
+        EncoderTicks.debug(robot.hw.clawLift!!, "Claw Lift", t)
     }
 }

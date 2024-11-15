@@ -2,8 +2,8 @@ package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.debug
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.RoadRunnerDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.tuning.RoadRunnerTuningOpMode
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 /**
  * For RoadRunner tuning.

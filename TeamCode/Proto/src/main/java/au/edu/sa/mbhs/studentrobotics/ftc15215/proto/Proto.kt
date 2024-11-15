@@ -1,6 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
@@ -28,7 +29,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -112,17 +112,29 @@ class Proto : RobotConfig() {
         hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.REVERSE
-            it.scaleRange(0.6, 1.0)
+            it.scaleRange(0.5, 1.0)
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
             val p = PController(Constants.cl_kP)
-            // TOOD: retune pid? consider hot motor situation
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
             val c = p.compose(ff) { a, b -> a + b }
             it.runToPositionController = c
-            BunyipsOpMode.ifRunning { o -> o.onActiveLoop { c.setCoefficients(Constants.cl_kP, 0.0, 0.0, 0.0, 0.0, Constants.cl_kG, 0.0, 0.0) } }
+            BunyipsOpMode.ifRunning { o ->
+                o.onActiveLoop {
+                    c.setCoefficients(
+                        Constants.cl_kP,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        Constants.cl_kG,
+                        0.0,
+                        0.0
+                    )
+                }
+            }
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
@@ -153,6 +165,7 @@ class Proto : RobotConfig() {
             .setAxialGain(2.5)
             .setLateralGain(2.5)
             .setHeadingGain(4.0)
+            .setPathFollowing(true)
             .build()
         val twl = TwoWheelLocalizer.Params.Builder()
             .setParYTicks(-2109.055102501924)
@@ -184,7 +197,7 @@ class Proto : RobotConfig() {
 
         BunyipsOpMode.ifRunning {
             it.onActiveLoop {
-                it.telemetry.addData("Vertical Lift Current (A)", hw.clawLift?.getCurrent(CurrentUnit.AMPS))
+                EncoderTicks.debug(hw.clawLift!!, "Vertical Lift", it.t)
             }
         }
     }

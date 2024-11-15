@@ -1,7 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.auto;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTiles;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.NonNull;
