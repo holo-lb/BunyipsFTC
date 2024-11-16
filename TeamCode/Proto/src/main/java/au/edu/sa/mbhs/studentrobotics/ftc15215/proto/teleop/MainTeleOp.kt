@@ -25,10 +25,7 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
 
     override fun assignCommands() {
         robot.drive default HolonomicVectorDriveTask(gamepad1, robot.drive)
-        driver() whenPressed Controls.BACK run HolonomicDriveTask(
-            gamepad1,
-            robot.drive
-        ) finishIf { gamepad1 rising Controls.BACK }
+        driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, robot.drive) finishIf { gamepad1 rising Controls.BACK }
 //        driver() whenPressed Controls.RIGHT_BUMPER run AlignToContourTask(gamepad1, robot.drive, yellowSampleDetector)
 //            .withController(PDController(0.4, 0.0001)) finishIf { !gamepad1.rb }
 

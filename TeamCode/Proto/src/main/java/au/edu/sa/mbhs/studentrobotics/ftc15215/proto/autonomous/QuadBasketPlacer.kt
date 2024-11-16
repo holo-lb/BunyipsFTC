@@ -50,9 +50,9 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         robot.drive.pose = startLocation.toFieldPose()
 
         val waypoints = listOf(
-            Pose2d(37.0, 41.0, 310.0.degToRad()),
+            Pose2d(38.33, 40.02, 310.0.degToRad()),
             Pose2d(53.64, 42.77, (-70.0).degToRad()),
-            Pose2d(58.7, 41.85, (-55.0).degToRad()),
+            Pose2d(58.69, 40.78, (-55.0).degToRad()),
         )
 
         // Reset position of claw rotator to be upright, as it might be slanted backwards for preloading
@@ -63,11 +63,11 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                     .strafeToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4)
                     .build(),
-                robot.clawLift.tasks.goTo(maxTicks) timeout (4 of Seconds)
+                robot.clawLift.tasks.goTo(maxTicks) timeout (3 of Seconds)
             )
         )
         // Angle claw rotator down and drop sample
-        add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
+        add(robot.clawRotator.tasks.setTo(0.8).forAtLeast(0.5, Seconds))
         add(robot.claws.tasks.openBoth().forAtLeast(0.1, Seconds))
         add(robot.clawRotator.tasks.open().forAtLeast(0.5, Seconds))
 
@@ -80,20 +80,22 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                             .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
                             .build()
                     },
-                    robot.clawRotator.tasks.setTo(0.6).after(0.5, Seconds),
+                    robot.clawRotator.tasks.setTo(0.3).after(0.5, Seconds),
                     robot.clawLift.tasks.home(),
                 )
             )
             // Yoink
-            add(robot.clawRotator.tasks.close().forAtLeast(0.2, Seconds))
+            add(robot.clawRotator.tasks.close().forAtLeast(0.4, Seconds))
             add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
             add(robot.clawRotator.tasks.open())
             // Go back and place
             add(
                 ParallelTaskGroup(
-                    Task.defer {
-                        val t =
-                            robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
+                    let {
+                        val t = robot.drive.makeTrajectory(
+                            waypoints.getOrElse(i - 1) { Pose2d(56.0, 56.0, PI / 4) },
+                            if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
+                        )
                         if (i < 1) {
                             t.strafeToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4)
                         } else {
@@ -103,10 +105,10 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                         }
                         t.build()
                     },
-                    robot.clawLift.tasks.goTo(maxTicks) timeout (4 of Seconds)
+                    robot.clawLift.tasks.goTo(maxTicks) timeout (3 of Seconds)
                 )
             )
-            add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
+            add(robot.clawRotator.tasks.setTo(0.8).forAtLeast(0.5, Seconds))
             add(robot.claws.tasks.openBoth().forAtLeast(0.1, Seconds))
             add(robot.clawRotator.tasks.open().forAtLeast(0.5, Seconds))
         }

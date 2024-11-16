@@ -112,8 +112,8 @@ class Proto : RobotConfig() {
         }
         hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
-            it.direction = Servo.Direction.REVERSE
-            it.scaleRange(0.5, 1.0)
+            it.direction = Servo.Direction.FORWARD
+            it.scaleRange(0.0, 0.45)
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
@@ -186,7 +186,7 @@ class Proto : RobotConfig() {
             .withName("Drive")
         claws = DualServos(hw.leftClaw, hw.rightClaw)
             .withName("Claws")
-        clawRotator = Switch(hw.clawRotator)
+        clawRotator = Switch(hw.clawRotator, 1.0, 0.0)
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
