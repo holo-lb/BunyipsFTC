@@ -48,6 +48,8 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
         robot.drive.pose = startLocation.toFieldPose()
 
+        // there aren't actually any changes
+
         val waypoints = listOf(
             Pose2d(38.33, 40.02, 310.0.degToRad()),
             Pose2d(53.64, 42.77, (-70.0).degToRad()),
