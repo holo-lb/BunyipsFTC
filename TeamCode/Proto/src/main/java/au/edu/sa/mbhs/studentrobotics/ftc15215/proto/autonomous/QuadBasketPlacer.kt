@@ -8,7 +8,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
@@ -75,11 +74,12 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             // Begin moving to the sample
             add(
                 ParallelTaskGroup(
-                    Task.defer {
-                        robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
-                            .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
-                            .build()
-                    },
+                    robot.drive.makeTrajectory(
+                        Pose2d(55.0, 55.0, PI / 4),
+                        if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
+                    )
+                        .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
+                        .build(),
                     robot.clawRotator.tasks.setTo(0.3).after(0.5, Seconds),
                     robot.clawLift.tasks.home(),
                 )
@@ -93,14 +93,15 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 ParallelTaskGroup(
                     let {
                         val t = robot.drive.makeTrajectory(
-                            waypoints.getOrElse(i - 1) { Pose2d(56.0, 56.0, PI / 4) },
+                            waypoints[i],
                             if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
                         )
-                        if (i < 1) {
+                        if (i <= 1) {
                             t.strafeToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4)
                         } else {
+                            // For the last trajectory only, back up while en route to the basket
                             t.setReversed(true)
-                                .splineTo(Vector2d(50.0, 48.0), tangent = 125.0.degToRad())
+                                .strafeToLinearHeading(Vector2d(50.0, 48.0), heading = 320.0.degToRad())
                                 .splineToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4, tangent = PI / 4)
                         }
                         t.build()
