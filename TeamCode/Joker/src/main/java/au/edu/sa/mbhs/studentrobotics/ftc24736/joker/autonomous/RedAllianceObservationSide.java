@@ -30,22 +30,23 @@ public class RedAllianceObservationSide extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
 
-        robot.drive.setPose(new Pose2d(24*1.5, -24*3+9, Math.toRadians(90)));
+        robot.drive.setPose(new Pose2d(24, -24*3+9, Math.toRadians(90)));
 
-        robot.drive.makeTrajectory(new Pose2d(24*1.5, -24*3+9, Math.toRadians(90)))
-                .strafeTo(new Vector2d(24*1.5, -8), Inches)
-                .strafeTo(new Vector2d(24*2.1, -8), Inches)
-                .strafeTo(new Vector2d(24*2.1, -24*2.2-1), Inches)
-                .strafeTo(new Vector2d(24*2.1, -8), Inches)
-                .strafeTo(new Vector2d(24*2.75, -8), Inches)
-                .strafeTo(new Vector2d(24*2.75, -24*2.2-1), Inches)
-                .strafeTo(new Vector2d(24*2.75, -8), Inches)
-                .strafeTo(new Vector2d(24*3.25, -8), Inches)
-                .strafeTo(new Vector2d(24*3.25, -24*2.2-1), Inches)
-                .strafeTo(new Vector2d(24*3.25-6, -24*2.2+6), Inches)
+        robot.drive.makeTrajectory(new Pose2d(24, -24*3+9, Math.toRadians(90)))
+                .strafeTo(new Vector2d(24*1.75, -24*1.5), Inches)
+                .strafeTo(new Vector2d(24*1.75, -8), Inches)
+                .strafeTo(new Vector2d(24*2.3, -8), Inches)
+                .strafeTo(new Vector2d(24*2.3, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*2.3, -8), Inches)
+                .strafeTo(new Vector2d(24*2.9, -8), Inches)
+                .strafeTo(new Vector2d(24*2.9, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*2.9, -8), Inches)
+                .strafeTo(new Vector2d(24*3.45, -8), Inches)
+                .strafeTo(new Vector2d(24*3.45, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*3.45-6, -24*2.2+6), Inches)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(24*3.25-6, -24*2.2+6, Math.toRadians(90)))
+        add(robot.drive.makeTrajectory(new Pose2d(24*3.45-6, -24*2.2+6, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(24*2.5, -56), Inches, 270, Degrees)
                 .build()
                 .with(robot.lift.tasks.home())
