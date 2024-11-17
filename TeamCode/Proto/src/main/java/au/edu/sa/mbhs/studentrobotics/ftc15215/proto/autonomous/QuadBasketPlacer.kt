@@ -57,6 +57,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         )
 
         // Reset position of claw rotator to be upright, as it might be slanted backwards for preloading
+        add(robot.claws.tasks.closeBoth())
         add(robot.clawRotator.tasks.open())
         // Navigate to the basket and lift up the vertical lift at the same time
         add(
