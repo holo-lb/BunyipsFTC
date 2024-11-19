@@ -25,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.BasketPlacer;
  *
  * @author Lachlan Paul, 2024
  */
+
 @Autonomous
 public class VanceAuto extends AutonomousBunyipsOpMode {
     protected final Vance robot = new Vance();
@@ -72,7 +73,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
             add(waitMessage);
 
             // Get a bit closer to the basket so our robot doesn't just beeline towards it, likely ramming into someone else's robot
-            robot.drive.makeTrajectory(/**new Vector2d(-35.76, 61.30), Inches, 270.00, Degrees,**/ isRed ? symmetricPoseMap : new IdentityPoseMap())
+            robot.drive.makeTrajectory(/*new Vector2d(-35.76, 61.30), Inches, 270.00, Degrees,*/ isRed ? symmetricPoseMap : new IdentityPoseMap())
                     .splineTo(new Vector2d(-8.51, 41.35), Inches, -46.42, Degrees)
                     .splineTo(new Vector2d(26.51, 37.95), Inches, 1.62, Degrees)
                     .addTask();
@@ -85,7 +86,6 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
                 .addTask();
         // And off to the scoring basket!
 
-        // todo: who knows if this will work lmaooooooooooooooooooooooooooooooo
         // Prepare the vertical arm!
         // Score the pre-load!
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
