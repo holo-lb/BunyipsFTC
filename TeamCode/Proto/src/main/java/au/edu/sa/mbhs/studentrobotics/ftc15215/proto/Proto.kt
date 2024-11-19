@@ -1,7 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
@@ -205,7 +204,7 @@ class Proto : RobotConfig() {
 
         BunyipsOpMode.ifRunning {
             it.onActiveLoop {
-                EncoderTicks.debug(hw.clawLift!!, "Vertical Lift", it.t)
+                Motor.debug(hw.clawLift!!, "Vertical Lift", it.t)
             }
         }
     }

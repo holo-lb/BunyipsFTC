@@ -1,7 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.debug;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 
 /**
@@ -19,7 +19,7 @@ public class VancePID extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         robot.verticalLift.setPower(-gamepad1.lsy);
-        EncoderTicks.debug(robot.hw.verticalLift, t);
+        Motor.debug(robot.hw.verticalLift, "Vertical Lift", t);
         robot.verticalLift.update();
     }
 }
