@@ -7,6 +7,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
+/**
+ * "Whoooaaa! Looking cool, Joker!"
+ */
 @TeleOp(name = "TeleOp")
 public class TeleOperation extends BunyipsOpMode {
     private final Joker robot = new Joker();
@@ -26,12 +29,34 @@ public class TeleOperation extends BunyipsOpMode {
         double rightStickX = gamepad1.right_stick_x;
         double gp2LeftStickY = -gamepad2.left_stick_y;
         double gp2RightStickY = -gamepad2.right_stick_y;
+
         if (gamepad2.getDebounced(Controls.LEFT_BUMPER)) {
             robot.toggleIntakeGrip();
         }
         if (gamepad2.getDebounced(Controls.RIGHT_BUMPER)) {
             robot.toggleOuttakeGrip();
         }
+
+        if (gamepad2.dpad_up) {
+            robot.hook.setPower(0.2);
+        }
+        else if (gamepad2.dpad_down) {
+            robot.hook.setPower(-0.2);
+        }
+        else {
+            robot.hook.setPower(0);
+        }
+
+        if (gamepad2.dpad_left) {
+            robot.ascentArm.setPower(0.2);
+        }
+        else if (gamepad2.dpad_right) {
+            robot.ascentArm.setPower(-0.2);
+        }
+        else {
+            robot.ascentArm.setPower(0);
+        }
+
         //if (gamepad2.getDebounced(Controls.X)) {
             //robot.toggleOuttake();
         //}
@@ -52,7 +77,8 @@ public class TeleOperation extends BunyipsOpMode {
         robot.intake.update();
         robot.lift.update();
         robot.lights.update();
-        telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
-        telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
+        robot.ascentArm.update();
+        //telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
+        //telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
     }
 }

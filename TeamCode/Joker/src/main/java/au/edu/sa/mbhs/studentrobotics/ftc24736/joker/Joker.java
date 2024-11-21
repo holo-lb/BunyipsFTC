@@ -52,6 +52,7 @@ public class Joker extends RobotConfig {
     /**
      * Expansion 3: back_right
      */
+
     public DcMotor backRight;
     /**
      * Control Hub 0: intakeMotor
@@ -64,7 +65,7 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 2: hook
      */
-    public DcMotor hookMotor;
+    public DcMotor hook;
     /**
      * Control Hub 3: arm
      */
@@ -169,7 +170,7 @@ public class Joker extends RobotConfig {
             d.setRunToPositionController(new PIDController(0.01, 0, 0.00001));
         });
         liftMotor = getHardware("liftMotor", DcMotor.class);
-        hookMotor = getHardware("hook", DcMotor.class);
+        hook = getHardware("hook", DcMotor.class);
         ascentMotor = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
@@ -229,8 +230,8 @@ public class Joker extends RobotConfig {
                 //.withUpperLimit(4950)
                 .withName("lift");
 
-        //can be replaced w/ pid controller if hookMotor gets an encoder (not really needed though)
-        hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
+        hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ascentArm = new HoldableActuator(ascentMotor)
                 .withUserSetpointControl((dt) -> 100 * dt);
