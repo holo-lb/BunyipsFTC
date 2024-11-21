@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:8.7.0'
 
         // Kotlin configuration for TeamCode, needs to be placed in the root build.gradle,
         // with additional support for dokka API generation
