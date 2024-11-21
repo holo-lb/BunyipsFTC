@@ -20,6 +20,7 @@ public class TeleOperation extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
+        //TODO: utilise the d-pad to control the hook and ascent arm (arm is left and right, hook is up and down)
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
