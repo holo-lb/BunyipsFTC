@@ -36,23 +36,24 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     private MessageTask waitMessage;
     private Vector2d basketPlacerPos;
     private PoseMap currentPoseMap;
-    final int rightSampleXPos = -48;
-
-    private void placeInScoringBasket() {
-        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
-        wait(300, Milliseconds);
-    }
+    final int rightSampleXPos = -44;
 
     private void placeInRobotBasket() {
-        add(new PickUpSample(robot.horizontalLift, robot.claws, 100));
-        wait(300, Milliseconds);
+        add(new PickUpSample(robot.horizontalLift, robot.claws, 246));
+        wait(700, Milliseconds);
         add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
     }
 
+    private void placeInScoringBasket() {
+        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
+        wait(700, Milliseconds);
+        add(robot.basketRotator.tasks.close());
+//        add(robot.verticalLift.tasks.home());
+    }
+
     private void acquireSampleAndPlace() {
-        // might combine later idk still deciding
         placeInRobotBasket();
-        robot.drive.makeTrajectory()
+        robot.drive.makeTrajectory(currentPoseMap)
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .addTask();
         placeInScoringBasket();
@@ -68,7 +69,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 StartingConfiguration.blueLeft().tile(2)
         );
 
-        basketPlacerPos = new Vector2d(-57.13, -56.35);
+        basketPlacerPos = new Vector2d(-57.13, -57.00);
     }
 
     @Override
@@ -78,6 +79,8 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
         currentPoseMap = startingPosition.isBlue() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
+        add(robot.claws.tasks.openBoth());
+        add(robot.verticalLift.tasks.home());
 
         robot.drive.makeTrajectory(new Vector2d(-36.26, -69.39), Inches, 90.00, Degrees, currentPoseMap)
                 .splineTo(basketPlacerPos, Inches, 230.00, Degrees)
@@ -87,26 +90,26 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
 
         robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(rightSampleXPos, -38.87), Inches, 90.00, Degrees)
-                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
+//                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .addTask();
 
-//        placeInBasket();
+        acquireSampleAndPlace();
 
         robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, -38.87), Inches, 90.00, Degrees)
-                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
+//                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .addTask();
 
-//        placeInBasket();
+        acquireSampleAndPlace();
 
         robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 // We need to grab the last sample at an angle so we need to use different positions
                 // We could just grab all of them at an angle like the Bunyips but uuhhhhhhhhh i dont wanna rewrite this
                 .strafeToSplineHeading(new Vector2d(-55, -25.7), Inches, 180, Degrees)
-                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
+//                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .addTask();
 
-//        placeInBasket();
+        acquireSampleAndPlace();
         // todo: figure out if we should park, sit in place, or both
     }
 }

@@ -52,8 +52,8 @@ public class TransferSample extends SequentialTaskGroup {
                                 .withTimeout(Seconds.of(2)),
                         clawRotator.tasks.setTo(0.5)
                 ),
-                clawRotator.tasks.close(),
-                claws.tasks.closeBoth()
+                clawRotator.tasks.close()
+//                claws.tasks.closeBoth()
         );
     }
 }
