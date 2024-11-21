@@ -16,6 +16,7 @@ public class RedTeamProp extends ColourThreshold {
     /**
      * The lower YCrCb bounds for the red team prop.
      */
+    @NonNull
     public static Scalar LOWER = new Scalar(0, 0, 0);
     // RokLive configuration
 //    public static Scalar LOWER = new Scalar(27.74, 137.99, 0.0);
@@ -23,6 +24,7 @@ public class RedTeamProp extends ColourThreshold {
     /**
      * The upper YCrCb bounds for the red team prop.
      */
+    @NonNull
     public static Scalar UPPER = new Scalar(100, 255, 255);
     /**
      * The minimum contour area percentages for the red team prop.
