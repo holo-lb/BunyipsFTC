@@ -1,0 +1,10 @@
+*
+!inspectionProfiles/
+!inspectionProfiles/**
+!runConfigurations/
+!runConfigurations/**
+!scopes/
+!scopes/**
+!codeStyles/
+!codeStyles/**
+!.gitignore

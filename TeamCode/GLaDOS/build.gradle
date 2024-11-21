@@ -1,4 +1,0 @@
-apply from: "../build.common.gradle"
-android {
-    namespace = 'org.murraybridgebunyips.glados'
-}

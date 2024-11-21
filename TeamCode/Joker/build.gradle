@@ -1,0 +1,4 @@
+apply from: "../build.common.gradle"
+android {
+    namespace = 'au.edu.sa.mbhs.studentrobotics.ftc24736.joker'
+}

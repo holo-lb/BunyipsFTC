@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="UserCode" pattern="file[BunyipsFTC.BunyipsLib*]:*//*||file[BunyipsFTC.Wheatley*]:*//*||file[BunyipsFTC.Common*]:*//*||file[BunyipsFTC.Jerry*]:*//*||file[BunyipsFTC.GLaDOS*]:*//*||file[BunyipsFTC.Pbody*]:*//*||src[BunyipsFTC.Cellphone*]:*..*||src[BunyipsFTC.Cellphone]:*..*" />
+  <scope name="UserCode" pattern="file[BunyipsFTC.BunyipsLib*]:*//*||file[BunyipsFTC.Wheatley*]:*//*||file[BunyipsFTC.Common*]:*//*||file[BunyipsFTC.Jerry*]:*//*||file[BunyipsFTC.GLaDOS*]:*//*||file[BunyipsFTC.Pbody*]:*//*||src[BunyipsFTC.Cellphone*]:*..*||src[BunyipsFTC.Cellphone]:*..*||src[BunyipsFTC.Proto*]:*..*||src[BunyipsFTC.Vance*]:*..*" />
 </component>

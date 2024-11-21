@@ -1,4 +1,4 @@
 //apply from: "../build.common.gradle"
 //android {
-//    namespace = 'org.murraybridgebunyips.template' // Change template with your robot name
+//    namespace = 'au.edu.sa.mbhs.studentrobotics.ftcXXXXX.TEMPLATE' // Change template with your robot name and number
 //}

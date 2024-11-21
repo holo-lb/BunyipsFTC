@@ -109,9 +109,9 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
                 .run(speed.decrementTask());
 
         scheduler().when(() -> gamepad1.right_trigger == 1.0)
-                .run(cannon.fireTask());
+                .run(cannon.tasks.fire());
         scheduler().whenPressed(Controller.User.ONE, Controller.BACK)
-                .run(cannon.resetTask());
+                .run(cannon.tasks.reset());
 
         scheduler().whenPressed(Controller.User.ONE, Controller.DPAD_UP)
                 .run(hook.extendTask());

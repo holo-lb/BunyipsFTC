@@ -1,14 +1,13 @@
 include ':FtcRobotController'
 include ':BunyipsLib'
+include ':BunyipsLib:MeepMeep'
 include ':Common'
-include ':Cellphone'
-include ':Jerry'
-include ':GLaDOS'
-include ':Wheatley'
-include ':Pbody'
 project(":Common").projectDir = new File("TeamCode/Common")
+include ':Cellphone'
 project(":Cellphone").projectDir = new File("TeamCode/Cellphone")
-project(":Jerry").projectDir = new File("TeamCode/Jerry")
-project(":GLaDOS").projectDir = new File("TeamCode/GLaDOS")
-project(":Wheatley").projectDir = new File("TeamCode/Wheatley")
-project(":Pbody").projectDir = new File("TeamCode/Pbody")
+include ':Proto'
+project(":Proto").projectDir = new File("TeamCode/Proto")
+include ':Vance'
+project(":Vance").projectDir = new File("TeamCode/Vance")
+include ':Joker'
+project(":Joker").projectDir = new File("TeamCode/Joker")

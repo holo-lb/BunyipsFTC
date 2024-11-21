@@ -1,4 +1,26 @@
 apply from: "../build.common.gradle"
 android {
-    namespace = 'org.murraybridgebunyips.cellphone'
+    namespace = 'au.edu.sa.mbhs.studentrobotics.cellphone'
+}
+
+// https://gist.github.com/MatthewOates36/84b46e749f814f8386cc5b67719fdbff/revisions
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url = 'https://www.matthewo.tech/maven/'
+        }
+    }
+    dependencies {
+        classpath 'org.team11260:fast-load-plugin:0.1.2'
+    }
+}
+apply plugin: 'org.team11260.fast-load-plugin'
+repositories {
+    maven {
+        url = 'https://www.matthewo.tech/maven/'
+    }
+}
+dependencies {
+    implementation 'org.team11260:fast-load:0.1.2'
 }
