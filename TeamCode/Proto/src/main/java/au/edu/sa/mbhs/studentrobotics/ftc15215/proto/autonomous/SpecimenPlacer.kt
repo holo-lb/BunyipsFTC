@@ -67,5 +67,13 @@ class SpecimenPlacer : AutonomousBunyipsOpMode() {
         add(robot.clawRotator.tasks.setTo(0.1).forAtLeast(0.4, Seconds)) // TODO: find proper specimen angle
         add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
         add(robot.clawRotator.tasks.open())
+        //Hello Bubner
+        // You are a robot
+        //Why is code so strange
+        //I am a robot
+        //I am a robot
+        //Hmmmmm, what are you doing mister?
+        //I am a robot
+        //I am a robot
     }
 }
