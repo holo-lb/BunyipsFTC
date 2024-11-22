@@ -6,7 +6,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfi
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
@@ -159,7 +158,6 @@ class Proto : RobotConfig() {
         val mp = MotionProfile.Builder()
             .setMaxWheelVel(40.0 of InchesPerSecond)
             .setMaxProfileAccel(60.0 of InchesPerSecondPerSecond)
-            .setMaxAngAccel(30.0 of DegreesPerSecondPerSecond)
             .setKs(0.93)
             .setKv(0.00022)
             .setKa(0.00001)

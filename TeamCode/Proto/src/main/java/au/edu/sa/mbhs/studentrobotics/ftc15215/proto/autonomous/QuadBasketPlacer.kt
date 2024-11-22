@@ -88,7 +88,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 )
             )
             // Yoink
-            add(robot.clawRotator.tasks.close().forAtLeast(0.4, Seconds))
+            add(robot.clawRotator.tasks.close().forAtLeast(0.3, Seconds))
             add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
             add(robot.clawRotator.tasks.open())
             // Go back and place
