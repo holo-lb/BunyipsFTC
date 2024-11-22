@@ -22,6 +22,6 @@ class TestVision : AutonomousBunyipsOpMode() {
     }
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
-        add(MoveToContourTask(robot.drive) { bs.data }.withPitchTarget(0.3))
+        add(MoveToContourTask(robot.drive) { bs.data })
     }
 }
