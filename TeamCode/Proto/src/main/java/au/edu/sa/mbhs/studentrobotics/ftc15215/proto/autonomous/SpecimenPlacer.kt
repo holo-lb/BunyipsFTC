@@ -34,8 +34,8 @@ class SpecimenPlacer : AutonomousBunyipsOpMode() {
             blueRight().tile(3.5).backward(5 of Inches),
             redRight().tile(3.5).backward(5 of Inches)
         )
-        MoveToContourTask.DEFAULT_X_CONTROLLER = PController(0.25)
-        MoveToContourTask.DEFAULT_R_CONTROLLER = PController(0.25)
+        MoveToContourTask.DEFAULT_X_CONTROLLER = PController(0.05)
+        MoveToContourTask.DEFAULT_R_CONTROLLER = PController(0.1)
     }
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
@@ -84,7 +84,8 @@ class SpecimenPlacer : AutonomousBunyipsOpMode() {
             .strafeTo(Vector2d(-47.0, 44.0))
             .turn(180.0, Degrees)
             .addTask()
-        add(MoveToContourTask(robot.drive) { sampleSensor.data } timeout (3 of Seconds))
+        add(MoveToContourTask(robot.drive) { sampleSensor.data }
+            .withForwardErrorSupplier { 8.0 - it.areaPercent } timeout (3 of Seconds))
         add(robot.claws.tasks.openBoth())
         add(robot.clawRotator.tasks.setTo(0.1).forAtLeast(0.4, Seconds))
         add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
