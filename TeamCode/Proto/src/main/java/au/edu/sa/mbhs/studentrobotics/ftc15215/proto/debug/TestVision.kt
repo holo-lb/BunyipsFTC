@@ -1,11 +1,8 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.debug
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MoveToContourTask
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Tasks
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.BlueSample
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
@@ -19,7 +16,7 @@ class TestVision : BunyipsOpMode() {
     override fun onInit() {
         robot.init()
         robot.camera.init(bs).start(bs).flip().startPreview()
-        MoveToContourTask.DEFAULT_X_CONTROLLER = PController(0.1)
+        MoveToContourTask.DEFAULT_X_CONTROLLER = PController(0.05)
         MoveToContourTask.DEFAULT_R_CONTROLLER = PController(0.1)
         Tasks.register(MoveToContourTask(robot.drive) { bs.data }.withForwardErrorSupplier {
             t.add(it.areaPercent)
