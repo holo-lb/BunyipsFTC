@@ -51,6 +51,39 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
 //            .startPreview()
         robot.drive.pose = startLocation.toFieldPose()
 
+        /*
+        drive.makeTrajectory(blueRight().tile(3.5).backward(Inches.of(5)).build().toFieldPose())
+                .setAccelConstraints(Accel.ofMin(-10, InchesPerSecondPerSecond))
+                .lineToY(36.0)
+                .addTask();
+
+        drive.makeTrajectory(new Pose2d(0.0, 38.0, 3 * PI / 2))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(-36.7, 26.8), 3 * PI / 2)
+                .splineToConstantHeading(new Vector2d(-47.0, 16.0), PI)
+                .setTangent(3 * PI / 2)
+                .setReversed(true)
+                .lineToY(56.0)
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-56.0, 16.0), PI)
+                .setReversed(true)
+                .lineToY(56.0)
+                .addTask();
+
+        drive.makeTrajectory(new Pose2d(-56.0, 56.0, 3 * PI / 2))
+                .strafeTo(new Vector2d(-47.0, 44.0))
+                .turn(180.0, Degrees)
+                .setVelConstraints(Vel.ofMax(0.1, FieldTilesPerSecond))
+                .lineToY(48.0)
+                .addTask();
+
+        drive.makeTrajectory(new Pose2d(-47.0, 48.0, PI / 2))
+                .splineTo(new Vector2d(-5.0, 38.0), 3 * PI / 2)
+                .setVelConstraints(Vel.ofMax(0.1, FieldTilesPerSecond))
+                .lineToY(36.0)
+                .addTask();
+         */
+
         add(robot.claws.tasks.closeBoth())
         add(robot.clawRotator.tasks.open())
         add(ParallelTaskGroup(
@@ -77,7 +110,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .build()
             .with(robot.clawLift.tasks.home().after(0.5 of Seconds)))
 
-        robot.drive.makeTrajectory(Pose2d(-62.0, 56.0, 3 * PI / 2))
+        robot.drive.makeTrajectory(Pose2d(-56.0, 56.0, 3 * PI / 2))
             .strafeTo(Vector2d(-47.0, 44.0))
             .turn(180.0, Degrees)
             .setVelConstraints(Vel.ofMax(0.1, FieldTiles per Second))
@@ -89,7 +122,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         add(robot.clawRotator.tasks.setTo(0.1).forAtLeast(0.4, Seconds))
         add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
         add(robot.clawRotator.tasks.open())
-        add(robot.drive.makeTrajectory(Pose2d(-47.0, 44.0, PI / 2))
+        add(robot.drive.makeTrajectory(Pose2d(-47.0, 48.0, PI / 2))
             .splineTo(Vector2d(-5.0, 38.0), tangent = 3 * PI / 2)
             .setVelConstraints(Vel.ofMax(0.1, FieldTiles per Second))
             .lineToY(36.0)
