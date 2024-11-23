@@ -165,11 +165,10 @@ public class Joker extends RobotConfig {
         backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
-            d.setRunToPositionController(new PIDController(0.01, 0, 0.00001));
-        });
-        liftMotor = getHardware("liftMotor", DcMotor.class);
+        intakeMotor = getHardware("intakeMotor", Motor.class, d ->
+            d.setRunToPositionController(new PIDController(0.01, 0, 0.00001))
+        );
+        liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         hook = getHardware("hook", DcMotor.class);
         ascentMotor = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
@@ -234,7 +233,8 @@ public class Joker extends RobotConfig {
         hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ascentArm = new HoldableActuator(ascentMotor)
-                .withUserSetpointControl((dt) -> 100 * dt);
+                .withUserSetpointControl((dt) -> 100 * dt)
+                .withName("ascent");
 
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
