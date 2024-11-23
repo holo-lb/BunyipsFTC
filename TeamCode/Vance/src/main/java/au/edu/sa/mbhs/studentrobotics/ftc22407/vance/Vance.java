@@ -136,7 +136,10 @@ public class Vance extends RobotConfig {
         hw.rightClaw = getHardware("rc", Servo.class, (d) -> d.scaleRange(0.0, 0.5));
 
         hw.clawRotator = getHardware("cr", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
-        hw.basketRotator = getHardware("bk", Servo.class);
+        hw.basketRotator = getHardware("bk", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.2, 0.5);
+        });
 
         hw.camera = getHardware("webcam", WebcamName.class);
         hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
