@@ -7,8 +7,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTiles
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Second
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Accel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Vel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MoveToContourTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup
@@ -22,8 +24,8 @@ import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
 
-@Autonomous(name = "?+0 Specimen Placer (Center, Right)")
-class SpecimenPlacer : AutonomousBunyipsOpMode() {
+@Autonomous(name = "3+0 Specimen Placer (Center, Right, Ob. Park)")
+class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
 //    private lateinit var sampleSensor: ColourThreshold
 
@@ -53,12 +55,7 @@ class SpecimenPlacer : AutonomousBunyipsOpMode() {
         add(robot.clawRotator.tasks.open())
         add(ParallelTaskGroup(
             robot.drive.makeTrajectory()
-                .setVelConstraints { _, _, s ->
-                    if (s > 20)
-                        1.0
-                    else
-                        40.0
-                }
+                .setAccelConstraints(Accel.ofMin(-10.0, InchesPerSecondPerSecond))
                 .lineToY(36.0)
                 .build(),
             robot.clawLift.tasks.goTo(1700)

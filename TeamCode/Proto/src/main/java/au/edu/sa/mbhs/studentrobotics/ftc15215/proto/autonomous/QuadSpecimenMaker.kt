@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "0+0 Quad Specimen Maker, Right")
+@Autonomous(name = "0+0 Quad Specimen Maker (Right, Ob. Park)")
 class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
     private val robot = Proto()
 

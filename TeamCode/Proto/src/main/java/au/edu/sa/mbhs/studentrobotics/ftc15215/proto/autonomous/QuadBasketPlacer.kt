@@ -25,7 +25,7 @@ import kotlin.math.PI
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "0+4 Quad Basket Placer, Left")
+@Autonomous(name = "0+4 Quad Basket Placer (Left)")
 class QuadBasketPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
     private val maxTicks = au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants.cl_MAX.toInt()
