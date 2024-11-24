@@ -46,7 +46,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        robot.verticalLift.withTolerance(25, true);
+        robot.verticalLift.withTolerance(25);
 
         setOpModes(
                 StartingConfiguration.redLeft().tile(2),

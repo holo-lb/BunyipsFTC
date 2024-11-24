@@ -38,7 +38,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             redLeft().tile(2.0).backward(5 of Inches).rotate(90 of Degrees)
         )
 
-        robot.clawLift.withTolerance(20, true)
+        robot.clawLift.withTolerance(20)
 
 //        setInitTask(SwitchableLocalizer(robot.drive.localizer, robot.drive.localizer).tasks.manualTestMainLocalizer())
     }
@@ -84,7 +84,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                         .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
                         .build(),
                     robot.clawRotator.tasks.setTo(0.3).after(0.5, Seconds),
-                    robot.clawLift.tasks.home(),
+                    robot.clawLift.tasks.home(), // TODO: optimise for time
                 )
             )
             // Yoink

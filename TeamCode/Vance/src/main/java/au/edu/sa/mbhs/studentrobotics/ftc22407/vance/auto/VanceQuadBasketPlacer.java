@@ -63,7 +63,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        robot.verticalLift.withTolerance(25, true);
+        robot.verticalLift.withTolerance(25);
 
         setOpModes(
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(5)).rotate(Degrees.of(90)),
