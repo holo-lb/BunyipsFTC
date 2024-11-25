@@ -81,6 +81,5 @@ public class TeleOperation extends BunyipsOpMode {
         robot.ascentArm.update();
         //telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
         //telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
-        telemetry.update();
     }
 }
