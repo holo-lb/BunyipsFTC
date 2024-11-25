@@ -30,7 +30,7 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
 //            .withController(PDController(0.4, 0.0001)) finishIf { !gamepad1.rb }
 
         robot.clawLift default robot.clawLift.tasks.control { -gamepad2.lsy.toDouble() }
-//        robot.ascent default robot.ascent.tasks.control { -gamepad2.rsy.toDouble() / 2.0 }
+        robot.ascent default robot.ascent.tasks.control { if (gamepad1.du) 1.0 else if (gamepad1.dd) -1.0 else 0.0 }
         robot.clawRotator default robot.clawRotator.tasks.controlDelta { -gamepad2.rsy.toDouble() * 0.75f * (timer.deltaTime() to Seconds) }
         operator() whenPressed Controls.A run robot.claws.tasks.toggleBoth()
         operator() whenRising (Controls.Analog.RIGHT_TRIGGER to { v -> v == 1.0f }) run robot.clawLift.tasks.home()

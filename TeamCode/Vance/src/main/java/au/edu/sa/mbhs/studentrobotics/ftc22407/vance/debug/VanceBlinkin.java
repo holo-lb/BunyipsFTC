@@ -41,16 +41,16 @@ public class VanceBlinkin extends BunyipsOpMode {
         robot.init();
         Field blinkinServoControllerField;
         Field blinkinPortField;
-        try {
-            blinkinServoControllerField = robot.hw.lights.getClass().getDeclaredField("controller");
-            blinkinServoControllerField.setAccessible(true);
-            blinkinPortField = robot.hw.lights.getClass().getDeclaredField("port");
-            blinkinPortField.setAccessible(true);
-            port = blinkinPortField.getInt(robot.hw.lights);
-            blinkinController = (ServoControllerEx) blinkinServoControllerField.get(robot.hw.lights);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            blinkinServoControllerField = robot.hw.lights.getClass().getDeclaredField("controller");
+//            blinkinServoControllerField.setAccessible(true);
+//            blinkinPortField = robot.hw.lights.getClass().getDeclaredField("port");
+//            blinkinPortField.setAccessible(true);
+//            port = blinkinPortField.getInt(robot.hw.lights);
+//            blinkinController = (ServoControllerEx) blinkinServoControllerField.get(robot.hw.lights);
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     private void sendPwmPulse(double us) {
@@ -66,9 +66,9 @@ public class VanceBlinkin extends BunyipsOpMode {
         if (gamepad1.getDebounced(Controls.A)) {
             Dbg.log("sending voltage reset command for " + voltage);
             sendPwmPulse(voltage.pwmCommandUs);
-            robot.hw.lights.setPattern(pattern.next());
+//            robot.hw.lights.setPattern(pattern.next());
         }
-        robot.hw.lights.setPattern(pattern);
+//        robot.hw.lights.setPattern(pattern);
     }
 
     /**

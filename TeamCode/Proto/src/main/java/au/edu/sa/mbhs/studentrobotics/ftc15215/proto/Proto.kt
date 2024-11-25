@@ -12,6 +12,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerS
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -24,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
@@ -61,10 +63,10 @@ class Proto : RobotConfig() {
      */
     lateinit var clawLift: HoldableActuator
 
-//    /**
-//     * Linked ascension mechanism for the claw lift.
-//     */
-//    lateinit var ascent: LinkedLift
+    /**
+     * Linked ascension mechanism for the claw lift.
+     */
+    lateinit var ascent: HoldableActuator
 
     /**
      * Forward camera.
@@ -79,17 +81,21 @@ class Proto : RobotConfig() {
                 RevHubOrientationOnRobot.UsbFacingDirection.LEFT
             )
         )
-        hw.fl = getHardware("fl", DcMotorEx::class.java) {
+        hw.fl = getHardware("fl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.bl = getHardware("bl", DcMotorEx::class.java) {
+        hw.bl = getHardware("bl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.br = getHardware("br", DcMotorEx::class.java) {
+        hw.br = getHardware("br", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.fr = getHardware("fr", DcMotorEx::class.java) {
+        hw.fr = getHardware("fr", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
 
         // REV Through Bore Encoders attached on ports 0 and 3 with the motors
@@ -101,17 +107,20 @@ class Proto : RobotConfig() {
         }
 
         // End effectors
-        hw.leftClaw = getHardware("lc", Servo::class.java) {
+        hw.leftClaw = getHardware("lc", ProfiledServo::class.java) {
             it.direction = Servo.Direction.REVERSE
+            it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.6, 1.0)
         }
-        hw.rightClaw = getHardware("rc", Servo::class.java) {
+        hw.rightClaw = getHardware("rc", ProfiledServo::class.java) {
             it.direction = Servo.Direction.FORWARD
+            it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.4)
         }
         hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.FORWARD
+            it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.45)
         }
 
@@ -121,6 +130,7 @@ class Proto : RobotConfig() {
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
             val c = p.compose(ff) { a, b -> a + b }
             it.runToPositionController = c
+            it.setPowerDeltaThreshold(0.02)
             BunyipsOpMode.ifRunning { o ->
                 o.onActiveLoop {
                     c.setCoefficients(
@@ -138,14 +148,11 @@ class Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-//        hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
-//            it.direction = DcMotorSimple.Direction.REVERSE
-//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        }
-//        hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
-//            it.direction = DcMotorSimple.Direction.REVERSE
-//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        }
+        hw.ascent = getHardware("asc", SimpleRotator::class.java) {
+            it.setPowerDeltaThreshold(0.02)
+            it.direction = DcMotorSimple.Direction.REVERSE
+            (it.actuator as DcMotor).zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        }
 
         hw.camera = getHardware("webcam", WebcamName::class.java)
 
@@ -193,18 +200,18 @@ class Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
-//        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
-//            .withName("Ascender")
+        ascent = HoldableActuator(hw.ascent!!.actuator as DcMotor)
+            .withName("Ascender")
 
         // PWM is not functional if we don't set one first. This is a patch.
         hw.clawRotator?.position = 1.0
         clawRotator.open()
 
-        BunyipsOpMode.ifRunning {
-            it.onActiveLoop {
-                Motor.debug(hw.clawLift!!, "Vertical Lift", it.t)
-            }
-        }
+//        BunyipsOpMode.ifRunning {
+//            it.onActiveLoop {
+//                Motor.debug(hw.clawLift!!, "Vertical Lift", it.t)
+//            }
+//        }
     }
 
     /**
@@ -271,15 +278,10 @@ class Proto : RobotConfig() {
          */
         var bottom: TouchSensor? = null
 
-//        /**
-//         * Control 3: Left Ascent "la"
-//         */
-//        var leftAscent: DcMotorEx? = null
-//
-//        /**
-//         * Control 0: Right Ascent "ra"
-//         */
-//        var rightAscent: DcMotorEx? = null
+        /**
+         * Control 2: Ascent "asc"
+         */
+        var ascent: SimpleRotator? = null
 
         /**
          * Control USB 3.0: Webcam

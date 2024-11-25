@@ -5,15 +5,12 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
@@ -27,12 +24,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Perio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
@@ -83,14 +78,10 @@ public class Vance extends RobotConfig {
      * Scoring element claws
      */
     public DualServos claws;
-    /**
-     * Backward camera
-     */
-    public Vision backVision;
-    /**
-     * Lights
-     */
-    public BlinkinLights lights;
+//    /**
+//     * Lights
+//     */
+//    public BlinkinLights lights;
 
     @Override
     protected void onRuntime() {
@@ -141,8 +132,7 @@ public class Vance extends RobotConfig {
             d.scaleRange(0.2, 0.5);
         });
 
-        hw.camera = getHardware("webcam", WebcamName.class);
-        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
+//        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
@@ -192,8 +182,7 @@ public class Vance extends RobotConfig {
         basketRotator = new Switch(hw.basketRotator)
                 .withName("Basket Rotator");
         claws = new DualServos(hw.leftClaw, hw.rightClaw);
-        backVision = new Vision(hw.camera);
-        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+//        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
     }
 
     /**
@@ -270,10 +259,10 @@ public class Vance extends RobotConfig {
          */
         public Servo basketRotator;
 
-        /**
-         * Control Servo 5: Blinkin Lights "lights"
-         */
-        public RevBlinkinLedDriver lights;
+//        /**
+//         * Control Servo 5: Blinkin Lights "lights"
+//         */
+//        public RevBlinkinLedDriver lights;
 
         /**
          * Control Digital 1: Limit Switch "bottom" for vertical arm
@@ -284,10 +273,5 @@ public class Vance extends RobotConfig {
          * hori: Limit switch "horizontal" for horizontal arm
          */
         public TouchSensor horizontalLimit;
-
-        /**
-         * Control USB 3.0: Webcam on back
-         */
-        public WebcamName camera;
     }
 }
