@@ -74,19 +74,19 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 0: spintake
      */
-    public CRServo spintakeHardware;
+    public CRServo spintake;
     /**
      * Control Hub 1: outtakeGrip
      */
     public Servo outtakeGrip;
     /**
-     * Control Hub 2: intakeGrip
-     */
-    public Servo intakeGrip;
-    /**
-     * Control Hub 3: lights
+     * Control Hub 2: lights
      */
     public RevBlinkinLedDriver lightsHardware;
+    //**
+    //* Control Hub 2: intakeGrip
+    //*/
+    //public Servo intakeGrip;
 
     /**
      * Control Hub 0-1 (1 used): liftLimiter
@@ -154,7 +154,7 @@ public class Joker extends RobotConfig {
     //public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
     //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
-    private boolean intakeGripClosed = false;
+    //private boolean intakeGripClosed = false;
     private boolean outtakeGripClosed = false;
     //private boolean outtakeFacingOut = false;
 
@@ -174,9 +174,9 @@ public class Joker extends RobotConfig {
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
         //outtakeAlign = getHardware("outtakeAlign", Servo.class);
-        spintakeHardware = getHardware("spintake", CRServo.class);
+        spintake = getHardware("spintake", CRServo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
+        //intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         lightsHardware = getHardware("lights", RevBlinkinLedDriver.class);
 
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
@@ -239,19 +239,8 @@ public class Joker extends RobotConfig {
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
 
-        intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
+        //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
         outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
-    }
-
-    public void toggleIntakeGrip() {
-        if (intakeGripClosed) {
-            intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-            intakeGripClosed = false;
-        }
-        else {
-            intakeGrip.setPosition(INTAKE_GRIP_CLOSED_POSITION);
-            intakeGripClosed = true;
-        }
     }
 
     public void toggleOuttakeGrip() {

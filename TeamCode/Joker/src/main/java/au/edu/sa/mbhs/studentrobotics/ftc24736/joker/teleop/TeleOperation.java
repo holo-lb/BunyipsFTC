@@ -23,16 +23,15 @@ public class TeleOperation extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        //TODO: utilise the d-pad to control the hook and ascent arm (arm is left and right, hook is up and down)
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
         double gp2LeftStickY = -gamepad2.left_stick_y;
         double gp2RightStickY = -gamepad2.right_stick_y;
 
-        if (gamepad2.getDebounced(Controls.LEFT_BUMPER)) {
-            robot.toggleIntakeGrip();
-        }
+        //if (gamepad2.getDebounced(Controls.LEFT_BUMPER)) {
+            //robot.toggleIntakeGrip();
+        //}
         if (gamepad2.getDebounced(Controls.RIGHT_BUMPER)) {
             robot.toggleOuttakeGrip();
         }
@@ -73,6 +72,8 @@ public class TeleOperation extends BunyipsOpMode {
         robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
         robot.intake.setPower(gp2LeftStickY);
         robot.lift.setPower(gp2RightStickY);
+        robot.spintake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+
         robot.drive.update();
         robot.intake.update();
         robot.lift.update();
@@ -80,5 +81,10 @@ public class TeleOperation extends BunyipsOpMode {
         robot.ascentArm.update();
         //telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
         //telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
+        telemetry.addData("gamepad 2 left trigger", gamepad2.left_trigger);
+        telemetry.addData("gamepad 2 right trigger", gamepad2.right_trigger);
+        telemetry.addData("theoretical power", gamepad2.left_trigger - gamepad2.right_trigger);
+        telemetry.addData("true power", robot.spintake.getPower());
+        telemetry.update();
     }
 }
