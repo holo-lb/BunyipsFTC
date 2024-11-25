@@ -36,14 +36,8 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     private MessageTask waitMessage;
     private Vector2d basketPlacerPos;
     private PoseMap currentPoseMap;
-    final int rightSampleXPos = -40;
-    final int rightSampleYPos = -40;
-
-    private void placeInRobotBasket() {
-        add(new PickUpSample(robot.horizontalLift, robot.claws, 246));
-        wait(700, Milliseconds);
-        add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
-    }
+    final int rightSampleXPos = -48;
+    final int rightSampleYPos = -48;
 
     private void placeInScoringBasket() {
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
@@ -53,7 +47,11 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     }
 
     private void acquireSampleAndPlace() {
-        placeInRobotBasket();
+        // Place in robot basket
+        add(new PickUpSample(robot.horizontalLift, robot.claws, 250));
+        wait(700, Milliseconds);
+        add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
+
         robot.drive.makeTrajectory(currentPoseMap)
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .addTask();
@@ -70,7 +68,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(5)).rotate(Degrees.of(90))
         );
 
-        basketPlacerPos = new Vector2d(-58.13, -58.00);
+        basketPlacerPos = new Vector2d(-60, -60.00);
     }
 
     @Override
@@ -82,6 +80,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
         robot.drive.setPose(startingPosition.toFieldPose());
         add(robot.claws.tasks.openBoth());
         add(robot.verticalLift.tasks.home());
+        add(robot.horizontalLift.tasks.home());
 
         robot.drive.makeTrajectory(new Vector2d(-38.12, -62.74), Inches, 180.00, Degrees, currentPoseMap)
                 .strafeToLinearHeading(basketPlacerPos, Inches, 230.00, Degrees)

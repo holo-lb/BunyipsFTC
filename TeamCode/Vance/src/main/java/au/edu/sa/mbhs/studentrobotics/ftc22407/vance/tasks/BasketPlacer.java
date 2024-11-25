@@ -31,7 +31,7 @@ public class BasketPlacer extends SequentialTaskGroup {
                 verticalArm.tasks.home().timeout(Seconds.of(1)),  // try to reset encoders as best we can
                 verticalArm.tasks.goTo(853),  // TODO: test
                 basketRotator.tasks.open(),
-                new WaitTask(Milliseconds.of(300)),
+                new WaitTask(Milliseconds.of(1000)),
                 new RunForTask(Milliseconds.of(100), () ->
                         drive.setMotorPowers(-1, -1, -1, -1),
                         () -> drive.setMotorPowers(0, 0, 0, 0)),

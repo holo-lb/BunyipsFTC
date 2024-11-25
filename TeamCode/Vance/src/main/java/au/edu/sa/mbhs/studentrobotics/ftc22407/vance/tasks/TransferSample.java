@@ -40,12 +40,12 @@ public class TransferSample extends SequentialTaskGroup {
                 verticalArm.tasks.home(),
                 basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
-                horizontalArm.tasks.goTo(210).withTimeout(Seconds.of(2)),
+                horizontalArm.tasks.goTo(200).withTimeout(Seconds.of(2)),
                 new WaitTask(0.6, Seconds),
                 claws.tasks.openBoth(),
                 new WaitTask(0.3, Seconds),
                 new ParallelTaskGroup(
-                        horizontalArm.tasks.goTo(240)
+                        horizontalArm.tasks.goTo(270)
                                 .withTimeout(Seconds.of(0.5))
                                 .then(horizontalArm.tasks.home()),
                         verticalArm.tasks.goTo(200)
