@@ -38,6 +38,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     private PoseMap currentPoseMap;
     final int rightSampleXPos = -48;
     final int rightSampleYPos = -48;
+    final int pickUpSamplePos = 250;
 
     private void placeInScoringBasket() {
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
@@ -48,7 +49,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
 
     private void acquireSampleAndPlace() {
         // Place in robot basket
-        add(new PickUpSample(robot.horizontalLift, robot.claws, 250));
+        add(new PickUpSample(robot.horizontalLift, robot.claws, pickUpSamplePos));
         wait(700, Milliseconds);
         add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
 
@@ -61,7 +62,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        robot.verticalLift.withTolerance(25);
+        robot.verticalLift.withTolerance(35);
 
         setOpModes(
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(5)).rotate(Degrees.of(90)),
