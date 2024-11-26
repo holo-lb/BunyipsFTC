@@ -210,7 +210,7 @@ public class Joker extends RobotConfig {
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
                 .withTopSwitch(intakeOutStop)
-                .withUserSetpointControl((dt) -> 400 * dt)
+                .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
 
         lift = new HoldableActuator(liftMotor)
@@ -219,7 +219,7 @@ public class Joker extends RobotConfig {
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
                         LIFT_UPPER_POWER_CLAMP)
                 .withUserSetpointControl((dt) -> 1800 * dt)
-                .withUpperLimit(4950)
+                .withUpperLimit(4100)
                 .withName("lift");
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
