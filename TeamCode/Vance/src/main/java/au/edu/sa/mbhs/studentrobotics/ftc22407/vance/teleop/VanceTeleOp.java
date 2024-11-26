@@ -61,7 +61,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.verticalLift.tasks.home());
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws));
+                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true));
 
         HolonomicVectorDriveTask hvdt = new HolonomicVectorDriveTask(gamepad1, robot.drive, () -> FC);
         robot.drive.setDefaultTask(hvdt);

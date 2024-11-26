@@ -1,10 +1,12 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
@@ -33,11 +35,12 @@ public class TransferSample extends SequentialTaskGroup {
      * @param clawRotator   the claw rotator
      * @param basketRotator the basket that the sample is placed in
      * @param claws         the claws
+     * @param shouldHome    if we should home the vertical arm
      */
-    public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws) {
+    public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws, boolean shouldHome) {
         super(
                 clawRotator.tasks.close(),
-                verticalArm.tasks.home(),
+                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new RunTask() /* do nothin*/,
                 basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
                 horizontalArm.tasks.goTo(200).withTimeout(Seconds.of(2)),

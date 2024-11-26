@@ -28,8 +28,8 @@ public class BasketPlacer extends SequentialTaskGroup {
      */
     public BasketPlacer(HoldableActuator verticalArm, Switch basketRotator, MecanumDrive drive) {
         super(
-                verticalArm.tasks.home().timeout(Seconds.of(1)),  // try to reset encoders as best we can
-                verticalArm.tasks.goTo(800),  // TODO: test
+//                verticalArm.tasks.home().timeout(Seconds.of(1)),  // try to reset encoders as best we can
+//                verticalArm.tasks.goTo(800),  // TODO: test
                 basketRotator.tasks.open(),
                 new WaitTask(Milliseconds.of(1000)),
                 new RunForTask(Milliseconds.of(100), () ->
