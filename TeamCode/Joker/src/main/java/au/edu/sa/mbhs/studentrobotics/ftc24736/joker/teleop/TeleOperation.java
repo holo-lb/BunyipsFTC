@@ -30,7 +30,7 @@ public class TeleOperation extends BunyipsOpMode {
         double gp2RightStickY = -gamepad2.right_stick_y;
 
         //if (gamepad2.getDebounced(Controls.LEFT_BUMPER)) {
-            //robot.toggleIntakeGrip();
+        //    robot.toggleIntakeGrip();
         //}
         if (gamepad2.getDebounced(Controls.RIGHT_BUMPER)) {
             robot.toggleOuttakeGrip();
@@ -56,19 +56,21 @@ public class TeleOperation extends BunyipsOpMode {
             robot.ascentArm.setPower(0);
         }
 
-        //if (gamepad2.getDebounced(Controls.X)) {
-            //robot.toggleOuttake();
-        //}
-        //if (robot.handoverPoint.isPressed()) {
-            //robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            //robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
-                    //Joker.LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT);
-        //}
-        //else {
-            //robot.lights.resetPattern();
-            //robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP,
-                    //Joker.LIFT_UPPER_POWER_CLAMP);
-        //}
+        /*
+        if (gamepad2.getDebounced(Controls.X)) {
+            robot.toggleOuttake();
+        }
+        if (robot.handoverPoint.isPressed()) {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
+                    Joker.LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT);
+        }
+        else {
+            robot.lights.resetPattern();
+            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP,
+                    Joker.LIFT_UPPER_POWER_CLAMP);
+        }
+        */
         robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
         robot.intake.setPower(gp2LeftStickY);
         robot.lift.setPower(gp2RightStickY);
@@ -79,7 +81,5 @@ public class TeleOperation extends BunyipsOpMode {
         robot.lift.update();
         robot.lights.update();
         robot.ascentArm.update();
-        //telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
-        //telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
     }
 }

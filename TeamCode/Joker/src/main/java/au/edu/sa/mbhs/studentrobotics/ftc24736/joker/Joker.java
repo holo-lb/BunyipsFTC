@@ -13,8 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
@@ -96,19 +94,15 @@ public class Joker extends RobotConfig {
      * Control Hub 2-3 (3 used): intakeInStop
      */
     public TouchSensor intakeInStop;
-    //**
-     //* Control Hub 4-5 (5 used): intakeOutStop
-     //*/
-    //public TouchSensor intakeOutStop;
+    /**
+     * Control Hub 4-5 (5 used): intakeOutStop
+     */
+    public TouchSensor intakeOutStop;
     //**
      //* Control Hub 6-7 (7 used): handoverPoint
      //*/
     //public TouchSensor handoverPoint;
 
-    /**
-     * Control Hub USB-3.0: webcam
-     */
-    public WebcamName camera;
     /**
      * Internally connected
      */
@@ -181,10 +175,9 @@ public class Joker extends RobotConfig {
 
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
-        //intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
+        intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
 
-        camera = getHardware("webcam", WebcamName.class);
         imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
@@ -216,8 +209,8 @@ public class Joker extends RobotConfig {
 
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
-                //.withTopSwitch(intakeOutStop)
-                .withUserSetpointControl((dt) -> 8)
+                .withTopSwitch(intakeOutStop)
+                .withUserSetpointControl((dt) -> 400 * dt)
                 .withName("intake");
 
         lift = new HoldableActuator(liftMotor)
@@ -226,7 +219,7 @@ public class Joker extends RobotConfig {
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
                         LIFT_UPPER_POWER_CLAMP)
                 .withUserSetpointControl((dt) -> 1800 * dt)
-                //.withUpperLimit(4950)
+                .withUpperLimit(4950)
                 .withName("lift");
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
@@ -254,13 +247,15 @@ public class Joker extends RobotConfig {
         }
     }
 
-    //public void toggleOuttake() {
-        //if (outtakeFacingOut) {
-            //outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
-            //outtakeFacingOut = false;
-        //}
-        //else {
-            //outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
-            //outtakeFacingOut = true;
-        //}
+    /*
+    public void toggleOuttake() {
+        if (outtakeFacingOut) {
+            outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
+            outtakeFacingOut = false;
+        }
+        else {
+            outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
+            outtakeFacingOut = true;
+        }
+    */
     }
