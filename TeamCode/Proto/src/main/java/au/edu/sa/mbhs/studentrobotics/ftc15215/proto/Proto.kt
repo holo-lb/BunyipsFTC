@@ -158,16 +158,17 @@ class Proto : RobotConfig() {
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
-            .setDistPerTick(123.5 of Inches, 134005.0)
-            .setLateralInPerTick(0.0007201181372108113)
-            .setTrackWidthTicks(15480.209096658593)
+            .setDistPerTick(100.0 of Inches, 109586.0) // 0.000912525
+            .setLateralInPerTick(0.0007900203034967318)
+            .setTrackWidthTicks(14558.708502496898)
             .build()
         val mp = MotionProfile.Builder()
-            .setMaxWheelVel(40.0 of InchesPerSecond)
-            .setMaxProfileAccel(60.0 of InchesPerSecondPerSecond)
-            .setKs(0.93)
-            .setKv(0.00022)
-            .setKa(0.00001)
+            .setMaxWheelVel(50.0 of InchesPerSecond)
+            .setMinProfileAccel(-80.0 of InchesPerSecondPerSecond)
+            .setMaxProfileAccel(80.0 of InchesPerSecondPerSecond)
+            .setKs(1.182874620902731)
+            .setKv(0.0002)
+            .setKa(0.000032)
             .build()
         val mg = MecanumGains.Builder()
             .setAxialGain(2.5)
@@ -176,8 +177,8 @@ class Proto : RobotConfig() {
             .setPathFollowing(true)
             .build()
         val twl = TwoWheelLocalizer.Params.Builder()
-            .setParYTicks(-2109.055102501924)
-            .setPerpXTicks(-5279.813561122253)
+            .setParYTicks(-2315.771797973272)
+            .setPerpXTicks(-5715.609945455893)
             .build()
 
 //        val at = AprilTag {

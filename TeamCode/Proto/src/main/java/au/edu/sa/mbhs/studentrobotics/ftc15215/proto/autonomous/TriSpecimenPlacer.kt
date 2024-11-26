@@ -53,12 +53,12 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         }
         val hookSpecimenRoutine = {
             ParallelTaskGroup(
-                robot.clawLift.tasks.goTo(1050).withTimeout(Seconds.of(2.0)) named "Hook Specimen",
+                robot.clawLift.tasks.goTo(850).withTimeout(Seconds.of(2.0)) named "Hook Specimen",
                 robot.claws.tasks.openBoth().after(0.4 of Seconds) named "Release Specimen"
             )
         }
         val highChamberTicks = 1700
-        val submersiblePlacingY = 36.0
+        val submersiblePlacingY = 31.0
         val samplePushY = 12.0
         val observationPushY = 50.0
         val homeDelay = 0.5 of Seconds
@@ -69,7 +69,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
 
         add(ParallelTaskGroup(
             robot.drive.makeTrajectory(map)
-                .setVelConstraints { _, _, s -> if (s > submersiblePlacingY * 0.6) slowSpeed to InchesPerSecond else 40.0 }
+                .setVelConstraints { _, _, s -> if (s > submersiblePlacingY * 0.3) slowSpeed to InchesPerSecond else 40.0 }
                 .lineToY(submersiblePlacingY)
                 .build(last) named "Drive to Submersible Zone",
             robot.clawLift.tasks.goTo(highChamberTicks) named "Lift to High Chamber"
@@ -94,7 +94,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .strafeTo(Vector2d(-47.0, 44.0))
             .turn(180.0, Degrees)
             .setVelConstraints(Vel.ofMax(slowSpeed))
-            .lineToY(47.0) // Human player alignment 1
+            .lineToY(43.0) // Human player alignment 1
             .withName("Orient to Observation Zone")
             .addTask(last)
         add(floorPickupRoutine.invoke())
