@@ -38,11 +38,11 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     private PoseMap currentPoseMap;
     final int rightSampleXPos = -46;
     final int rightSampleYPos = -48;
-    final int pickUpSamplePos = 250;
+    final int pickUpSamplePos = 240;
 
     private void placeInScoringBasket() {
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
-        wait(700, Milliseconds);
+        wait(200, Milliseconds);
         add(robot.basketRotator.tasks.close());
 //        add(robot.verticalLift.tasks.home());
     }
@@ -50,12 +50,12 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     private void acquireSampleAndPlace() {
         // Place in robot basket
         add(new PickUpSample(robot.horizontalLift, robot.claws, pickUpSamplePos));
-        wait(700, Milliseconds);
+        wait(300, Milliseconds);
         add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, false));
 
         add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
-                .build());
+                .build().with(robot.verticalLift.tasks.goTo(800)));
 
         placeInScoringBasket();
     }
@@ -70,7 +70,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(5)).rotate(Degrees.of(90))
         );
 
-        basketPlacerPos = new Vector2d(-60, -60.00);
+        basketPlacerPos = new Vector2d(-59, -59.00);
     }
 
     @Override
@@ -90,17 +90,17 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
 
         placeInScoringBasket();
 
-        robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
+        add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToSplineHeading(new Vector2d(rightSampleXPos, rightSampleYPos), Inches, 90.00, Degrees)
 //                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
-                .addTask();
+                .build().with(robot.verticalLift.tasks.home()));
 
         acquireSampleAndPlace();
 
-        robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
+        add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, rightSampleYPos), Inches, 90.00, Degrees)
 //                .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
-                .addTask();
+                .build());
 
         acquireSampleAndPlace();
 
