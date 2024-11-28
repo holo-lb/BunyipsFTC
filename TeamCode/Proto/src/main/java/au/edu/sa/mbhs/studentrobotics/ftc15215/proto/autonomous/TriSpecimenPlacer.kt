@@ -43,12 +43,12 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         val last = Reference.of(startLocation.toFieldPose())
         robot.drive.pose = last.require()
 
-        val floorPickupRoutine = {
+        val wallPickupRoutine = {
             SequentialTaskGroup(
                 robot.claws.tasks.openBoth() named "Prepare Claws",
-                robot.clawRotator.tasks.setTo(0.1).forAtLeast(0.4, Seconds) named "Reach Specimen",
+                robot.clawRotator.tasks.setTo(0.6).forAtLeast(0.4, Seconds) named "Reach Specimen",
                 robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds) named "Grip Specimen",
-                robot.clawRotator.tasks.open() named "Lift Specimen"
+                robot.clawLift.tasks.goTo(400) named "Lift Specimen"
             )
         }
         val hookSpecimenRoutine = {
@@ -57,20 +57,19 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
                 robot.claws.tasks.openBoth().after(0.4 of Seconds) named "Release Specimen"
             )
         }
-        // TODO: recalibration due to rr retuning
         val highChamberTicks = 1700
-        val submersiblePlacingY = 31.0
+        val submersiblePlacingY = 33.0
         val samplePushY = 12.0
         val observationPushY = 50.0
         val homeDelay = 0.5 of Seconds
-        val slowSpeed = 0.1 of FieldTilesPerSecond
+        val slowSpeed = 0.2 of FieldTilesPerSecond
 
         add(robot.claws.tasks.closeBoth()) named "Grip Preload"
         add(robot.clawRotator.tasks.open()) named "Home Rotator"
 
         add(ParallelTaskGroup(
             robot.drive.makeTrajectory(map)
-                .setVelConstraints { _, _, s -> if (s > submersiblePlacingY * 0.3) slowSpeed to InchesPerSecond else 40.0 }
+                .setVelConstraints { _, _, s -> if (s > submersiblePlacingY * 0.8) slowSpeed to InchesPerSecond else 40.0 }
                 .lineToY(submersiblePlacingY)
                 .build(last) named "Drive to Submersible Zone",
             robot.clawLift.tasks.goTo(highChamberTicks) named "Lift to High Chamber"
@@ -80,7 +79,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         add(robot.drive.makeTrajectory(last.require(), map)
             .setReversed(true)
             .splineToConstantHeading(Vector2d(-36.7, 26.8), tangent = 3 * PI / 2)
-            .splineToConstantHeading(Vector2d(-47.0, samplePushY), tangent = PI)
+            .splineToConstantHeading(Vector2d(-45.0, samplePushY), tangent = PI)
             .setTangent(3 * PI / 2)
             .setReversed(true)
             .lineToY(observationPushY)
@@ -95,10 +94,11 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .strafeTo(Vector2d(-47.0, 44.0))
             .turn(180.0, Degrees)
             .setVelConstraints(Vel.ofMax(slowSpeed))
-            .lineToY(43.0) // Human player alignment 1
+            // TODO: wall alignment
+            .strafeToLinearHeading(Vector2d(-46.14, 57.78), heading = PI / 2) // HP alignment 1
             .withName("Orient to Observation Zone")
             .addTask(last)
-        add(floorPickupRoutine.invoke())
+        add(wallPickupRoutine.invoke())
 
         add(robot.drive.makeTrajectory(last.require(), map)
             .splineTo(Vector2d(-5.0, 38.0), tangent = 3 * PI / 2)
@@ -116,7 +116,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .build(last)
             .with(robot.clawLift.tasks.home().after(homeDelay) named "Home Lift"))
 
-        add(floorPickupRoutine.invoke())
+        add(wallPickupRoutine.invoke())
 
         add(robot.drive.makeTrajectory(last.require(), map)
             .strafeToLinearHeading(Vector2d(-8.0, 38.0), heading = 3 * PI / 2)
