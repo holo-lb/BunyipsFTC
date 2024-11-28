@@ -152,6 +152,10 @@ public class Joker extends RobotConfig {
     private boolean outtakeGripClosed = false;
     //private boolean outtakeFacingOut = false;
 
+    public static double kP = 0.005;
+    public static double kI = 0;
+    public static double kD = 0;
+
     @Override
     protected void onRuntime() {
         frontLeft = getHardware("front_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
@@ -160,7 +164,7 @@ public class Joker extends RobotConfig {
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         intakeMotor = getHardware("intakeMotor", Motor.class, d ->
-            d.setRunToPositionController(new PIDController(0.01, 0, 0.00001))
+            d.setRunToPositionController(new PIDController(kP, kI, kD))
         );
         liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         hook = getHardware("hook", DcMotor.class);
@@ -218,8 +222,8 @@ public class Joker extends RobotConfig {
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
                         LIFT_UPPER_POWER_CLAMP)
+                .withUpperLimit(6000)
                 .withUserSetpointControl((dt) -> 1800 * dt)
-                .withUpperLimit(4100)
                 .withName("lift");
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
@@ -233,7 +237,7 @@ public class Joker extends RobotConfig {
                 .withName("lights");
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-        outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
+        outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
     }
 
     public void toggleOuttakeGrip() {

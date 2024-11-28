@@ -52,6 +52,8 @@ public class RedAllianceObservationSide extends AutonomousBunyipsOpMode {
                 .with(robot.lift.tasks.home())
         );
 
+        run(robot::toggleOuttakeGrip);
+
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
         //run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));

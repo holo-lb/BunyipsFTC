@@ -1,5 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.teleop;
 
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,6 +14,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 @TeleOp(name = "TeleOp")
 public class TeleOperation extends BunyipsOpMode {
     private final Joker robot = new Joker();
+    private Rotation2d origin = Rotation2d.exp(0);
 
     @Override
     protected void onInit() {
@@ -56,6 +58,10 @@ public class TeleOperation extends BunyipsOpMode {
             robot.ascentArm.setPower(0);
         }
 
+        if (gamepad1.getDebounced(Controls.A)) {
+            origin = robot.drive.getPose().heading;
+        }
+
         /*
         if (gamepad2.getDebounced(Controls.X)) {
             robot.toggleOuttake();
@@ -71,7 +77,7 @@ public class TeleOperation extends BunyipsOpMode {
                     Joker.LIFT_UPPER_POWER_CLAMP);
         }
         */
-        robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
+        robot.drive.setPower(robot.drive.getPose().heading.inverse().times(origin).times(Controls.vel(leftStickX, leftStickY, rightStickX)));
         robot.intake.setPower(gp2LeftStickY);
         robot.lift.setPower(gp2RightStickY);
         robot.spintake.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
@@ -81,5 +87,7 @@ public class TeleOperation extends BunyipsOpMode {
         robot.lift.update();
         robot.lights.update();
         robot.ascentArm.update();
+        telemetry.addData("intake arm current position", robot.intakeMotor.getCurrentPosition());
+        telemetry.addData("intake arm target position", robot.intakeMotor.getTargetPosition());
     }
 }

@@ -45,8 +45,6 @@ public class RedAllianceBasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*3.1+6, -24*2+2+6), Inches)
                 .addTask();
 
-        run(robot::toggleOuttakeGrip);
-
         add(robot.drive.makeTrajectory(new Pose2d(-24*3.1+6, -24*2+2+6, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-14-13, 0), Inches, 0, Degrees)
                 .build()
