@@ -12,7 +12,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerS
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -25,7 +24,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
@@ -62,11 +60,6 @@ class Proto : RobotConfig() {
      * Vertical lift for the claw mechanism (`claws` and `clawRotator`).
      */
     lateinit var clawLift: HoldableActuator
-
-    /**
-     * Linked ascension mechanism for the claw lift.
-     */
-    lateinit var ascent: HoldableActuator
 
     /**
      * Forward camera.
@@ -148,19 +141,13 @@ class Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-        hw.ascent = getHardware("asc", SimpleRotator::class.java) {
-            it.setPowerDeltaThreshold(0.02)
-            it.direction = DcMotorSimple.Direction.REVERSE
-            (it.actuator as DcMotor).zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
-
         hw.camera = getHardware("webcam", WebcamName::class.java)
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
             .setDistPerTick(100.0 of Inches, 109586.0) // 0.000912525
-            .setLateralInPerTick(0.0007900203034967318)
-            .setTrackWidthTicks(14558.708502496898)
+            .setLateralInPerTick(0.0007272580236408389)
+            .setTrackWidthTicks(15504.984641208961)
             .build()
         val mp = MotionProfile.Builder()
             .setMaxWheelVel(50.0 of InchesPerSecond)
@@ -174,11 +161,10 @@ class Proto : RobotConfig() {
             .setAxialGain(2.5)
             .setLateralGain(2.5)
             .setHeadingGain(4.0)
-            .setPathFollowing(true)
             .build()
         val twl = TwoWheelLocalizer.Params.Builder()
-            .setParYTicks(-2315.771797973272)
-            .setPerpXTicks(-5715.609945455893)
+            .setParYTicks(-2331.640217956543)
+            .setPerpXTicks(-6317.573653757131)
             .build()
 
 //        val at = AprilTag {
@@ -201,8 +187,6 @@ class Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
-        ascent = HoldableActuator(hw.ascent!!.actuator as DcMotor)
-            .withName("Ascender")
 
         // PWM is not functional if we don't set one first. This is a patch.
         hw.clawRotator?.position = 1.0
@@ -278,11 +262,6 @@ class Proto : RobotConfig() {
          * Control Digital 1: "bottom" limit for claw lift
          */
         var bottom: TouchSensor? = null
-
-        /**
-         * Control 2: Ascent "asc"
-         */
-        var ascent: SimpleRotator? = null
 
         /**
          * Control USB 3.0: Webcam

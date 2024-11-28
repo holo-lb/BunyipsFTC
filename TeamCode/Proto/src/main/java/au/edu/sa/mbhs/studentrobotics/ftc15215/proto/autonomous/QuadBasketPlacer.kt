@@ -13,6 +13,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
+import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.IdentityPoseMap
 import com.acmerobotics.roadrunner.Pose2d
@@ -25,17 +26,16 @@ import kotlin.math.PI
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "0+4 Quad Basket Placer (Left)")
+@Autonomous(name = "0+4 Quad Basket Placer (Left, L1 Asc.)")
 class QuadBasketPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
-    private val maxTicks = au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants.cl_MAX.toInt()
 
     override fun onInitialise() {
         robot.init()
 
         setOpModes(
-            blueLeft().tile(2.0).backward(5 of Inches).rotate(90 of Degrees),
-            redLeft().tile(2.0).backward(5 of Inches).rotate(90 of Degrees)
+            blueLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees),
+            redLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees)
         )
 
         robot.clawLift.withTolerance(20)
@@ -50,10 +50,12 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
 
         // there aren't actually any changes
 
+        val basket = Pose2d(54.6, 53.6, PI / 4)
+        val basketTarget = Constants.cl_MAX.toInt() - 600
         val waypoints = listOf(
-            Pose2d(38.33, 40.02, 310.0.degToRad()),
-            Pose2d(53.64, 42.77, (-70.0).degToRad()),
-            Pose2d(58.69, 40.78, (-55.0).degToRad()),
+            Pose2d(37.87, 36.19, (-54.9).degToRad()),
+            Pose2d(46.9, 35.43, (-49.6).degToRad()),
+            Pose2d(53.64, 24.41, 0.0), // TODO: consider last sample positioning
         )
 
         // Reset position of claw rotator to be upright, as it might be slanted backwards for preloading
@@ -63,9 +65,9 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         add(
             ParallelTaskGroup(
                 robot.drive.makeTrajectory(if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
-                    .strafeToLinearHeading(Vector2d(56.0, 56.0), heading = PI / 4)
+                    .strafeToLinearHeading(basket.position, heading = basket.heading)
                     .build(),
-                robot.clawLift.tasks.goTo(maxTicks) timeout (3 of Seconds)
+                robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)
             )
         )
         // Angle claw rotator down and drop sample
@@ -77,14 +79,11 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             // Begin moving to the sample
             add(
                 ParallelTaskGroup(
-                    robot.drive.makeTrajectory(
-                        Pose2d(55.0, 55.0, PI / 4),
-                        if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
-                    )
+                    robot.drive.makeTrajectory(basket, if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
                         .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
                         .build(),
                     robot.clawRotator.tasks.setTo(0.3).after(0.5, Seconds),
-                    robot.clawLift.tasks.home(), // TODO: optimise for time
+                    robot.clawLift.tasks.home(),
                 )
             )
             // Yoink
@@ -94,22 +93,10 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             // Go back and place
             add(
                 ParallelTaskGroup(
-                    let {
-                        val t = robot.drive.makeTrajectory(
-                            waypoints[i],
-                            if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
-                        )
-                        if (i <= 1) {
-                            t.strafeToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4)
-                        } else {
-                            // For the last trajectory only, back up while en route to the basket
-                            t.setReversed(true)
-                                .strafeToLinearHeading(Vector2d(50.0, 48.0), heading = 320.0.degToRad())
-                                .splineToLinearHeading(Vector2d(55.0, 55.0), heading = PI / 4, tangent = PI / 4)
-                        }
-                        t.build()
-                    },
-                    robot.clawLift.tasks.goTo(maxTicks) timeout (3 of Seconds)
+                    robot.drive.makeTrajectory(waypoints[i], if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap())
+                        .strafeToLinearHeading(basket.position, heading = basket.heading)
+                        .build(),
+                    robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)
                 )
             )
             add(robot.clawRotator.tasks.setTo(0.8).forAtLeast(0.5, Seconds))
@@ -117,15 +104,16 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             add(robot.clawRotator.tasks.open().forAtLeast(0.5, Seconds))
         }
 
-//        add(
-//            robot.drive.makeTrajectory(Pose2d(55.0, 55.0, PI / 4))
-//            .turnTo(225.0, Degrees)
-//            .splineTo(Vector2d(24.26, 11.25), Inches, 180.00, Degrees)
-//            .build()
-//            .with(
-//                robot.clawLift.tasks.goTo(250) timeout (3 of Seconds),
-//                robot.clawRotator.tasks.setTo(0.1)
-//            )
-//        )
+        add(
+            robot.drive.makeTrajectory(Pose2d(54.6, 53.6, Math.PI / 4))
+                .setReversed(true)
+                .splineTo(Vector2d(48.13, 11.09), tangent = 0.0)
+                .lineToX(24.0)
+                .build()
+                .with(
+                    robot.clawLift.tasks.goTo(1600) timeout (3 of Seconds),
+                    robot.clawRotator.tasks.setTo(0.8)
+                )
+        )
     }
 }

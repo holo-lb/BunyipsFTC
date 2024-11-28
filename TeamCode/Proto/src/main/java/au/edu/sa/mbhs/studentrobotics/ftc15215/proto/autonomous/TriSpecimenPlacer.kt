@@ -57,6 +57,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
                 robot.claws.tasks.openBoth().after(0.4 of Seconds) named "Release Specimen"
             )
         }
+        // TODO: recalibration due to rr retuning
         val highChamberTicks = 1700
         val submersiblePlacingY = 31.0
         val samplePushY = 12.0
