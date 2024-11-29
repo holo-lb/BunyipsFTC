@@ -1,6 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -13,7 +14,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
@@ -149,12 +154,19 @@ public class Joker extends RobotConfig {
     //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
     //private boolean intakeGripClosed = false;
-    private boolean outtakeGripClosed = false;
+    private boolean outtakeGripClosed = true;
     //private boolean outtakeFacingOut = false;
 
+    public static double kS = 0;
+    public static double kCos = 0.1;
+    public static double kV = 0;
+    public static double kA = 0;
     public static double kP = 0.005;
     public static double kI = 0;
-    public static double kD = 0;
+    public static double kD = 0.00001;
+
+    //live mecanum wheel rolling on keyboard reaction:
+    //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
     @Override
     protected void onRuntime() {
@@ -163,9 +175,19 @@ public class Joker extends RobotConfig {
         backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        intakeMotor = getHardware("intakeMotor", Motor.class, d ->
-            d.setRunToPositionController(new PIDController(kP, kI, kD))
-        );
+        intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
+            PIDController pid = new PIDController(kP, kI, kD);
+            ArmFeedforward ff = new ArmFeedforward(kS, kCos, kV, kA, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            CompositeController c = new CompositeController(pid, ff, Double::sum);
+            BunyipsOpMode.ifRunning(o ->
+                o.onActiveLoop(() -> {
+                    c.setCoefficients(kP, kI, kD, 0.0, kS, kCos, kV, kA);
+                    o.telemetry.addData("arm angle", angleGen.getAngle().in(Degrees));
+                })
+            );
+            d.setRunToPositionController(c);
+        });
         liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         hook = getHardware("hook", DcMotor.class);
         ascentMotor = getHardware("arm", Motor.class,
