@@ -6,6 +6,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 
@@ -15,6 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
  * @author Lucas Bubner, 2024
  */
 @TeleOp(name = "Pusher", group = "a")
+@Disabled
 class Pusher : BunyipsOpMode() {
     private val robot = Proto()
 

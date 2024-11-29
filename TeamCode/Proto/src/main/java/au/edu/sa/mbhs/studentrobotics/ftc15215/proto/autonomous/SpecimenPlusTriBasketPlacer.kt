@@ -27,15 +27,14 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
             redLeft().tile(2.5).backward(1 of Inches)
         )
 
-        robot.clawLift.withTolerance(20)
+        robot.clawLift.withTolerance(25)
     }
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         super.onReady(selectedOpMode, selectedButton)
 
         // Clear initial tasks to go to basket
-        for (i in 0..3)
-            removeFirst()
+        repeat(4) { removeFirst() }
 
         // Must populate backwards
         addFirst(robot.clawLift.tasks.goTo(850).withTimeout(2 of Seconds)

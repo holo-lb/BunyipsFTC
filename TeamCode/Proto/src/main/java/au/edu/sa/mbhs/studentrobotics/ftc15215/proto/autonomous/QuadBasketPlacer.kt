@@ -40,7 +40,7 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             redLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees)
         )
 
-        robot.clawLift.withTolerance(20)
+        robot.clawLift.withTolerance(25)
 
 //        setInitTask(SwitchableLocalizer(robot.drive.localizer, robot.drive.localizer).tasks.manualTestMainLocalizer())
     }
