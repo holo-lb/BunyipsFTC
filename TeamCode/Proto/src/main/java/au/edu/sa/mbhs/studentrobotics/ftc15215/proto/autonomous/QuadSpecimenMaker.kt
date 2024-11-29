@@ -40,7 +40,6 @@ class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         if (selectedOpMode == null) return
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
-        add(robot.clawRotator.tasks.close())
         robot.drive.pose = startLocation.toFieldPose()
         robot.drive.makeTrajectory(
             Pose2d(-28.0, 60.0, 0.0),

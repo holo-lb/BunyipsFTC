@@ -8,7 +8,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
@@ -34,14 +33,11 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
 
     override fun onInitialise() {
         robot.init()
-
+        robot.clawLift.withTolerance(25)
         setOpModes(
             blueLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees),
             redLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees)
         )
-
-        robot.clawLift.withTolerance(25)
-
 //        setInitTask(SwitchableLocalizer(robot.drive.localizer, robot.drive.localizer).tasks.manualTestMainLocalizer())
     }
 
@@ -62,12 +58,10 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
 
         // Navigate to the basket and lift up the vertical lift at the same time
         add(
-            ParallelTaskGroup(
-                robot.drive.makeTrajectory(map)
-                    .strafeToLinearHeading(basket.position, heading = basket.heading)
-                    .build(),
-                robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)
-            )
+            robot.drive.makeTrajectory(map)
+                .strafeToLinearHeading(basket.position, heading = basket.heading)
+                .build()
+                .with(robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)),
         )
         // Angle claw rotator down and drop sample
         add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
@@ -77,13 +71,13 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         for (i in waypoints.indices) {
             // Begin moving to the sample
             add(
-                ParallelTaskGroup(
-                    robot.drive.makeTrajectory(basket, map)
-                        .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
-                        .build(),
-                    robot.clawRotator.tasks.setTo(0.8).after(0.5, Seconds),
-                    robot.clawLift.tasks.home(),
-                )
+                robot.drive.makeTrajectory(basket, map)
+                    .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
+                    .build()
+                    .with(
+                        robot.clawRotator.tasks.setTo(0.8).after(0.5, Seconds),
+                        robot.clawLift.tasks.home()
+                    )
             )
             // Yoink
             add(robot.clawRotator.tasks.open().forAtLeast(0.3, Seconds))
@@ -91,12 +85,10 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             add(robot.clawRotator.tasks.close())
             // Go back and place
             add(
-                ParallelTaskGroup(
-                    robot.drive.makeTrajectory(waypoints[i], map)
-                        .strafeToLinearHeading(basket.position, heading = basket.heading)
-                        .build(),
-                    robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)
-                )
+                robot.drive.makeTrajectory(waypoints[i], map)
+                    .strafeToLinearHeading(basket.position, heading = basket.heading)
+                    .build()
+                    .with(robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)),
             )
             add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
             add(robot.claws.tasks.openBoth().forAtLeast(0.1, Seconds))
@@ -104,10 +96,10 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         }
 
         add(
-            robot.drive.makeTrajectory(Pose2d(54.6, 53.6, Math.PI / 4), map)
+            robot.drive.makeTrajectory(basket, map)
                 .setReversed(true)
-                .splineTo(Vector2d(48.13, 11.09), tangent = 0.0)
-                .lineToX(20.0)
+                .splineToSplineHeading(Pose2d(38.8, 18.9, PI), tangent = 3 * PI / 2)
+                .splineToConstantHeading(Vector2d(20.0, 11.0), tangent = 0.0)
                 .build()
                 .with(
                     robot.clawLift.tasks.goTo(1600) timeout (3 of Seconds),

@@ -21,13 +21,11 @@ import kotlin.math.PI
 class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
     override fun onInitialise() {
         robot.init()
-
+        robot.clawLift.withTolerance(25)
         setOpModes(
             blueLeft().tile(2.5).backward(1 of Inches),
             redLeft().tile(2.5).backward(1 of Inches)
         )
-
-        robot.clawLift.withTolerance(25)
     }
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
