@@ -5,6 +5,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * VanceAuto but also parks in parking position
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * @author Lachlan Paul, 2024
  */
 @Autonomous
+@Disabled
 public class VanceAutoPark extends VanceAuto {
     @Override
     protected void park() {

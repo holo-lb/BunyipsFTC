@@ -8,6 +8,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunForTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 /**
@@ -35,7 +36,7 @@ public class BasketPlacer extends SequentialTaskGroup {
                 new RunForTask(Milliseconds.of(100), () ->
                         drive.setMotorPowers(-1, -1, -1, -1),
                         () -> drive.setMotorPowers(0, 0, 0, 0)),
-                verticalArm.tasks.home().timeout(Seconds.of(1))
+                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close())
         );
     }
 }

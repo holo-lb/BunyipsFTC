@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.roadrunner.IdentityPoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
@@ -27,6 +28,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.BasketPlacer;
  */
 
 @Autonomous
+@Disabled
 public class VanceAuto extends AutonomousBunyipsOpMode {
     protected final Vance robot = new Vance();
     private MessageTask waitMessage;
