@@ -112,7 +112,7 @@ class Proto : RobotConfig() {
         }
         hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
-            it.direction = Servo.Direction.FORWARD
+            it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.45)
         }
@@ -179,7 +179,7 @@ class Proto : RobotConfig() {
             .withName("Drive")
         claws = DualServos(hw.leftClaw, hw.rightClaw)
             .withName("Claws")
-        clawRotator = Switch(hw.clawRotator, 1.0, 0.0)
+        clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
@@ -187,10 +187,6 @@ class Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
-
-        // PWM is not functional if we don't set one first. This is a patch.
-        hw.clawRotator?.position = 1.0
-        clawRotator.open()
 
 //        BunyipsOpMode.ifRunning {
 //            it.onActiveLoop {

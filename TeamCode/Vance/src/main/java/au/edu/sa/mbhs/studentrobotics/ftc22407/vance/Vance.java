@@ -177,9 +177,9 @@ public class Vance extends RobotConfig {
                 .withBottomSwitch(hw.horizontalLimit)
                 .withTolerance(7, true)
                 .withName("Horizontal Arm");
-        clawRotator = new Switch(hw.clawRotator)
+        clawRotator = new Switch(hw.clawRotator, 1, 0)
                 .withName("Claw Rotator");
-        basketRotator = new Switch(hw.basketRotator)
+        basketRotator = new Switch(hw.basketRotator, 1, 0)
                 .withName("Basket Rotator");
         claws = new DualServos(hw.leftClaw, hw.rightClaw);
 //        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);

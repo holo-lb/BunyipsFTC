@@ -17,6 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.IdentityPoseMap
 import com.acmerobotics.roadrunner.Pose2d
+import com.acmerobotics.roadrunner.PoseMap
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
@@ -27,8 +28,9 @@ import kotlin.math.PI
  * @author Lucas Bubner, 2024
  */
 @Autonomous(name = "0+4 Quad Basket Placer (Left, L1 Asc.)")
-class QuadBasketPlacer : AutonomousBunyipsOpMode() {
-    private val robot = Proto()
+open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
+    protected val robot = Proto()
+    protected lateinit var map: PoseMap
 
     override fun onInitialise() {
         robot.init()
@@ -49,7 +51,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
         robot.drive.pose = startLocation.toFieldPose()
 
         // there aren't actually any changes
-        val map = if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
+        map = if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
         val basket = Pose2d(54.6, 53.6, PI / 4)
         val basketTarget = Constants.cl_MAX.toInt() - 600
         val waypoints = listOf(
@@ -58,9 +60,6 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             Pose2d(51.4, 23.88, 0.0),
         )
 
-        // Reset position of claw rotator to be upright, as it might be slanted backwards for preloading
-        add(robot.claws.tasks.closeBoth())
-        add(robot.clawRotator.tasks.open())
         // Navigate to the basket and lift up the vertical lift at the same time
         add(
             ParallelTaskGroup(
@@ -71,9 +70,9 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
             )
         )
         // Angle claw rotator down and drop sample
-        add(robot.clawRotator.tasks.setTo(0.8).forAtLeast(0.5, Seconds))
+        add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
         add(robot.claws.tasks.openBoth().forAtLeast(0.1, Seconds))
-        add(robot.clawRotator.tasks.open().forAtLeast(0.5, Seconds))
+        add(robot.clawRotator.tasks.close().forAtLeast(0.5, Seconds))
 
         for (i in waypoints.indices) {
             // Begin moving to the sample
@@ -82,14 +81,14 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                     robot.drive.makeTrajectory(basket, map)
                         .strafeToLinearHeading(waypoints[i].position, heading = waypoints[i].heading)
                         .build(),
-                    robot.clawRotator.tasks.setTo(0.3).after(0.5, Seconds),
+                    robot.clawRotator.tasks.setTo(0.8).after(0.5, Seconds),
                     robot.clawLift.tasks.home(),
                 )
             )
             // Yoink
-            add(robot.clawRotator.tasks.close().forAtLeast(0.3, Seconds))
+            add(robot.clawRotator.tasks.open().forAtLeast(0.3, Seconds))
             add(robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds))
-            add(robot.clawRotator.tasks.open())
+            add(robot.clawRotator.tasks.close())
             // Go back and place
             add(
                 ParallelTaskGroup(
@@ -99,9 +98,9 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                     robot.clawLift.tasks.goTo(basketTarget) timeout (3 of Seconds)
                 )
             )
-            add(robot.clawRotator.tasks.setTo(0.8).forAtLeast(0.5, Seconds))
+            add(robot.clawRotator.tasks.setTo(0.2).forAtLeast(0.5, Seconds))
             add(robot.claws.tasks.openBoth().forAtLeast(0.1, Seconds))
-            add(robot.clawRotator.tasks.open().forAtLeast(0.5, Seconds))
+            add(robot.clawRotator.tasks.close().forAtLeast(0.5, Seconds))
         }
 
         add(
@@ -112,7 +111,7 @@ class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 .build()
                 .with(
                     robot.clawLift.tasks.goTo(1600) timeout (3 of Seconds),
-                    robot.clawRotator.tasks.setTo(0.8)
+                    robot.clawRotator.tasks.setTo(0.2)
                 )
         )
     }
