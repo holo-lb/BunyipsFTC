@@ -6,7 +6,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.Lambda;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;

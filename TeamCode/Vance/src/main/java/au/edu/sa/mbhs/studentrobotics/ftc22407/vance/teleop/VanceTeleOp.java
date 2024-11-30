@@ -7,7 +7,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitUntilTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
@@ -45,7 +45,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 FC = false;
             }
         }, "FIELD-CENTRIC", "ROBOT-CENTRIC"));
-        setInitTask(new WaitUntilTask(() -> !Threads.isRunning("sel")));
+        setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
 

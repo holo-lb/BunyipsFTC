@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.Lambda;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
