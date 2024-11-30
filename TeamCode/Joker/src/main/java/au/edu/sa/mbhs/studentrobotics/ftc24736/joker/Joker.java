@@ -1,7 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -14,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
@@ -157,14 +155,6 @@ public class Joker extends RobotConfig {
     private boolean outtakeGripClosed = false;
     //private boolean outtakeFacingOut = false;
 
-    public static double kS = 0;
-    public static double kCos = 0.1;
-    public static double kV = 0;
-    public static double kA = 0;
-    public static double kP = 0.005;
-    public static double kI = 0;
-    public static double kD = 0.00001;
-
     //live mecanum wheel rolling on keyboard reaction:
     //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
@@ -177,15 +167,9 @@ public class Joker extends RobotConfig {
 
         intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
             EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
-            PIDController pid = new PIDController(kP, kI, kD);
-            ArmFeedforward ff = new ArmFeedforward(kS, kCos, kV, kA, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            PIDController pid = new PIDController(0.005, 0, 0.00001);
+            ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = new CompositeController(pid, ff, Double::sum);
-            BunyipsOpMode.ifRunning(o ->
-                o.onActiveLoop(() -> {
-                    c.setCoefficients(kP, kI, kD, 0.0, kS, kCos, kV, kA);
-                    o.telemetry.addData("arm angle", angleGen.getAngle().in(Degrees));
-                })
-            );
             d.setRunToPositionController(c);
         });
         liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
@@ -207,6 +191,8 @@ public class Joker extends RobotConfig {
         imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
+        /*
+        OLD TUNING VALUES IN CASE OF HAVING TO GO BACK TO EEYUCK WEIRD POSITION AUTONOMOUSEs:
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(123.5 / 6454.75)
                 .setLateralInPerTick(125 / 5090.25)
@@ -217,6 +203,24 @@ public class Joker extends RobotConfig {
                 .setKv(0.004)
                 .setKs(1.2071095031375727)
                 .setKa(0.001)
+                .build();
+        MecanumGains mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(3.5)
+                .setLateralGain(3.5)
+                .setHeadingGain(2)
+                .build();
+        */
+
+        DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick((95.5 - 0.787402 /*2 centimeters in inches, half the length of the jigsaw piece protrusions of the 2 end field tiles*/) / 5155.25) //RE-DONE and result of calculation be 0.0187354924
+                .setLateralInPerTick((95.5 - 0.787402) / 5200) //RE-DONE and result of calculation be
+                .setTrackWidthTicks(1564.368988990854) //RE-DONE
+                .build();
+        MotionProfile motionProfile = new MotionProfile.Builder()
+                .setMaxWheelVel(InchesPerSecond.of(40))
+                .setKv(0.003819584225840457) //RE-DONE
+                .setKs(1.4223271129208594) //RE-DONE
+                .setKa(0.001) //RE-DONE
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
                 .setAxialGain(3.5)

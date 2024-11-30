@@ -36,8 +36,8 @@ public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
         robot.drive.setPose(new Pose2d(-24, 24*3+9, Math.toRadians(270)));
 
         robot.drive.makeTrajectory()
-                .strafeTo(new Vector2d(-24*1.85, 24*1.3), Inches)
-                .strafeTo(new Vector2d(-24*1.85, 8), Inches)
+                .strafeTo(new Vector2d(-24*1.75, 24*1.3), Inches)
+                .strafeTo(new Vector2d(-24*1.75, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 24*1.5), Inches)
