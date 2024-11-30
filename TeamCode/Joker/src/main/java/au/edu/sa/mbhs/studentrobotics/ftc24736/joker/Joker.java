@@ -154,7 +154,7 @@ public class Joker extends RobotConfig {
     //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
     //private boolean intakeGripClosed = false;
-    private boolean outtakeGripClosed = true;
+    private boolean outtakeGripClosed = false;
     //private boolean outtakeFacingOut = false;
 
     public static double kS = 0;
@@ -258,7 +258,7 @@ public class Joker extends RobotConfig {
                 .withName("lights");
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-        outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
+        outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
     }
 
     public void toggleOuttakeGrip() {

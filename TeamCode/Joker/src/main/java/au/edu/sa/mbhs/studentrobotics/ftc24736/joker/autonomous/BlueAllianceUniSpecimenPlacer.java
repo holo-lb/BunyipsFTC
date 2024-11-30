@@ -33,11 +33,11 @@ public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
 
-        robot.drive.setPose(new Pose2d(-24, 24*3+9, Math.toRadians(90)));
+        robot.drive.setPose(new Pose2d(-24, 24*3+9, Math.toRadians(270)));
 
-        robot.drive.makeTrajectory(new Pose2d(-24, 24*3-9, Math.toRadians(270)))
-                .strafeTo(new Vector2d(-24*1.5, 24*1.3), Inches)
-                .strafeTo(new Vector2d(-24*1.5, 8), Inches)
+        robot.drive.makeTrajectory()
+                .strafeTo(new Vector2d(-24*1.85, 24*1.3), Inches)
+                .strafeTo(new Vector2d(-24*1.85, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(-24*2.1, 24*1.5), Inches)
@@ -46,6 +46,8 @@ public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .addTask();
 
         run(robot::toggleOuttakeGrip);
+
+        add(robot.lift.tasks.goTo(500));
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.1, 24*3-9, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-24*2.1, 24*2.5), Inches)

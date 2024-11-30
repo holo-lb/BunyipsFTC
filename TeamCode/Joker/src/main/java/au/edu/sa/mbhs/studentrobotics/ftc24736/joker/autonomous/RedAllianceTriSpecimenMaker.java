@@ -32,7 +32,7 @@ public class RedAllianceTriSpecimenMaker extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(new Pose2d(24, -24*3+9, Math.toRadians(90)));
 
-        robot.drive.makeTrajectory(new Pose2d(24, -24*3+9, Math.toRadians(90)))
+        robot.drive.makeTrajectory()
                 .strafeTo(new Vector2d(24*1.75, -24*1.5), Inches)
                 .strafeTo(new Vector2d(24*1.75, -8), Inches)
                 .strafeTo(new Vector2d(24*2.3, -8), Inches)
