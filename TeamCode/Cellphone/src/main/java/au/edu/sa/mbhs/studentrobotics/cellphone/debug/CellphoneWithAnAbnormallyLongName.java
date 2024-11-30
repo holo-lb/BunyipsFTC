@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
@@ -36,7 +36,7 @@ public class CellphoneWithAnAbnormallyLongName extends CommandBasedBunyipsOpMode
         always().run(() -> telemetry.add("hi"));
         // self destruct in 1 minute
         s.setDefaultTask(new WaitTask(Minutes.of(1)));
-        driver().whenReleased(Controls.BACK).run(new RunTask(() -> {
+        driver().whenReleased(Controls.BACK).run(new Lambda(() -> {
         }).withName("TaskTask").withTimeout(Minutes.of(2)));
         driver().whenHeld(Controls.LEFT_STICK_BUTTON).run(() -> telemetry.add("left stick button")).in(Minutes.of(60));
     }

@@ -6,7 +6,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
@@ -40,7 +40,7 @@ public class TransferSample extends SequentialTaskGroup {
     public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws, boolean shouldHome) {
         super(
                 clawRotator.tasks.close(),
-                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new RunTask() /* do nothin*/,
+                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new Lambda() /* do nothin*/,
                 basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
                 horizontalArm.tasks.goTo(200).withTimeout(Seconds.of(2)),

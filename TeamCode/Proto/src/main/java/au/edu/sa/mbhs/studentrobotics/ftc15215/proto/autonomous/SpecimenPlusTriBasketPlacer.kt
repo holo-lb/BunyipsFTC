@@ -5,7 +5,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunForTask
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
@@ -47,9 +47,14 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
 
         val placing = Pose2d(7.42, 32.13, 3 * PI / 2)
         // Must populate tasks backwards
-        addFirst(RunForTask(0.4 of Seconds,
-            { robot.drive.setPower(Geometry.vel(-1.0, 0.0, 0.0)) },
-            { robot.drive.setPower(Geometry.zeroVel()) }) named "Move Backwards")
+        addFirst(
+            task {
+                named("Move Backwards")
+                timeout(0.4 of Seconds)
+                init { robot.drive.setPower(Geometry.vel(-1.0, 0.0, 0.0)) }
+                onFinish { robot.drive.setPower(Geometry.zeroVel()) }
+            }
+        )
         addFirst(robot.clawLift.tasks.goTo(850).withTimeout(2 of Seconds)
             .with(robot.claws.tasks.openBoth().after(0.4 of Seconds)))
         addFirst(robot.drive.makeTrajectory(map)
