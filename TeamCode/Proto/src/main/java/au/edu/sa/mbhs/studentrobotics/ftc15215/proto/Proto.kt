@@ -107,6 +107,7 @@ class Proto : RobotConfig() {
         }
         hw.rightClaw = getHardware("rc", ProfiledServo::class.java) {
             it.direction = Servo.Direction.FORWARD
+            // play halfway through
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.4)
         }
@@ -114,7 +115,7 @@ class Proto : RobotConfig() {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
-            it.scaleRange(0.0, 0.45)
+            it.scaleRange(0.1, 0.65)
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {

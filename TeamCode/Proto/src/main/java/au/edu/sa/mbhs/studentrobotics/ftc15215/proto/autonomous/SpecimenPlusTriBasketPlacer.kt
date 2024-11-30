@@ -1,13 +1,16 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunForTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
-import com.acmerobotics.roadrunner.Vector2d
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry
+import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
 
@@ -28,20 +31,30 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
         )
     }
 
+    private val offset = 1.0
+    override val waypoints = listOf(
+        Pose2d(37.87 - offset, 36.19 + offset, (-54.9).degToRad()),
+        Pose2d(47.67 - offset, 35.12 + offset, (-49.6).degToRad()),
+        Pose2d(64.5 - offset, 39.4 + offset, (-75.0).degToRad()),
+    )
+    override val basket = Pose2d(54.6 + offset, 53.6 + offset, PI / 4)
+
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         super.onReady(selectedOpMode, selectedButton)
 
         // Clear initial tasks to go to basket
         repeat(4) { removeFirst() }
 
-        // Must populate backwards
+        val placing = Pose2d(7.42, 32.13, 3 * PI / 2)
+        // Must populate tasks backwards
+        addFirst(RunForTask(0.4 of Seconds,
+            { robot.drive.setPower(Geometry.vel(-1.0, 0.0, 0.0)) },
+            { robot.drive.setPower(Geometry.zeroVel()) }) named "Move Backwards")
         addFirst(robot.clawLift.tasks.goTo(850).withTimeout(2 of Seconds)
             .with(robot.claws.tasks.openBoth().after(0.4 of Seconds)))
         addFirst(robot.drive.makeTrajectory(map)
-                .splineToConstantHeading(Vector2d(7.42, 33.13), tangent = 3 * PI / 2)
+                .strafeToLinearHeading(placing.position, heading = placing.heading)
                 .build()
                 .with(robot.clawLift.tasks.goTo(1700)))
-
-        // TODO: consider starting location and how the inter-splice is handled
     }
 }
