@@ -49,10 +49,10 @@ public class TeleOperation extends BunyipsOpMode {
         }
 
         if (gamepad2.dpad_left) {
-            robot.ascentArm.setPower(0.4);
+            robot.ascentArm.setPower(0.19);
         }
         else if (gamepad2.dpad_right) {
-            robot.ascentArm.setPower(-0.4);
+            robot.ascentArm.setPower(-0.19);
         }
         else {
             robot.ascentArm.setPower(0);
@@ -89,5 +89,7 @@ public class TeleOperation extends BunyipsOpMode {
         robot.ascentArm.update();
         telemetry.addData("intake arm current position", robot.intakeMotor.getCurrentPosition());
         telemetry.addData("intake arm target position", robot.intakeMotor.getTargetPosition());
+        telemetry.addData("intake arm power", robot.intakeMotor.getPower());
+        telemetry.update();
     }
 }

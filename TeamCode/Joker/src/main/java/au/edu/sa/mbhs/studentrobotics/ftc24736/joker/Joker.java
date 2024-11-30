@@ -72,7 +72,7 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 3: arm
      */
-    public Motor ascentMotor;
+    public DcMotor ascentMotor;
 
     /**
      * Control Hub 0: spintake
@@ -252,7 +252,6 @@ public class Joker extends RobotConfig {
         hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ascentArm = new HoldableActuator(ascentMotor)
-                .withUserSetpointControl((dt) -> 100 * dt)
                 .withName("ascent");
 
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
