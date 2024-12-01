@@ -109,8 +109,8 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
                 .splineToConstantHeading(Vector2d(20.0, 9.0), tangent = PI)
                 .build()
                 .with(
-                    robot.clawLift.tasks.goTo(1600) timeout (3 of Seconds),
-                    robot.clawRotator.tasks.setTo(0.2)
+                    robot.clawLift.tasks.goTo(1900) timeout (3 of Seconds),
+                    robot.clawRotator.tasks.setTo(0.28)
                 )
         )
     }

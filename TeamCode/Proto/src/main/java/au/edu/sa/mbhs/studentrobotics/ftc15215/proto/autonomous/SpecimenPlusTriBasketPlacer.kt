@@ -31,7 +31,7 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
         )
     }
 
-    private val offset = 1.0
+    private val offset = 1.2
     override val waypoints = listOf(
         Pose2d(37.87 - offset, 36.19 + offset, (-54.9).degToRad()),
         Pose2d(47.67 - offset, 35.12 + offset, (-49.6).degToRad()),
@@ -45,7 +45,7 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
         // Clear initial tasks to go to basket
         repeat(4) { removeFirst() }
 
-        val placing = Pose2d(7.42, 32.13, 3 * PI / 2)
+        val placing = Pose2d(7.42, 32.0, 3 * PI / 2)
         // Must populate tasks backwards
         addFirst(
             task {
@@ -58,7 +58,7 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
         addFirst(robot.clawLift.tasks.goTo(850).withTimeout(2 of Seconds)
             .with(robot.claws.tasks.openBoth().after(0.4 of Seconds)))
         addFirst(robot.drive.makeTrajectory(map)
-                .strafeToLinearHeading(placing.position, heading = placing.heading)
+                .splineToConstantHeading(placing.position, tangent = placing.heading)
                 .build()
                 .with(robot.clawLift.tasks.goTo(1700)))
     }
