@@ -31,11 +31,17 @@ public class BasketPlacer extends SequentialTaskGroup {
 //                verticalArm.tasks.home().timeout(Seconds.of(1)),  // try to reset encoders as best we can
                 verticalArm.tasks.goTo(800),  // TODO: test
                 basketRotator.tasks.open(),
-                new WaitTask(Milliseconds.of(1000)),
-                task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
+                new WaitTask(Milliseconds.of(500)),
+//                task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
+//                        .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
+//                        .timeout(Milliseconds.of(100)),
+//                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close())
+                // todo: test, might need some slight delay on arm movements so it doesn't get caught.
+                //  original is just above if we need to rollback
+                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close(),
+                        task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
                         .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
-                        .timeout(Milliseconds.of(100)),
-                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close())
+                        .timeout(Milliseconds.of(100)))
         );
     }
 }

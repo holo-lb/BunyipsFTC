@@ -41,10 +41,6 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     final int rightSampleYPos = -48;
     final int pickUpSamplePos = 250;  // The amount of ticks the horizontal arm needs to go to pick up a sample
 
-    private void placeInScoringBasket() {
-        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
-    }
-
     private void acquireSampleAndPlace() {
         // Place in robot basket
         add(new PickUpSample(robot.horizontalLift, robot.claws, pickUpSamplePos));
@@ -55,7 +51,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .build().with(robot.verticalLift.tasks.goTo(800)));
 
-        placeInScoringBasket();
+        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
     }
 
     @Override
@@ -86,7 +82,8 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .build().with(robot.verticalLift.tasks.goTo(800)));
 
-        placeInScoringBasket();
+        // Since we already have a preload, we only need to place the sample
+        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
 
         add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToSplineHeading(new Vector2d(rightSampleXPos, rightSampleYPos), Inches, 90.00, Degrees)
@@ -107,6 +104,5 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
                 .addTask();
 
         acquireSampleAndPlace();
-        // todo: figure out if we should park, sit in place, or both
     }
 }

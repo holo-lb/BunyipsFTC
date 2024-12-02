@@ -104,6 +104,5 @@ public class VanceTriBasketPlacer extends AutonomousBunyipsOpMode {
                 .addTask();
 
         acquireSampleAndPlace();
-        // todo: figure out if we should park, sit in place, or both
     }
 }
