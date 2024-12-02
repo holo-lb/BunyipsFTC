@@ -191,8 +191,6 @@ public class Joker extends RobotConfig {
         imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
-        /*
-        OLD TUNING VALUES IN CASE OF HAVING TO GO BACK TO EEYUCK WEIRD POSITION AUTONOMOUSEs:
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(123.5 / 6454.75)
                 .setLateralInPerTick(125 / 5090.25)
@@ -209,10 +207,11 @@ public class Joker extends RobotConfig {
                 .setLateralGain(3.5)
                 .setHeadingGain(2)
                 .build();
-        */
 
+        /*
+        NEW VALUES IN CASE OF ABILITY TO RETUNE ALL AUTONOMOUSes
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick((95.5 - 0.787402 /*2 centimeters in inches, half the length of the jigsaw piece protrusions of the 2 end field tiles*/) / 5155.25) //RE-DONE and result of calculation be 0.0187354924
+                .setInPerTick((95.5 - 0.787402) / 5155.25) //RE-DONE and result of calculation be 0.0187354924
                 .setLateralInPerTick((95.5 - 0.787402) / 5200) //RE-DONE and result of calculation be
                 .setTrackWidthTicks(1564.368988990854) //RE-DONE
                 .build();
@@ -227,6 +226,7 @@ public class Joker extends RobotConfig {
                 .setLateralGain(3.5)
                 .setHeadingGain(2)
                 .build();
+        */
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, frontLeft, backLeft, backRight, frontRight, imu, hardwareMap.voltageSensor)
                 .withName("drive");
