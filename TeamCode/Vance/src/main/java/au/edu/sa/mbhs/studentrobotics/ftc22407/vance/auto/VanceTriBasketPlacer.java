@@ -24,16 +24,13 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.TransferSample;
 
 /**
  * Auto that scores a pre load and two extra scoring elements
- * Name shamlessly stolen from Bunyips.
- * <p></p>
- * WIP, if not finished use Tri version
- * @see VanceTriBasketPlacer
+ * This one works, in case I don't get the Quad working in time.
  *
  * @author Lachlan Paul, 2024
  */
 
 @Autonomous
-public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
+public class VanceTriBasketPlacer extends AutonomousBunyipsOpMode {
     protected final Vance robot = new Vance();
     private Vector2d basketPlacerPos;
     private PoseMap currentPoseMap;
