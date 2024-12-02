@@ -8,6 +8,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Millisecon
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup
+// giulio wass here and you dont know
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
@@ -20,8 +21,6 @@ import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
 
-// TODO: optimise for time
-//     considering A) sample push method
 @Autonomous(name = "3+0 Specimen Placer (Right, Ob. Park)")
 class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
     private val robot = Proto()
@@ -45,53 +44,56 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
 
         val highChamberTicks = 1700
         val homeDelay = 0.5 of Seconds
-        val wallPickup = Pose2d(-47.14, 56.88, PI / 2)
+        val wallPickup = Pose2d(-47.14, 56.5, PI / 2)
         var i = 0
         val wallPickupRoutine = {
             SequentialTaskGroup(
                 robot.claws.tasks.openBoth() named "Prepare Claws",
                 robot.clawRotator.tasks.setTo(0.45).forAtLeast(0.4, Seconds) named "Reach Specimen",
                 robot.claws.tasks.closeBoth().forAtLeast(0.2, Seconds) named "Grip Specimen",
-                robot.clawLift.tasks.goTo(400) named "Lift Specimen"
+                robot.clawLift.tasks.goTo(550) named "Lift Specimen" timeout (2 of Seconds) forAtLeast (0.5 of Seconds),
             )
         }
         val hookSpecimenRoutine = {
             ParallelTaskGroup(
-                robot.clawLift.tasks.goTo(850).withTimeout(Seconds.of(2.0)) named "Hook Specimen",
+                robot.clawLift.tasks.goTo(750).withTimeout(Seconds.of(2.0)) named "Hook Specimen",
                 robot.claws.tasks.openBoth().after(0.4 of Seconds) named "Release Specimen"
             )
         }
         val wallToSubmersibleRoutine = {
-            robot.drive.makeTrajectory(last.require(), map)
-                .setReversed(i >= 1)
-                .splineToLinearHeading(Vector2d(-5.0 - (i++ * 2), 32.0), heading = 3 * PI / 2 + 1.0e-6, tangent = 3 * PI / 2)
+            val tb = if (i == 0) robot.drive.makeTrajectory(map) else robot.drive.makeTrajectory(last.require(), map)
+            tb.setReversed(i >= 1)
+                .splineToLinearHeading(Vector2d(-5.0 - (++i * 3), 31.0), heading = 3 * PI / 2 + 1.0e-6, tangent = 3 * PI / 2)
                 .withName("Go to Submersible Zone")
                 .build(last)
                 .with(
-                    robot.clawLift.tasks.goTo(highChamberTicks) named "Lift to High Chamber",
+                    robot.clawLift.tasks.goTo(highChamberTicks) named "Lift to High Chamber" timeout (3.0 of Seconds),
                     robot.clawRotator.tasks.close().after(300.0, Milliseconds)
                 )
         }
 
-        add(wallToSubmersibleRoutine.invoke())
+        add(wallToSubmersibleRoutine.invoke().after(robot.clawLift.tasks.home()))
         add(hookSpecimenRoutine.invoke())
 
         val returning = Pose2d(-37.87, 52.02, 3 * PI / 4)
         robot.drive.makeTrajectory(last.require(), map)
             .afterTime(homeDelay to Seconds, a = robot.clawLift.tasks.home() named "Home Lift")
             .splineToLinearHeading(Pose2d(-5.0, 32.0, 3 * PI / 2), tangent = 3 * PI / 2)
-            .afterTime(1.0, a = robot.clawRotator.tasks.setTo(0.85).forAtLeast(1.0, Seconds)
-                .then(robot.claws.tasks.closeBoth().forAtLeast(0.4, Seconds).then(robot.clawRotator.tasks.setTo(0.5))))
+            .afterTime(1.0, a = robot.clawRotator.tasks.setTo(0.85).after(0.2, Seconds).forAtLeast(1.3, Seconds)
+                .then(robot.claws.tasks.closeBoth().forAtLeast(0.7, Seconds).then(robot.clawRotator.tasks.setTo(0.5))))
             .setReversed(true)
-            .splineToLinearHeading(Pose2d(-36.8, 38.95, 5 * PI / 4), tangent = 5 * PI / 4)
+            .splineToLinearHeading(Pose2d(-39.33, 37.64, 5 * PI / 4), tangent = 5 * PI / 4)
+            .waitSeconds(0.5)
             .setReversed(false)
+            .afterTime(0.6, a = robot.claws.tasks.openBoth())
             .strafeToLinearHeading(returning.position, heading = returning.heading)
-//            .afterTime(0.1, a = robot.clawRotator.tasks.close().then(robot.claws.tasks.closeBoth()))
-            .strafeToLinearHeading(Vector2d(-47.21, 35.58), heading = 5 * PI / 4)
-//            .afterTime(1.0, a = robot.claws.tasks.openBoth().then(robot.clawRotator.tasks.setTo(0.8)))
+            .afterTime(1.0, a = robot.clawRotator.tasks.setTo(0.85).forAtLeast(0.35, Seconds)
+                .then(robot.claws.tasks.closeBoth().forAtLeast(0.7, Seconds)).then(robot.clawRotator.tasks.close().after(0.4, Seconds)))
+            .strafeToLinearHeading(Vector2d(-49.5, 39.86), heading = 5 * PI / 4)
+            .waitSeconds(0.5) //giulio is here
             .strafeToLinearHeading(returning.position, heading = returning.heading)
-//            .afterTime(0.1, a = robot.clawRotator.tasks.close().then(robot.claws.tasks.closeBoth()))
-            .strafeToLinearHeading(wallPickup.position, heading = wallPickup.heading)
+            .afterTime(0.1, a = robot.clawRotator.tasks.close().then(robot.claws.tasks.openBoth()))
+            .strafeToLinearHeading(wallPickup.position - Vector2d(0.0, 1.4), heading = wallPickup.heading)
             .withName("Move Two Samples")
             .addTask(last)
 
@@ -181,3 +183,4 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .addTask(last);
      */
 }
+//still here
