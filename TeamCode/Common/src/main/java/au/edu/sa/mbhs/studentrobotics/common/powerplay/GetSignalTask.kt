@@ -50,7 +50,7 @@ class GetSignalTask(private val vision: Vision) : Task(INFINITE_TIMEOUT) {
             vision.init(at)
         // Will assume AprilTag is attached if the VisionPortal is already initialised
         vision.start(at)
-        withName("Get Signal")
+        named("Get Signal")
     }
 
     override fun isTaskFinished(): Boolean {

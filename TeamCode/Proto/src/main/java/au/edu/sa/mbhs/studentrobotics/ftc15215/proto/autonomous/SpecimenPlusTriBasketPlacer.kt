@@ -55,11 +55,11 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
                 onFinish { robot.drive.setPower(Geometry.zeroVel()) }
             }
         )
-        addFirst(robot.clawLift.tasks.goTo(750).withTimeout(2 of Seconds)
+        addFirst(robot.clawLift.tasks.goTo(750).timeout(2 of Seconds)
             .with(robot.claws.tasks.openBoth().after(0.4 of Seconds)))
         addFirst(robot.drive.makeTrajectory(map)
                 .splineToConstantHeading(placing.position, tangent = placing.heading)
                 .build()
-                .with(robot.clawLift.tasks.goTo(1700).withTimeout(2 of Seconds)))
+                .with(robot.clawLift.tasks.goTo(1700).timeout(2 of Seconds)))
     }
 }

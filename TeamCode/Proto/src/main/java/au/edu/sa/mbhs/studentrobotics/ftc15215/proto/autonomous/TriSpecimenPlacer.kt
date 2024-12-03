@@ -56,7 +56,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         }
         val hookSpecimenRoutine = {
             ParallelTaskGroup(
-                robot.clawLift.tasks.goTo(750).withTimeout(Seconds.of(2.0)) named "Hook Specimen",
+                robot.clawLift.tasks.goTo(750).timeout(Seconds.of(2.0)) named "Hook Specimen",
                 robot.claws.tasks.openBoth().after(0.4 of Seconds) named "Release Specimen"
             )
         }

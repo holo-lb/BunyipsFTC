@@ -37,7 +37,7 @@ public class CellphoneWithAnAbnormallyLongName extends CommandBasedBunyipsOpMode
         // self destruct in 1 minute
         s.setDefaultTask(new WaitTask(Minutes.of(1)));
         driver().whenReleased(Controls.BACK).run(new Lambda(() -> {
-        }).withName("TaskTask").withTimeout(Minutes.of(2)));
+        }).named("TaskTask").timeout(Minutes.of(2)));
         driver().whenHeld(Controls.LEFT_STICK_BUTTON).run(() -> telemetry.add("left stick button")).in(Minutes.of(60));
     }
 
