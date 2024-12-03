@@ -51,6 +51,7 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
     open val basket = Pose2d(54.6, 53.6, PI / 4)
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+        robot.hw.clawLift?.resetEncoder()
         if (selectedOpMode == null) return
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
         robot.drive.pose = startLocation.toFieldPose()

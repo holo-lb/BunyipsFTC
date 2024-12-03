@@ -2,6 +2,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
@@ -63,7 +64,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         val wallToSubmersibleRoutine = {
             val tb = if (i == 0) robot.drive.makeTrajectory(map) else robot.drive.makeTrajectory(last.require(), map)
             tb.setReversed(i >= 1)
-                .splineToLinearHeading(Vector2d(-5.0 - (++i * 3), 31.0), heading = 3 * PI / 2 + 1.0e-6, tangent = 3 * PI / 2)
+                .splineToLinearHeading(Vector2d(-2.0 - (++i * 3), 31.0), heading = 3 * PI / 2 + 1.0e-6, tangent = 3 * PI / 2)
                 .withName("Go to Submersible Zone")
                 .build(last)
                 .with(
@@ -82,7 +83,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             .afterTime(1.0, a = robot.clawRotator.tasks.setTo(0.85).after(0.2, Seconds).forAtLeast(1.3, Seconds)
                 .then(robot.claws.tasks.closeBoth().forAtLeast(0.7, Seconds).then(robot.clawRotator.tasks.setTo(0.5))))
             .setReversed(true)
-            .splineToLinearHeading(Pose2d(-39.33, 37.64, 5 * PI / 4), tangent = 5 * PI / 4)
+            .splineToLinearHeading(Pose2d(-45.55, 42.16, 250.degToRad()), tangent = PI)
             .waitSeconds(0.5)
             .setReversed(false)
             .afterTime(0.6, a = robot.claws.tasks.openBoth())
