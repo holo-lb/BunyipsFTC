@@ -76,13 +76,13 @@ public class BlueAllianceBasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(24*3.1-6, 24*2-2-6), Inches)
                 .addTask();
 
+        run(robot::toggleOuttakeGrip);
+
         add(robot.drive.makeTrajectory(new Pose2d(24*3.1-6, 24*2-2-6, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
                 .build()
                 .with(robot.lift.tasks.goTo(2600))
         );
-
-        run(robot::toggleOuttakeGrip);
 
         add(robot.lift.tasks.goTo(3000));
     }

@@ -49,10 +49,10 @@ public class TeleOperation extends BunyipsOpMode {
         }
 
         if (gamepad2.dpad_left) {
-            robot.ascentArm.setPower(0.19);
+            robot.ascentArm.setPower(0.4);
         }
         else if (gamepad2.dpad_right) {
-            robot.ascentArm.setPower(-0.19);
+            robot.ascentArm.setPower(-0.4);
         }
         else {
             robot.ascentArm.setPower(0);
