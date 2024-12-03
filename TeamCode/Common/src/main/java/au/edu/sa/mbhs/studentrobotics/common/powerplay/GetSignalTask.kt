@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
  * Updated 26/12/23 to use the new Vision class.
  * @author Lucas Bubner, 2022
  */
-class GetSignalTask(private val vision: Vision) : Task(INFINITE_TIMEOUT) {
+class GetSignalTask(private val vision: Vision) : Task() {
     private lateinit var at: AprilTag
     private val lockTimer = ElapsedTime()
 //    private var noDetections = 0
