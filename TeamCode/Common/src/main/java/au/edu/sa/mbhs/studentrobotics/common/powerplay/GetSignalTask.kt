@@ -62,7 +62,7 @@ class GetSignalTask(private val vision: Vision) : Task() {
     }
 
     override fun periodic() {
-        // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
+        // Caution! ParkingPosition will be null if the camera does not pick up anything in its task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         var newPosition: Direction? = null
         val detections = at.data
