@@ -41,23 +41,23 @@ public class TransferSample extends SequentialTaskGroup {
         super(
                 new ParallelTaskGroup(  // todo: test
                         clawRotator.tasks.close(),
-                        shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new Lambda() /* do nothin*/,
+                        shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(1000)): new Lambda() /* do nothin*/,
                         basketRotator.tasks.close()
                 ),
 //                clawRotator.tasks.close(),
 //                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new Lambda() /* do nothin*/,
 //                basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
-                horizontalArm.tasks.goTo(200).timeout(Seconds.of(2)),
-                new WaitTask(200, Milliseconds),
+                horizontalArm.tasks.goTo(200).timeout(Seconds.of(0.5)),
+                new WaitTask(325, Milliseconds),
                 claws.tasks.openBoth(),
-                new WaitTask(200, Milliseconds),
+                new WaitTask(75, Milliseconds),
                 new ParallelTaskGroup(
                         horizontalArm.tasks.goTo(270)
                                 .timeout(Seconds.of(0.5))
                                 .then(horizontalArm.tasks.home()),
                         verticalArm.tasks.goTo(200)
-                                .timeout(Seconds.of(2)),
+                                .timeout(Seconds.of(0.5)),
                         clawRotator.tasks.setTo(0.5)
                 ),
                 clawRotator.tasks.close()

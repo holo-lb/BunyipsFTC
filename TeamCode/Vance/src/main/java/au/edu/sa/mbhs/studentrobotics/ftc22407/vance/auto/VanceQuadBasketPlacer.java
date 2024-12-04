@@ -37,15 +37,16 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     protected final Vance robot = new Vance();
     private Vector2d basketPlacerPos;
     private PoseMap currentPoseMap;
-    final int rightSampleXPos = -48;
-    final int rightSampleYPos = -50;
-    final int pickUpSamplePos = 265;  // The amount of ticks the horizontal arm needs to go to pick up a sample
+    final int rightSampleXPos = -50;
+    final int rightSampleYPos = -45;
+    final int pickUpSamplePos = 215;  // The amount of ticks the horizontal arm needs to go to pick up a sample
+    final int preClawOut = pickUpSamplePos - 80;  // how far to go out while rotating the name sucks shut up
     final int armTimeout = 1200;
 
     private void acquireSampleAndPlace() {
         // Place in robot basket
         add(new PickUpSample(robot.horizontalLift, robot.claws, pickUpSamplePos));
-        wait(300, Milliseconds);
+        wait(250, Milliseconds);
         add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, false));
 
         add(robot.drive.makeTrajectory(currentPoseMap)
@@ -88,21 +89,21 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
 
         add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 .strafeToSplineHeading(new Vector2d(rightSampleXPos, rightSampleYPos), Inches, 90.00, Degrees)
-                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(pickUpSamplePos - 20).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
+                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(preClawOut).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
 
         acquireSampleAndPlace();
 
         add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, rightSampleYPos), Inches, 90.00, Degrees)
-                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(pickUpSamplePos - 20).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
+                .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, rightSampleYPos), Inches, 85.00, Degrees) // FIXME: heading set to 85 as the robot seems to be out of tune as drifting 5 degrees, this needs a fix
+                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(preClawOut).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
 
         acquireSampleAndPlace();
 
-        robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
+        add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
                 // We need to grab the last sample at an angle so we need to use different positions
                 // We could just grab all of them at an angle like the Bunyips but uuhhhhhhhhh i dont wanna rewrite this
-                .strafeToSplineHeading(new Vector2d(-55, -25.7), Inches, 180, Degrees)
-                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(pickUpSamplePos - 20).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout)));
+                .strafeToSplineHeading(new Vector2d(-54, -27.5), Inches, 180, Degrees) //position altered to meet new claw pos
+                .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(preClawOut).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
 
         acquireSampleAndPlace();
     }
