@@ -88,7 +88,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
         add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
 
         add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
-                .strafeToSplineHeading(new Vector2d(rightSampleXPos, rightSampleYPos), Inches, 90.00, Degrees)
+                .strafeToSplineHeading(new Vector2d(rightSampleXPos + 1, rightSampleYPos), Inches, 90.00, Degrees)
                 .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(preClawOut).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
 
         acquireSampleAndPlace();
