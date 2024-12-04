@@ -49,9 +49,9 @@ public class TransferSample extends SequentialTaskGroup {
 //                basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
                 horizontalArm.tasks.goTo(200).timeout(Seconds.of(2)),
-                new WaitTask(600, Milliseconds),
+                new WaitTask(200, Milliseconds),
                 claws.tasks.openBoth(),
-                new WaitTask(300, Milliseconds),
+                new WaitTask(200, Milliseconds),
                 new ParallelTaskGroup(
                         horizontalArm.tasks.goTo(270)
                                 .timeout(Seconds.of(0.5))

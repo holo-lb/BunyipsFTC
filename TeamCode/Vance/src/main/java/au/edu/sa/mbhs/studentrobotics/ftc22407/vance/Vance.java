@@ -85,20 +85,21 @@ public class Vance extends RobotConfig {
 
     @Override
     protected void onRuntime() {
+        // todo: giulio messed with the robot so i have to change all the directions
         hw.fl = getHardware("fl", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
+//            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.bl = getHardware("bl", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
+//            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.fr = getHardware("fr", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.br = getHardware("br", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,

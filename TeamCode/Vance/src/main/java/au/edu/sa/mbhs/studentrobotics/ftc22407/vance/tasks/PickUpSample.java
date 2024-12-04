@@ -17,7 +17,7 @@ public class PickUpSample extends SequentialTaskGroup {
     @SuppressWarnings("MissingJavadoc")  // you can figure it out
     public PickUpSample(HoldableActuator horizontalArm, DualServos claws, Integer targetPos) {
         super(
-                new ParallelTaskGroup(horizontalArm.tasks.home().timeout(Milliseconds.of(1500)), claws.tasks.openBoth()),
+                new ParallelTaskGroup(/*horizontalArm.tasks.home().timeout(Milliseconds.of(1500)),*/ claws.tasks.openBoth()),
                 horizontalArm.tasks.goTo(targetPos),
                 claws.tasks.closeBoth()
         );
