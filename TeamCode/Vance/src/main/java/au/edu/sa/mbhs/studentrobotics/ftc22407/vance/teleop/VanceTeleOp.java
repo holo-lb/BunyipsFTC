@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -48,7 +49,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
-
+// giulio is still here
     @Override
     protected void assignCommands() {
         operator().whenPressed(Controls.X)
@@ -61,12 +62,20 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.verticalLift.tasks.home());
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true));
+                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
+                .finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER));
 
         HolonomicVectorDriveTask hvdt = new HolonomicVectorDriveTask(gamepad1, robot.drive, () -> FC);
+        HolonomicDriveTask hdt = new HolonomicDriveTask(gamepad1, robot.drive, () -> FC);
         robot.drive.setDefaultTask(hvdt);
+        driver().whenPressed(Controls.BACK)
+                .run(hdt)
+                .finishIf(() -> gamepad1.getDebounced(Controls.BACK));
         driver().whenPressed(Controls.A)
-                .run("Reset FC Offset", () -> hvdt.resetFieldCentricOrigin(robot.drive.getPose()));
+                .run("Reset FC Offset", () -> {
+                    hvdt.resetFieldCentricOrigin(robot.drive.getPose());
+                    hdt.resetFieldCentricOrigin(robot.drive.getPose());
+                });
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
         robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));

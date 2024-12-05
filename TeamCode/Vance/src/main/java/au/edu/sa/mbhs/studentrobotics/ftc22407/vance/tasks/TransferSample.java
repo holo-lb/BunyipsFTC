@@ -39,7 +39,8 @@ public class TransferSample extends SequentialTaskGroup {
      */
     public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws, boolean shouldHome) {
         super(
-                new ParallelTaskGroup(  // todo: test
+                claws.tasks.closeBoth(),
+                new ParallelTaskGroup(
                         clawRotator.tasks.close(),
                         shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(1000)): new Lambda() /* do nothin*/,
                         basketRotator.tasks.close()
@@ -48,8 +49,7 @@ public class TransferSample extends SequentialTaskGroup {
 //                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new Lambda() /* do nothin*/,
 //                basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
-                horizontalArm.tasks.goTo(200).timeout(Seconds.of(0.5)),
-                new WaitTask(325, Milliseconds),
+                horizontalArm.tasks.goTo(200).forAtLeast(0.9, Seconds),
                 claws.tasks.openBoth(),
                 new WaitTask(75, Milliseconds),
                 new ParallelTaskGroup(

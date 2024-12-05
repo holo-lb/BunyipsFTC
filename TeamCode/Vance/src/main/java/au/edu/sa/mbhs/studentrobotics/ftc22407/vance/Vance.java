@@ -85,7 +85,7 @@ public class Vance extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        // todo: giulio messed with the robot so i have to change all the directions
+        // giulio messed with the robot so i have to change all the directions
         hw.fl = getHardware("fl", DcMotorEx.class, (d) -> {
 //            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -116,7 +116,7 @@ public class Vance extends RobotConfig {
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
-        });
+        }); // giulio is now in robot 22407 not 15215
         hw.bottomLimit = getHardware("bottom", TouchSensor.class);
         hw.horizontalLimit = getHardware("hori", TouchSensor.class);
         hw.horizontalLift = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));

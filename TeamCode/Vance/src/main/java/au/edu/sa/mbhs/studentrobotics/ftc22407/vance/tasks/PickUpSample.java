@@ -18,7 +18,7 @@ public class PickUpSample extends SequentialTaskGroup {
     public PickUpSample(HoldableActuator horizontalArm, DualServos claws, Integer targetPos) {
         super(
                 new ParallelTaskGroup(/*horizontalArm.tasks.home().timeout(Milliseconds.of(1500)),*/ claws.tasks.openBoth()),
-                horizontalArm.tasks.goTo(targetPos),
+                horizontalArm.tasks.goTo(targetPos).timeout(Milliseconds.of(1200)),
                 claws.tasks.closeBoth()
         );
     }
