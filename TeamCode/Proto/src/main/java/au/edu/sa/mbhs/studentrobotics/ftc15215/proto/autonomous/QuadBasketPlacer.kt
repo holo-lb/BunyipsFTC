@@ -45,8 +45,8 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
 
     open val waypoints = listOf(
         Pose2d(37.87, 36.19, (-54.9).degToRad()),
-        Pose2d(47.67, 35.12, (-49.6).degToRad()),
-        Pose2d(64.5, 39.4, (-75.0).degToRad()),
+        Pose2d(46.6, 34.51, (-49.6).degToRad()),
+        Pose2d(64.96, 38.03, (-75.0).degToRad()),
     )
     open val basket = Pose2d(54.6, 53.6, PI / 4)
 

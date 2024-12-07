@@ -34,10 +34,10 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
     private val offset = 1.2
     override val waypoints = listOf(
         Pose2d(37.87 - offset, 36.19 + offset, (-54.9).degToRad()),
-        Pose2d(47.67 - offset, 35.12 + offset, (-49.6).degToRad()),
+        Pose2d(47.67 - offset, 35.12 + offset, (-49.6).degToRad()), // may need adjustments
         Pose2d(64.5 - offset, 39.4 + offset, (-75.0).degToRad()),
     )
-    override val basket = Pose2d(54.6 + offset, 53.6 + offset, PI / 4)
+    override val basket = Pose2d(54.1, 53.1, PI / 4)
 
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         super.onReady(selectedOpMode, selectedButton)
