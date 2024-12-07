@@ -32,8 +32,6 @@ public class RedAllianceBasketSide extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(new Pose2d(-24*1.5, -24*3+9, Math.toRadians(90)));
 
-        //TODO: TEST WITH NEW TRAJECTORY VALUES
-
         robot.drive.makeTrajectory()
                 .strafeTo(new Vector2d(-24*1.5, -8), Inches)
                 .strafeTo(new Vector2d(-24*2.1, -8), Inches)

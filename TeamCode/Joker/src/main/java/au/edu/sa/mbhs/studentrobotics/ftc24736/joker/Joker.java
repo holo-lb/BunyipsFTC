@@ -262,7 +262,9 @@ public class Joker extends RobotConfig {
                 .withName("lights");
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-        outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
+
+        //BELOW IS THE EVIL YELLOW-CARD GIVING LINE OF CODE!!1
+        //outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
     }
 
     public void toggleOuttakeGrip() {

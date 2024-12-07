@@ -10,16 +10,15 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
-/**
- * "I've bathed in the terrestrial Juice. Witness my omnipotence (bad autonomouse)."
- */
 @Autonomous(name = "Blue Uni Specimen Placer", preselectTeleOp = "TeleOp")
+@Disabled
 public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
 

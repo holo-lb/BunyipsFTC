@@ -16,35 +16,35 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
-@Autonomous(name = "Blue Tri Specimen Maker", preselectTeleOp = "TeleOp")
-public class BlueAllianceTriSpecimenMaker extends AutonomousBunyipsOpMode {
+@Autonomous(name = "Red Observation Side", preselectTeleOp = "TeleOp")
+public class RedAllianceObservationSide extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
 
     @Override
     protected void onInitialise() {
         robot.init();
-        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
 
-        robot.drive.setPose(new Pose2d(-24, 24*3-9, Math.toRadians(270)));
+        robot.drive.setPose(new Pose2d(24, -24*3+9, Math.toRadians(90)));
 
         robot.drive.makeTrajectory()
-                .strafeTo(new Vector2d(-24*1.75, 24*1.5), Inches)
-                .strafeTo(new Vector2d(-24*1.75, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*3, 8), Inches)
-                .strafeTo(new Vector2d(-24*3.45, 8), Inches)
-                .strafeTo(new Vector2d(-24*3.45, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*3.45+6, 24*2.2-6), Inches)
-                .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
+                .strafeTo(new Vector2d(24*1.75, -24*1.5), Inches)
+                .strafeTo(new Vector2d(24*1.75, -8), Inches)
+                .strafeTo(new Vector2d(24*2.4, -8), Inches)
+                .strafeTo(new Vector2d(24*2.4, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*2.4, -8), Inches)
+                .strafeTo(new Vector2d(24*3, -8), Inches)
+                .strafeTo(new Vector2d(24*3, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*3, -8), Inches)
+                .strafeTo(new Vector2d(24*3.45, -8), Inches)
+                .strafeTo(new Vector2d(24*3.45, -24*2.2-1), Inches)
+                .strafeTo(new Vector2d(24*3.45-6, -24*2.2+6), Inches)
+                .strafeToLinearHeading(new Vector2d(24*2.5, -56), Inches, 270, Degrees)
                 .addTask();
 
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
