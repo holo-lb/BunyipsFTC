@@ -15,6 +15,7 @@ import com.acmerobotics.roadrunner.IdentityPoseMap
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 
 /**
  * Pushes 4 ALLIANCE-SPECIFIC SPECIMENS to the OBSERVATION ZONE for the HUMAN PLAYER.
@@ -22,7 +23,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "0+0 Quad Specimen Maker, Right")
+@Autonomous(name = "0+0 Quad Specimen Maker (Right, Ob. Park)")
+@Disabled
 class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
     private val robot = Proto()
 
@@ -38,7 +40,6 @@ class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         if (selectedOpMode == null) return
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
-        add(robot.clawRotator.tasks.open())
         robot.drive.pose = startLocation.toFieldPose()
         robot.drive.makeTrajectory(
             Pose2d(-28.0, 60.0, 0.0),

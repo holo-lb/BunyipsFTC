@@ -6,7 +6,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfi
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
@@ -62,11 +61,6 @@ class Proto : RobotConfig() {
      */
     lateinit var clawLift: HoldableActuator
 
-//    /**
-//     * Linked ascension mechanism for the claw lift.
-//     */
-//    lateinit var ascent: LinkedLift
-
     /**
      * Forward camera.
      */
@@ -80,17 +74,21 @@ class Proto : RobotConfig() {
                 RevHubOrientationOnRobot.UsbFacingDirection.LEFT
             )
         )
-        hw.fl = getHardware("fl", DcMotorEx::class.java) {
+        hw.fl = getHardware("fl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.bl = getHardware("bl", DcMotorEx::class.java) {
+        hw.bl = getHardware("bl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.br = getHardware("br", DcMotorEx::class.java) {
+        hw.br = getHardware("br", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
+            it.setPowerDeltaThreshold(0.02)
         }
-        hw.fr = getHardware("fr", DcMotorEx::class.java) {
+        hw.fr = getHardware("fr", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
+            it.setPowerDeltaThreshold(0.02)
         }
 
         // REV Through Bore Encoders attached on ports 0 and 3 with the motors
@@ -102,18 +100,22 @@ class Proto : RobotConfig() {
         }
 
         // End effectors
-        hw.leftClaw = getHardware("lc", Servo::class.java) {
+        hw.leftClaw = getHardware("lc", ProfiledServo::class.java) {
             it.direction = Servo.Direction.REVERSE
+            it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.6, 1.0)
         }
-        hw.rightClaw = getHardware("rc", Servo::class.java) {
+        hw.rightClaw = getHardware("rc", ProfiledServo::class.java) {
             it.direction = Servo.Direction.FORWARD
+            // play halfway through
+            it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.4)
         }
         hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
-            it.direction = Servo.Direction.FORWARD
-            it.scaleRange(0.0, 0.45)
+            it.direction = Servo.Direction.REVERSE
+            it.setPositionDeltaThreshold(0.02)
+            it.scaleRange(0.1, 0.65)
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
@@ -122,6 +124,7 @@ class Proto : RobotConfig() {
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
             val c = p.compose(ff) { a, b -> a + b }
             it.runToPositionController = c
+            it.setPowerDeltaThreshold(0.02)
             BunyipsOpMode.ifRunning { o ->
                 o.onActiveLoop {
                     c.setCoefficients(
@@ -139,40 +142,30 @@ class Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-//        hw.leftAscent = getHardware("la", DcMotorEx::class.java) {
-//            it.direction = DcMotorSimple.Direction.REVERSE
-//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        }
-//        hw.rightAscent = getHardware("ra", DcMotorEx::class.java) {
-//            it.direction = DcMotorSimple.Direction.REVERSE
-//            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-//        }
-
         hw.camera = getHardware("webcam", WebcamName::class.java)
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
-            .setDistPerTick(123.5 of Inches, 134005.0)
-            .setLateralInPerTick(0.0007201181372108113)
-            .setTrackWidthTicks(15480.209096658593)
+            .setDistPerTick(100.0 of Inches, 109586.0) // 0.000912525
+            .setLateralInPerTick(0.0007272580236408389)
+            .setTrackWidthTicks(15504.984641208961)
             .build()
         val mp = MotionProfile.Builder()
-            .setMaxWheelVel(40.0 of InchesPerSecond)
-            .setMaxProfileAccel(60.0 of InchesPerSecondPerSecond)
-            .setMaxAngAccel(30.0 of DegreesPerSecondPerSecond)
-            .setKs(0.93)
-            .setKv(0.00022)
-            .setKa(0.00001)
+            .setMaxWheelVel(50.0 of InchesPerSecond)
+            .setMinProfileAccel(-80.0 of InchesPerSecondPerSecond)
+            .setMaxProfileAccel(80.0 of InchesPerSecondPerSecond)
+            .setKs(1.182874620902731)
+            .setKv(0.0002)
+            .setKa(0.000032)
             .build()
         val mg = MecanumGains.Builder()
             .setAxialGain(2.5)
             .setLateralGain(2.5)
             .setHeadingGain(4.0)
-            .setPathFollowing(true)
             .build()
         val twl = TwoWheelLocalizer.Params.Builder()
-            .setParYTicks(-2109.055102501924)
-            .setPerpXTicks(-5279.813561122253)
+            .setParYTicks(-2331.640217956543)
+            .setPerpXTicks(-6317.573653757131)
             .build()
 
 //        val at = AprilTag {
@@ -187,7 +180,7 @@ class Proto : RobotConfig() {
             .withName("Drive")
         claws = DualServos(hw.leftClaw, hw.rightClaw)
             .withName("Claws")
-        clawRotator = Switch(hw.clawRotator, 1.0, 0.0)
+        clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
@@ -195,18 +188,12 @@ class Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
-//        ascent = LinkedLift(hw.leftAscent!!, hw.rightAscent!!)
-//            .withName("Ascender")
 
-        // PWM is not functional if we don't set one first. This is a patch.
-        hw.clawRotator?.position = 1.0
-        clawRotator.open()
-
-        BunyipsOpMode.ifRunning {
-            it.onActiveLoop {
-                Motor.debug(hw.clawLift!!, "Vertical Lift", it.t)
-            }
-        }
+//        BunyipsOpMode.ifRunning {
+//            it.onActiveLoop {
+//                Motor.debug(hw.clawLift!!, "Vertical Lift", it.t)
+//            }
+//        }
     }
 
     /**
@@ -272,16 +259,6 @@ class Proto : RobotConfig() {
          * Control Digital 1: "bottom" limit for claw lift
          */
         var bottom: TouchSensor? = null
-
-//        /**
-//         * Control 3: Left Ascent "la"
-//         */
-//        var leftAscent: DcMotorEx? = null
-//
-//        /**
-//         * Control 0: Right Ascent "ra"
-//         */
-//        var rightAscent: DcMotorEx? = null
 
         /**
          * Control USB 3.0: Webcam

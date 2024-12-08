@@ -1,10 +1,12 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
@@ -33,27 +35,32 @@ public class TransferSample extends SequentialTaskGroup {
      * @param clawRotator   the claw rotator
      * @param basketRotator the basket that the sample is placed in
      * @param claws         the claws
+     * @param shouldHome    if we should home the vertical arm
      */
-    public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws) {
+    public TransferSample(HoldableActuator verticalArm, HoldableActuator horizontalArm, Switch clawRotator, Switch basketRotator, DualServos claws, boolean shouldHome) {
         super(
-                clawRotator.tasks.close(),
-                verticalArm.tasks.home(),
-                basketRotator.tasks.close(),
+                claws.tasks.closeBoth(),
+                new ParallelTaskGroup(
+                        clawRotator.tasks.close(),
+                        shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(1000)): new Lambda() /* do nothin*/,
+                        basketRotator.tasks.close()
+                ),
+//                clawRotator.tasks.close(),
+//                shouldHome ? verticalArm.tasks.home().timeout(Milliseconds.of(500)): new Lambda() /* do nothin*/,
+//                basketRotator.tasks.close(),
                 clawRotator.tasks.open(),
-                horizontalArm.tasks.goTo(240).withTimeout(Seconds.of(2)),
-                new WaitTask(0.6, Seconds),
+                horizontalArm.tasks.goTo(200).forAtLeast(0.9, Seconds),
                 claws.tasks.openBoth(),
-                new WaitTask(0.3, Seconds),
+                new WaitTask(75, Milliseconds),
                 new ParallelTaskGroup(
                         horizontalArm.tasks.goTo(270)
-                                .withTimeout(Seconds.of(0.5))
+                                .timeout(Seconds.of(0.5))
                                 .then(horizontalArm.tasks.home()),
                         verticalArm.tasks.goTo(200)
-                                .withTimeout(Seconds.of(2)),
+                                .timeout(Seconds.of(0.5)),
                         clawRotator.tasks.setTo(0.5)
                 ),
-                clawRotator.tasks.close(),
-                claws.tasks.closeBoth()
+                clawRotator.tasks.close()
         );
     }
 }

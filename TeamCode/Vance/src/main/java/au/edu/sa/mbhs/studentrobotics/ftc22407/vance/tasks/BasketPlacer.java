@@ -1,12 +1,13 @@
 package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.RunForTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 /**
@@ -27,14 +28,18 @@ public class BasketPlacer extends SequentialTaskGroup {
      */
     public BasketPlacer(HoldableActuator verticalArm, Switch basketRotator, MecanumDrive drive) {
         super(
-                verticalArm.tasks.home(),  // try to reset encoders as best we can
-                verticalArm.tasks.goTo(853),  // TODO: test
+//                verticalArm.tasks.home().timeout(Seconds.of(1)),  // try to reset encoders as best we can
+                verticalArm.tasks.goTo(830).timeout(Milliseconds.of(2000)),
                 basketRotator.tasks.open(),
-                new WaitTask(Milliseconds.of(300)),
-                new RunForTask(Milliseconds.of(100), () ->
-                        drive.setMotorPowers(-1, -1, -1, -1),
-                        () -> drive.setMotorPowers(0, 0, 0, 0)),
-                verticalArm.tasks.home()
+                new WaitTask(Milliseconds.of(500)),
+//                task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
+//                        .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
+//                        .timeout(Milliseconds.of(100)),
+//                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close())
+                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close(),
+                        task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
+                        .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
+                        .timeout(Milliseconds.of(100)))
         );
     }
 }

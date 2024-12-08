@@ -7,14 +7,12 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
 @TeleOp(name = "DriveTest")
 public class DriveTest extends BunyipsOpMode {
     private final Joker robot = new Joker();
-    private Vision webcam;
 
     @Override
     protected void onInit() {
@@ -25,11 +23,7 @@ public class DriveTest extends BunyipsOpMode {
                 .build();
         robot.drive
                 .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu.get()));
-        webcam = new Vision(robot.camera);
         AprilTag at = new AprilTag();
-        webcam.init(at);
-        webcam.start(at);
-        webcam.startPreview();
 //        AprilTagPoseEstimator.enable(at, localizer)
 //                .setCameraOffset(new Pose2d(8.5, 0, 0))
 //                .setHeadingEstimate(false)

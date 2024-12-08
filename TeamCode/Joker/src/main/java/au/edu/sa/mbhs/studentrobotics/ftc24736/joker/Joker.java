@@ -13,9 +13,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
@@ -52,6 +53,7 @@ public class Joker extends RobotConfig {
     /**
      * Expansion 3: back_right
      */
+
     public DcMotor backRight;
     /**
      * Control Hub 0: intakeMotor
@@ -64,28 +66,28 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 2: hook
      */
-    public DcMotor hookMotor;
+    public DcMotor hook;
     /**
      * Control Hub 3: arm
      */
-    public Motor ascentMotor;
+    public DcMotor ascentMotor;
 
     /**
      * Control Hub 0: spintake
      */
-    public CRServo spintakeHardware;
+    public CRServo spintake;
     /**
      * Control Hub 1: outtakeGrip
      */
     public Servo outtakeGrip;
     /**
-     * Control Hub 2: intakeGrip
-     */
-    public Servo intakeGrip;
-    /**
-     * Control Hub 3: lights
+     * Control Hub 2: lights
      */
     public RevBlinkinLedDriver lightsHardware;
+    //**
+    //* Control Hub 2: intakeGrip
+    //*/
+    //public Servo intakeGrip;
 
     /**
      * Control Hub 0-1 (1 used): liftLimiter
@@ -95,19 +97,15 @@ public class Joker extends RobotConfig {
      * Control Hub 2-3 (3 used): intakeInStop
      */
     public TouchSensor intakeInStop;
-    //**
-     //* Control Hub 4-5 (5 used): intakeOutStop
-     //*/
-    //public TouchSensor intakeOutStop;
+    /**
+     * Control Hub 4-5 (5 used): intakeOutStop
+     */
+    public TouchSensor intakeOutStop;
     //**
      //* Control Hub 6-7 (7 used): handoverPoint
      //*/
     //public TouchSensor handoverPoint;
 
-    /**
-     * Control Hub USB-3.0: webcam
-     */
-    public WebcamName camera;
     /**
      * Internally connected
      */
@@ -153,9 +151,12 @@ public class Joker extends RobotConfig {
     //public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
     //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
-    private boolean intakeGripClosed = false;
+    //private boolean intakeGripClosed = false;
     private boolean outtakeGripClosed = false;
     //private boolean outtakeFacingOut = false;
+
+    //live mecanum wheel rolling on keyboard reaction:
+    //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
     @Override
     protected void onRuntime() {
@@ -165,26 +166,28 @@ public class Joker extends RobotConfig {
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
-            d.setRunToPositionController(new PIDController(0.01, 0, 0.00001));
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
+            PIDController pid = new PIDController(0.005, 0, 0.00001);
+            ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            CompositeController c = new CompositeController(pid, ff, Double::sum);
+            d.setRunToPositionController(c);
         });
-        liftMotor = getHardware("liftMotor", DcMotor.class);
-        hookMotor = getHardware("hook", DcMotor.class);
+        liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hook = getHardware("hook", DcMotor.class);
         ascentMotor = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
         //outtakeAlign = getHardware("outtakeAlign", Servo.class);
-        spintakeHardware = getHardware("spintake", CRServo.class);
+        spintake = getHardware("spintake", CRServo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
+        //intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         lightsHardware = getHardware("lights", RevBlinkinLedDriver.class);
 
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
-        //intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
+        intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
 
-        camera = getHardware("webcam", WebcamName.class);
         imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
@@ -205,6 +208,26 @@ public class Joker extends RobotConfig {
                 .setHeadingGain(2)
                 .build();
 
+        /*
+        NEW VALUES IN CASE OF ABILITY TO RETUNE ALL AUTONOMOUSes
+        DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick((95.5 - 0.787402) / 5155.25) //RE-DONE and result of calculation be 0.0187354924
+                .setLateralInPerTick((95.5 - 0.787402) / 5200) //RE-DONE and result of calculation be
+                .setTrackWidthTicks(1564.368988990854) //RE-DONE
+                .build();
+        MotionProfile motionProfile = new MotionProfile.Builder()
+                .setMaxWheelVel(InchesPerSecond.of(40))
+                .setKv(0.003819584225840457) //RE-DONE
+                .setKs(1.4223271129208594) //RE-DONE
+                .setKa(0.001) //RE-DONE
+                .build();
+        MecanumGains mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(3.5)
+                .setLateralGain(3.5)
+                .setHeadingGain(2)
+                .build();
+        */
+
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, frontLeft, backLeft, backRight, frontRight, imu, hardwareMap.voltageSensor)
                 .withName("drive");
 
@@ -216,8 +239,8 @@ public class Joker extends RobotConfig {
 
         intake = new HoldableActuator(intakeMotor)
                 .withBottomSwitch(intakeInStop)
-                //.withTopSwitch(intakeOutStop)
-                .withUserSetpointControl((dt) -> 8)
+                .withTopSwitch(intakeOutStop)
+                .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
 
         lift = new HoldableActuator(liftMotor)
@@ -225,32 +248,23 @@ public class Joker extends RobotConfig {
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
                         LIFT_UPPER_POWER_CLAMP)
+                .withUpperLimit(6000)
                 .withUserSetpointControl((dt) -> 1800 * dt)
-                //.withUpperLimit(4950)
                 .withName("lift");
 
-        //can be replaced w/ pid controller if hookMotor gets an encoder (not really needed though)
-        hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
+        hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ascentArm = new HoldableActuator(ascentMotor)
-                .withUserSetpointControl((dt) -> 100 * dt);
+                .withName("ascent");
 
         lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
 
-        intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-        outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
-    }
+        //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
 
-    public void toggleIntakeGrip() {
-        if (intakeGripClosed) {
-            intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-            intakeGripClosed = false;
-        }
-        else {
-            intakeGrip.setPosition(INTAKE_GRIP_CLOSED_POSITION);
-            intakeGripClosed = true;
-        }
+        //BELOW IS THE EVIL YELLOW-CARD GIVING LINE OF CODE!!1
+        //outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
     }
 
     public void toggleOuttakeGrip() {
@@ -264,13 +278,15 @@ public class Joker extends RobotConfig {
         }
     }
 
-    //public void toggleOuttake() {
-        //if (outtakeFacingOut) {
-            //outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
-            //outtakeFacingOut = false;
-        //}
-        //else {
-            //outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
-            //outtakeFacingOut = true;
-        //}
+    /*
+    public void toggleOuttake() {
+        if (outtakeFacingOut) {
+            outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
+            outtakeFacingOut = false;
+        }
+        else {
+            outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
+            outtakeFacingOut = true;
+        }
+    */
     }

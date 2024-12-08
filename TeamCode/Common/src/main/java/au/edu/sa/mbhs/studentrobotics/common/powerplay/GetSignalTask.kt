@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
  * Updated 26/12/23 to use the new Vision class.
  * @author Lucas Bubner, 2022
  */
-class GetSignalTask(private val vision: Vision) : Task(INFINITE_TIMEOUT) {
+class GetSignalTask(private val vision: Vision) : Task() {
     private lateinit var at: AprilTag
     private val lockTimer = ElapsedTime()
 //    private var noDetections = 0
@@ -50,7 +50,7 @@ class GetSignalTask(private val vision: Vision) : Task(INFINITE_TIMEOUT) {
             vision.init(at)
         // Will assume AprilTag is attached if the VisionPortal is already initialised
         vision.start(at)
-        withName("Get Signal")
+        named("Get Signal")
     }
 
     override fun isTaskFinished(): Boolean {
@@ -62,7 +62,7 @@ class GetSignalTask(private val vision: Vision) : Task(INFINITE_TIMEOUT) {
     }
 
     override fun periodic() {
-        // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
+        // Caution! ParkingPosition will be null if the camera does not pick up anything in its task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         var newPosition: Direction? = null
         val detections = at.data
