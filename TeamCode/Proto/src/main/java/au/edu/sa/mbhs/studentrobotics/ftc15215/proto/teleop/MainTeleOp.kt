@@ -1,6 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.Sound
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
@@ -8,6 +9,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.defa
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
+import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.R
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 /**
@@ -18,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "TeleOp")
 class MainTeleOp : CommandBasedBunyipsOpMode() {
     private val robot = Proto()
+    private val boom = Sound(R.raw.vineboom)
 
     override fun onInitialise() {
         robot.init()
@@ -31,5 +34,10 @@ class MainTeleOp : CommandBasedBunyipsOpMode() {
         robot.clawRotator default robot.clawRotator.tasks.controlDelta { gamepad2.rsy.toDouble() * 0.75f * (timer.deltaTime() to Seconds) }
         operator() whenPressed Controls.A run robot.claws.tasks.toggleBoth()
         operator() whenRising (Controls.Analog.RIGHT_TRIGGER to { v -> v == 1.0f }) run robot.clawLift.tasks.home() finishIf { gamepad2.lsy != 0.0f }
+    }
+
+    override fun periodic() {
+        if (gamepad2.getDebounced(Controls.A))
+            boom.play()
     }
 }
