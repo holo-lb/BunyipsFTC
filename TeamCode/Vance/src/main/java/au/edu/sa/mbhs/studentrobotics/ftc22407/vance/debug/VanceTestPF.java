@@ -5,11 +5,11 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Mil
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 
 /**
- * BunyipsLib test for ProfiledServo
+ * BunyipsLib test for ServoEx
  *
  * @author Lucas Bubner, 2024
  */
@@ -38,12 +38,12 @@ public class VanceTestPF extends BunyipsOpMode {
     public static double dtMs;
 
     private final Vance robot = new Vance();
-    private ProfiledServo pf;
+    private ServoEx pf;
 
     @Override
     protected void onInit() {
         robot.init();
-        pf = new ProfiledServo(robot.hw.clawRotator);
+        pf = new ServoEx(robot.hw.clawRotator);
     }
 
     @Override

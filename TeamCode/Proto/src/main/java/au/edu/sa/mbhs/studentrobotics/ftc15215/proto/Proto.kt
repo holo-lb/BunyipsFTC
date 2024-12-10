@@ -11,7 +11,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerS
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ProfiledServo
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -100,18 +100,18 @@ class Proto : RobotConfig() {
         }
 
         // End effectors
-        hw.leftClaw = getHardware("lc", ProfiledServo::class.java) {
+        hw.leftClaw = getHardware("lc", ServoEx::class.java) {
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.6, 1.0)
         }
-        hw.rightClaw = getHardware("rc", ProfiledServo::class.java) {
+        hw.rightClaw = getHardware("rc", ServoEx::class.java) {
             it.direction = Servo.Direction.FORWARD
             // play halfway through
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.4)
         }
-        hw.clawRotator = getHardware("cr", ProfiledServo::class.java) {
+        hw.clawRotator = getHardware("cr", ServoEx::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
