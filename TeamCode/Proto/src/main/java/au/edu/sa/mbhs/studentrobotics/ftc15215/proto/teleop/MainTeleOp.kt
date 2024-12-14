@@ -18,8 +18,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
  * @author Lucas Bubner, 2024
  */
 @TeleOp(name = "TeleOp")
-class MainTeleOp : CommandBasedBunyipsOpMode() {
-    private val robot = Proto()
+open class MainTeleOp : CommandBasedBunyipsOpMode() {
+    protected val robot = Proto()
     private val boom = Sound(R.raw.vineboom)
 
     override fun onInitialise() {
