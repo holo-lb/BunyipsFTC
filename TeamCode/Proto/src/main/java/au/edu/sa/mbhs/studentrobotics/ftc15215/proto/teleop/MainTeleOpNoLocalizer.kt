@@ -19,6 +19,7 @@ class MainTeleOpNoLocalizer : MainTeleOp() {
 
     override fun assignCommands() {
         super.assignCommands()
+        unbind(0)
         robot.drive default HolonomicDriveTask(gamepad1, robot.drive)
     }
 }
