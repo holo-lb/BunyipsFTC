@@ -4,7 +4,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Sound
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicLockingDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
@@ -27,7 +27,10 @@ open class MainTeleOp : CommandBasedBunyipsOpMode() {
     }
 
     override fun assignCommands() {
-        robot.drive default HolonomicVectorDriveTask(gamepad1, robot.drive)
+        robot.drive default HolonomicLockingDriveTask(
+            gamepad1,
+            robot.drive
+        )
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, robot.drive) finishIf { gamepad1 rising Controls.BACK }
 
         robot.clawLift default robot.clawLift.tasks.control { -gamepad2.lsy.toDouble() }
