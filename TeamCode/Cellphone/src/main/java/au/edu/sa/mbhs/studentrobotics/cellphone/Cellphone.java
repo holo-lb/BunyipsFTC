@@ -1,4 +1,4 @@
-package au.edu.sa.mbhs.studentrobotics.cellphone.components;
+package au.edu.sa.mbhs.studentrobotics.cellphone;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
@@ -55,7 +55,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 /**
  * Cellphone
  */
-public class CellphoneConfig extends RobotConfig {
+@RobotConfig.AutoInit
+public class Cellphone extends RobotConfig {
+    /**
+     * Auto initialised instance
+     */
+    public static final Cellphone instance = new Cellphone();
+
     /**
      * Back camera
      */
@@ -85,7 +91,6 @@ public class CellphoneConfig extends RobotConfig {
 
         BunyipsOpMode.ifRunning(o -> o.onActiveLoop(m::update));
     }
-
 
     private static class DummyHDrive implements RoadRunnerDrive {
         private PoseVelocity2d target = Geometry.zeroVel();

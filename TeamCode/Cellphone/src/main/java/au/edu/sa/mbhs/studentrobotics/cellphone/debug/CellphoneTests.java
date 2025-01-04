@@ -15,10 +15,6 @@ public class CellphoneTests extends BunyipsOpMode {
     private final Sound sound = new Sound(R.raw.vineboom);
 
     @Override
-    protected void onInit() {
-    }
-
-    @Override
     protected void activeLoop() {
         if (gamepad1.getDebounced(Controls.A))
             sound.play();

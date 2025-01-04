@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.GetDualSplitContourTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
+import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
 import au.edu.sa.mbhs.studentrobotics.common.centerstage.vision.RedTeamProp;
 
 /**
@@ -13,15 +13,13 @@ import au.edu.sa.mbhs.studentrobotics.common.centerstage.vision.RedTeamProp;
  */
 @TeleOp(name = "Tri Position Vision")
 public class CellphoneTriPositionTask extends BunyipsOpMode {
-    private final CellphoneConfig config = new CellphoneConfig();
     private Vision visionB;
     //    private Vision visionF;
     private GetDualSplitContourTask task;
 
     @Override
     protected void onInit() {
-        config.init(this);
-        visionB = new Vision(config.cameraB);
+        visionB = new Vision(Cellphone.instance.cameraB);
         RedTeamProp proc = new RedTeamProp();
         visionB.init(proc);
         visionB.start(proc);

@@ -17,7 +17,7 @@ import org.opencv.core.Scalar;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.ColourThreshold;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
+import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
 
 /**
  * Test all 2023-2024 CENTERSTAGE pixel detections.
@@ -26,7 +26,7 @@ import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
 @Config
 @SuppressWarnings("MissingJavadoc")
 public class CellphonePixelTest extends BunyipsOpMode {
-    private final CellphoneConfig config = new CellphoneConfig();
+    
     private Vision visionB;
 //    private Vision visionF
     @NonNull
@@ -44,7 +44,6 @@ public class CellphonePixelTest extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
 //        VisionPortal p = VisionPortal.easyCreateWithDefaults(
 //                config.cameraB,
 //                new ColorBlobLocatorProcessor.Builder()
@@ -57,7 +56,7 @@ public class CellphonePixelTest extends BunyipsOpMode {
 //                        .setSwatches(PredominantColorProcessor.Swatch.RED)
 //                        .build()
 //        );
-        visionB = new Vision(config.cameraB);
+        visionB = new Vision(Cellphone.instance.cameraB);
 //        MultiColourThreshold proc = new MultiColourThreshold(Pixels.createProcessors());
 //        ColourLocator proc = new ColourLocator(
 //                b -> b

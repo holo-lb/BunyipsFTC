@@ -10,6 +10,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry
+import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import kotlin.math.PI
@@ -23,8 +24,7 @@ import kotlin.math.PI
 @Autonomous(name = "1+3 Preload Specimen and Triple Basket (Left, L1 Asc.)")
 class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
     override fun onInitialise() {
-        robot.init()
-        robot.clawLift.withTolerance(25)
+        Proto.clawLift.withTolerance(25)
         setOpModes(
             blueLeft().tile(2.5).backward(1 of Inches),
             redLeft().tile(2.5).backward(1 of Inches)
@@ -51,15 +51,15 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
             task {
                 named("Move Backwards")
                 timeout(0.4 of Seconds)
-                init { robot.drive.setPower(Geometry.vel(-1.0, 0.0, 0.0)) }
-                onFinish { robot.drive.setPower(Geometry.zeroVel()) }
+                init { Proto.drive.setPower(Geometry.vel(-1.0, 0.0, 0.0)) }
+                onFinish { Proto.drive.setPower(Geometry.zeroVel()) }
             }
         )
-        addFirst(robot.clawLift.tasks.goTo(750).timeout(2 of Seconds)
-            .with(robot.claws.tasks.openBoth().after(0.4 of Seconds)))
-        addFirst(robot.drive.makeTrajectory(map)
+        addFirst(Proto.clawLift.tasks.goTo(750).timeout(2 of Seconds)
+            .with(Proto.claws.tasks.openBoth().after(0.4 of Seconds)))
+        addFirst(Proto.drive.makeTrajectory(map)
                 .splineToConstantHeading(placing.position, tangent = placing.heading)
                 .build()
-                .with(robot.clawLift.tasks.goTo(1700).timeout(2 of Seconds)))
+                .with(Proto.clawLift.tasks.goTo(1700).timeout(2 of Seconds)))
     }
 }

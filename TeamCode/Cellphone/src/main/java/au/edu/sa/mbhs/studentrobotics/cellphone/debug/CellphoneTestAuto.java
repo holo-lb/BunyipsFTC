@@ -18,18 +18,15 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
+import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
 
 /**
  * Test batch of 100 WaitTasks.
  */
 @Autonomous
 public class CellphoneTestAuto extends AutonomousBunyipsOpMode {
-    private final CellphoneConfig config = new CellphoneConfig();
-
     @Override
     protected void onInitialise() {
-        config.init();
 //        setOpModes("Test Auto", "Test Auto 2", "3,", "4", "5", "6", "7", "8", "9", "10", "18", "19", "20");
         setOpModes(
                 redRight()
@@ -46,7 +43,7 @@ public class CellphoneTestAuto extends AutonomousBunyipsOpMode {
     protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
         assert selectedOpMode != null;
         telemetry.log(((StartingConfiguration.Position) selectedOpMode.require()).toFieldPose());
-        telemetry.log(config.dummyMotor.getController());
+        telemetry.log(Cellphone.instance.dummyMotor.getController());
         for (int i = 0; i < 100; i++) {
             add(new WaitTask(Milliseconds.of(100)).named("WaitTask no. " + i));
         }

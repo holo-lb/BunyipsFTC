@@ -12,13 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "Drivebase Control")
 @Disabled
 class Drivebase : CommandBasedBunyipsOpMode() {
-    private val robot = Proto()
-
-    override fun onInitialise() {
-        robot.init()
-    }
-
     override fun assignCommands() {
-        robot.drive.setDefaultTask(HolonomicDriveTask(gamepad1, robot.drive))
+        Proto.drive.setDefaultTask(HolonomicDriveTask(gamepad1, Proto.drive))
     }
 }

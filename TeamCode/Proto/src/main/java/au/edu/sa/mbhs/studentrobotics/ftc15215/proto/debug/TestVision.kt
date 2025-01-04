@@ -12,15 +12,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp
 @Disabled
 class TestVision : BunyipsOpMode() {
-    private val robot = Proto()
     private val bs = BlueSample()
 
     override fun onInit() {
-        robot.init()
-        robot.camera.init(bs).start(bs).flip().startPreview()
+        Proto.camera.init(bs).start(bs).flip().startPreview()
         MoveToContourTask.DEFAULT_X_CONTROLLER = PController(0.05)
         MoveToContourTask.DEFAULT_R_CONTROLLER = PController(0.1)
-        Tasks.register(MoveToContourTask(robot.drive) { bs.data }.withForwardErrorSupplier {
+        Tasks.register(MoveToContourTask(Proto.drive) { bs.data }.withForwardErrorSupplier {
             t.add(it.areaPercent)
             8.0 - it.areaPercent
         })
@@ -28,6 +26,6 @@ class TestVision : BunyipsOpMode() {
 
     override fun activeLoop() {
         Tasks.runRepeatedly(0)
-        robot.drive.update()
+        Proto.drive.update()
     }
 }

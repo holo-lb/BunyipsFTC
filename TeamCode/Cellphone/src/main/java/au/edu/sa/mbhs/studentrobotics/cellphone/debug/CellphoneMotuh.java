@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.ProfiledPIDController;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
+import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
 
 /**
  * Fake motor (motuh)
@@ -41,7 +41,7 @@ public class CellphoneMotuh extends BunyipsOpMode {
      */
     public static double mAccel = 8;
 
-    private final CellphoneConfig phone = new CellphoneConfig();
+    private final Cellphone phone = new Cellphone();
 
     @Override
     protected void onInit() {

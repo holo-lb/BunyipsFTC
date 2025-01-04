@@ -9,7 +9,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
 
 
 /**
@@ -17,12 +16,10 @@ import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
  */
 @TeleOp
 public class CellphoneWithAnAbnormallyLongName extends CommandBasedBunyipsOpMode {
-    private final CellphoneConfig config = new CellphoneConfig();
     private TestSubsystem s;
 
     @Override
     protected void onInitialise() {
-        config.init();
         s = new TestSubsystem();
 //        try (Storage.Filesystem f = Storage.filesystem()) {
 //        }

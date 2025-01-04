@@ -9,15 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "Test Vertical Lift", group = "a")
 @Disabled
 class VerticalLiftTest : BunyipsOpMode() {
-    private val robot = Proto()
-
-    override fun onInit() {
-        robot.init()
-    }
-
     override fun activeLoop() {
-        robot.clawLift.setPower(-gamepad1.lsy.toDouble())
-        robot.clawLift.update()
-        Motor.debug(robot.hw.clawLift!!, "Claw Lift", t)
+        Proto.clawLift.setPower(-gamepad1.lsy.toDouble())
+        Proto.clawLift.update()
+        Motor.debug(Proto.hw.clawLift!!, "Claw Lift", t)
     }
 }

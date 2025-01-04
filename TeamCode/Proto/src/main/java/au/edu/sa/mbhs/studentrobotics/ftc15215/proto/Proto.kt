@@ -35,7 +35,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
  *
  * @author Lucas Bubner, 2024
  */
-class Proto : RobotConfig() {
+@RobotConfig.AutoInit
+object Proto : RobotConfig() {
     /**
      * Non-subsystem hardware instances.
      */

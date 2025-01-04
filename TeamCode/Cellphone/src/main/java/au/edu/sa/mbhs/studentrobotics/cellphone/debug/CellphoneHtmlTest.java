@@ -5,18 +5,19 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 
 /**
  * Html test
  */
 @TeleOp
+@RobotConfig.InhibitAutoInit
 public class CellphoneHtmlTest extends BunyipsOpMode {
     @Override
     protected void onInit() {
-        setInitTask(new WaitTask(Seconds.of(1), false));
+        setInitTask(new WaitTask(Seconds.of(1)));
         setLoopSpeed(Seconds.of(0.1));
-        throw new RuntimeException("oops");
     }
 
     @Override

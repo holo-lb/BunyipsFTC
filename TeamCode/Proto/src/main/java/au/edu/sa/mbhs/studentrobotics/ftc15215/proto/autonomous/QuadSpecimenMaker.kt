@@ -26,11 +26,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 @Autonomous(name = "0+0 Quad Specimen Maker (Right, Ob. Park)")
 @Disabled
 class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
-    private val robot = Proto()
-
     override fun onInitialise() {
-        robot.init()
-
         setOpModes(
             blueRight().tile(2.5).backward(5 of Inches).rotate(90 of Degrees),
             redRight().tile(2.5).backward(5 of Inches).rotate(90 of Degrees),
@@ -40,8 +36,8 @@ class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
     override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         if (selectedOpMode == null) return
         val startLocation = selectedOpMode.require() as StartingConfiguration.Position
-        robot.drive.pose = startLocation.toFieldPose()
-        robot.drive.makeTrajectory(
+        Proto.drive.pose = startLocation.toFieldPose()
+        Proto.drive.makeTrajectory(
             Pose2d(-28.0, 60.0, 0.0),
             if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
         )

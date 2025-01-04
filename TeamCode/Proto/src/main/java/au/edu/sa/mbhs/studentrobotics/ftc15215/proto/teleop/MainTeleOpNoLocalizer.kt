@@ -3,6 +3,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.NullLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
+import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 /**
@@ -13,13 +14,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "TeleOp (No Localization)")
 class MainTeleOpNoLocalizer : MainTeleOp() {
     override fun onInitialise() {
-        super.onInitialise()
-        robot.drive.localizer = NullLocalizer()
+        Proto.drive.localizer = NullLocalizer()
     }
 
     override fun assignCommands() {
         super.assignCommands()
         unbind(0)
-        robot.drive default HolonomicDriveTask(gamepad1, robot.drive)
+        Proto.drive default HolonomicDriveTask(gamepad1, Proto.drive)
     }
 }

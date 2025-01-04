@@ -25,15 +25,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dashboard;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
-import au.edu.sa.mbhs.studentrobotics.cellphone.components.CellphoneConfig;
+import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
 
 /**
  * test for AprilTagPoseEstimator sanity checking
  */
 @TeleOp
 public class CellphoneAprilTagTest extends BunyipsOpMode {
-    private final CellphoneConfig config = new CellphoneConfig();
-
     private final Localizer l = new Localizer() {
         @NonNull
         @Override
@@ -47,8 +45,7 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init();
-        Vision vision = new Vision(config.cameraB);
+        Vision vision = new Vision(Cellphone.instance.cameraB);
         AprilTagMetadata meta = new AprilTagMetadata(14, "test", 1.5, new VectorF(0, 0, 0), DistanceUnit.INCH,
                 new QuaternionMaker(0, 0, 0).make());
         AprilTag aprilTag = new AprilTag((b) -> {

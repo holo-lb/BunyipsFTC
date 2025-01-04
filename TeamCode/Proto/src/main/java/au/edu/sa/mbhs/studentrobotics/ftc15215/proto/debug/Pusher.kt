@@ -18,18 +18,15 @@ import com.qualcomm.robotcore.hardware.DcMotor
 @TeleOp(name = "Pusher", group = "a")
 @Disabled
 class Pusher : BunyipsOpMode() {
-    private val robot = Proto()
-
     override fun onInit() {
-        robot.init()
-        robot.drive.pose = blueLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees).build().toFieldPose()
-        robot.hw.bl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        robot.hw.br?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        robot.hw.fl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        robot.hw.fr?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        Proto.drive.pose = blueLeft().tile(2.0).backward(1 of Inches).rotate(90 of Degrees).build().toFieldPose()
+        Proto.hw.bl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        Proto.hw.br?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        Proto.hw.fl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        Proto.hw.fr?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
     }
 
     override fun activeLoop() {
-        robot.drive.update()
+        Proto.drive.update()
     }
 }
