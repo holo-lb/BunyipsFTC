@@ -19,7 +19,7 @@ public class VanceRoadRunnerTuning extends RoadRunnerTuningOpMode {
     @Override
     protected RoadRunnerDrive getDrive() {
         Vance robot = new Vance();
-        robot.init(this);
+        robot.init();
         return robot.drive;
     }
 }

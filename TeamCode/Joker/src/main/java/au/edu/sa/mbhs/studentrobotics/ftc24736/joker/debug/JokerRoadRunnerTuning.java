@@ -15,7 +15,7 @@ public class JokerRoadRunnerTuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getDrive() {
-        robot.init(this);
+        robot.init();
         return robot.drive;
     }
 }
