@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="BunyipsLib" pattern="file[BunyipsFTC.BunyipsLib*]:*//*||file[BunyipsFTC.BunyipsLib.MeepMeep*]:*//*" />
+</component>

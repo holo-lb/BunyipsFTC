@@ -3,7 +3,6 @@ package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.autonomous;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.Pose2d;
@@ -12,9 +11,8 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
+import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous(name = "Red Observation Side", preselectTeleOp = "TeleOp")
 public class RedAllianceObservationSide extends AutonomousBunyipsOpMode {
@@ -28,7 +26,7 @@ public class RedAllianceObservationSide extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
+    protected void onReady(@Nullable RefCell<?> selectedOpMode) {
 
         robot.drive.setPose(new Pose2d(24, -24*3+9, Math.toRadians(90)));
 

@@ -1,7 +1,6 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
@@ -10,7 +9,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Vel
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
@@ -21,6 +19,7 @@ import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.PoseMap
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import dev.frozenmilk.util.cell.RefCell
 import kotlin.math.PI
 
 /**
@@ -48,10 +47,10 @@ open class QuadBasketPlacer : AutonomousBunyipsOpMode() {
     )
     open val basket = Pose2d(54.6, 53.6, PI / 4)
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         Proto.hw.clawLift?.resetEncoder()
         if (selectedOpMode == null) return
-        val startLocation = selectedOpMode.require() as StartingConfiguration.Position
+        val startLocation = selectedOpMode.get() as StartingConfiguration.Position
         Proto.drive.pose = startLocation.toFieldPose()
 
         // there aren't actually any changes

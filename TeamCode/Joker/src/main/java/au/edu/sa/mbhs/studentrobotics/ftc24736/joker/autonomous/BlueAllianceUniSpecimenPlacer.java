@@ -3,7 +3,6 @@ package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.autonomous;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.Pose2d;
@@ -13,9 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
+import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous(name = "Blue Uni Specimen Placer", preselectTeleOp = "TeleOp")
 @Disabled
@@ -30,7 +28,7 @@ public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
+    protected void onReady(@Nullable RefCell<?> selectedOpMode) {
 
         robot.drive.setPose(new Pose2d(-24, 24*3+9, Math.toRadians(270)));
 

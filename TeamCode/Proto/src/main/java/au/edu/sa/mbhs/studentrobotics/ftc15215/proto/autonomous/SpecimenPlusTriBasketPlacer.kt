@@ -1,18 +1,17 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import dev.frozenmilk.util.cell.RefCell
 import kotlin.math.PI
 
 /**
@@ -39,8 +38,8 @@ class SpecimenPlusTriBasketPlacer : QuadBasketPlacer() {
     )
     override val basket = Pose2d(54.1, 53.1, PI / 4)
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
-        super.onReady(selectedOpMode, selectedButton)
+    override fun onReady(selectedOpMode: RefCell<*>?) {
+        super.onReady(selectedOpMode)
 
         // Clear initial tasks to go to basket
         repeat(4) { removeFirst() }

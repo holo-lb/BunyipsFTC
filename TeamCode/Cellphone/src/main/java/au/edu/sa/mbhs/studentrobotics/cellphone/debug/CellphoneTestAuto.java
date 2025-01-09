@@ -7,18 +7,16 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfi
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.cellphone.Cellphone;
+import dev.frozenmilk.util.cell.RefCell;
 
 /**
  * Test batch of 100 WaitTasks.
@@ -40,9 +38,9 @@ public class CellphoneTestAuto extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
+    protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         assert selectedOpMode != null;
-        telemetry.log(((StartingConfiguration.Position) selectedOpMode.require()).toFieldPose());
+        telemetry.log(((StartingConfiguration.Position) selectedOpMode.get()).toFieldPose());
         telemetry.log(Cellphone.instance.dummyMotor.getController());
         for (int i = 0; i < 100; i++) {
             add(new WaitTask(Milliseconds.of(100)).named("WaitTask no. " + i));

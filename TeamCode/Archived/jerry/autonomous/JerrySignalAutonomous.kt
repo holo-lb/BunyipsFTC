@@ -62,7 +62,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         tagtask?.let { setInitTask(it) }
     }
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(

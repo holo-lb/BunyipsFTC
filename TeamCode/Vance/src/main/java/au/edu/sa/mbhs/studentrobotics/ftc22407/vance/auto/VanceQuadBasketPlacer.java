@@ -5,7 +5,6 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.IdentityPoseMap;
@@ -15,14 +14,13 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.BasketPlacer;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.PickUpSample;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.TransferSample;
+import dev.frozenmilk.util.cell.RefCell;
 
 /**
  * Auto that scores a pre load and two extra scoring elements
@@ -72,9 +70,9 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
+    protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         if (selectedOpMode == null) return;
-        StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.require();
+        StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         currentPoseMap = startingPosition.isBlue() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());

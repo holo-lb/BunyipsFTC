@@ -43,7 +43,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
         setOpModes(Direction.LEFT, Direction.RIGHT)
     }
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         if (selectedOpMode == null) return
         addTask(
             JerryPrecisionDriveTask(

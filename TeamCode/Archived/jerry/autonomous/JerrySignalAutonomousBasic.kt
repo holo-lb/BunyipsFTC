@@ -51,7 +51,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         tagtask?.let { setInitTask(it) }
     }
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         addTask(JerryTimeDriveTask(Seconds.of(1.5), drive, 1.0, 0.0, 0.0))
     }
 

@@ -1,6 +1,19 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <option name="scopesOrder">
+      <list>
+        <option value="All Changed Files" />
+        <option value="Open Files" />
+        <option value="Production" />
+        <option value="Project Files" />
+        <option value="Project Non-Source Files" />
+        <option value="Project Source Files" />
+        <option value="Scratches and Consoles" />
+        <option value="Tests" />
+        <option value="UserCode" />
+      </list>
+    </option>
     <inspection_tool class="AddConversionCallMigration" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AmbiguousExpressionInWhenBranchMigration" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AmbiguousFieldAccess" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -89,7 +102,10 @@
     <inspection_tool class="InterfaceMayBeAnnotatedFunctional" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavaLangImport" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavadocLinkAsPlainText" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="KDocMissingDocumentation" enabled="false" level="WARNING" enabled_by_default="false" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="KDocMissingDocumentation" enabled="true" level="WARNING" enabled_by_default="false" editorAttributes="INFO_ATTRIBUTES">
+      <scope name="BunyipsLib" level="WEAK WARNING" enabled="true" editorAttributes="INFO_ATTRIBUTES" />
+      <scope name="UserCode" level="WEAK WARNING" enabled="true" editorAttributes="TEXT_STYLE_SUGGESTION" />
+    </inspection_tool>
     <inspection_tool class="LambdaParameterHidingMemberVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LengthOneStringInIndexOf" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MarkdownIncorrectTableFormatting" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
@@ -103,7 +119,15 @@
     <inspection_tool class="MemberVisibilityCanBePrivate" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissingJavadoc" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="UserCode" level="WARNING" enabled="true" editorAttributes="INFO_ATTRIBUTES">
+      <scope name="BunyipsLib" level="WEAK WARNING" enabled="true" editorAttributes="INFO_ATTRIBUTES">
+        <option name="IGNORE_ACCESSORS" value="true" />
+        <option name="TOP_LEVEL_CLASS_SETTINGS">
+          <Options>
+            <option name="REQUIRED_TAGS" value="@param@since" />
+          </Options>
+        </option>
+      </scope>
+      <scope name="UserCode" level="WEAK WARNING" enabled="true" editorAttributes="TEXT_STYLE_SUGGESTION">
         <option name="IGNORE_ACCESSORS" value="true" />
       </scope>
       <option name="IGNORE_ACCESSORS" value="true" />
@@ -205,7 +229,7 @@
       <option name="ignoreClassesWithOnlyMain" value="false" />
     </inspection_tool>
     <inspection_tool class="WarningOnMainUnusedParameterMigration" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="unused" enabled="true" level="INFORMATION" enabled_by_default="true" klass="packageLocal" method="packageLocal" checkParameterExcludingHierarchy="false">
+    <inspection_tool class="unused" enabled="true" level="TEXT ATTRIBUTES" enabled_by_default="true" klass="packageLocal" method="packageLocal" checkParameterExcludingHierarchy="false">
       <option name="LOCAL_VARIABLE" value="true" />
       <option name="FIELD" value="true" />
       <option name="METHOD" value="true" />

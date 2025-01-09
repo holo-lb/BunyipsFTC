@@ -1,12 +1,10 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueRight
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight
@@ -16,6 +14,7 @@ import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
+import dev.frozenmilk.util.cell.RefCell
 
 /**
  * Pushes 4 ALLIANCE-SPECIFIC SPECIMENS to the OBSERVATION ZONE for the HUMAN PLAYER.
@@ -33,9 +32,9 @@ class QuadSpecimenMaker : AutonomousBunyipsOpMode() {
         )
     }
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         if (selectedOpMode == null) return
-        val startLocation = selectedOpMode.require() as StartingConfiguration.Position
+        val startLocation = selectedOpMode.get() as StartingConfiguration.Position
         Proto.drive.pose = startLocation.toFieldPose()
         Proto.drive.makeTrajectory(
             Pose2d(-28.0, 60.0, 0.0),

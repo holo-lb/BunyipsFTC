@@ -2,17 +2,15 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.auto;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
+import dev.frozenmilk.util.cell.RefCell;
 
 /**
  * Quick auto for easy 3 points. Use as backup.
@@ -34,9 +32,9 @@ public class VanceBasicPark extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onReady(@Nullable Reference<?> selectedOpMode, @NonNull Controls selectedButton) {
+    protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         if (selectedOpMode == null) return;
-        StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.require();
+        StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
 
         robot.drive.setPose(startingPosition.toFieldPose());
 

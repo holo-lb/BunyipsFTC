@@ -1,7 +1,7 @@
 package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.autonomous
 
+// giulio wass here and you dont know
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Reference
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
@@ -9,17 +9,17 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Millisecon
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup
-// giulio wass here and you dont know
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueRight
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref.ref
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
 import com.acmerobotics.roadrunner.IdentityPoseMap
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import dev.frozenmilk.util.cell.RefCell
 import kotlin.math.PI
 
 @Autonomous(name = "3+0 Specimen Placer (Right, Ob. Park)")
@@ -32,13 +32,13 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         )
     }
 
-    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+    override fun onReady(selectedOpMode: RefCell<*>?) {
         if (selectedOpMode == null) return
-        val startLocation = selectedOpMode.require() as StartingConfiguration.Position
+        val startLocation = selectedOpMode.get() as StartingConfiguration.Position
 
         val map = if (startLocation.isRed) SymmetricPoseMap() else IdentityPoseMap()
-        val last = Reference.of(startLocation.toFieldPose())
-        Proto.drive.pose = last.require()
+        val last = startLocation.toFieldPose().ref()
+        Proto.drive.pose = last.get()
 
         val highChamberTicks = 1700
         val homeDelay = 0.5 of Seconds
@@ -59,7 +59,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
             )
         }
         val wallToSubmersibleRoutine = {
-            val tb = if (i == 0) Proto.drive.makeTrajectory(map) else Proto.drive.makeTrajectory(last.require(), map)
+            val tb = if (i == 0) Proto.drive.makeTrajectory(map) else Proto.drive.makeTrajectory(last.get(), map)
             tb.setReversed(i >= 1)
                 .splineToLinearHeading(Vector2d(-2.0 - (++i * 3), 31.0), heading = 3 * PI / 2 + 1.0e-6, tangent = 3 * PI / 2)
                 .withName("Go to Submersible Zone")
@@ -74,7 +74,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         add(hookSpecimenRoutine.invoke())
 
         val returning = Pose2d(-37.87, 52.02, 3 * PI / 4)
-        Proto.drive.makeTrajectory(last.require(), map)
+        Proto.drive.makeTrajectory(last.get(), map)
             .afterTime(homeDelay to Seconds, a = Proto.clawLift.tasks.home() named "Home Lift")
             .splineToLinearHeading(Pose2d(-5.0, 32.0, 3 * PI / 2), tangent = 3 * PI / 2)
             .afterTime(1.0, a = Proto.clawRotator.tasks.setTo(0.85).after(0.2, Seconds).forAtLeast(1.3, Seconds)
@@ -99,7 +99,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         add(wallToSubmersibleRoutine.invoke())
         add(hookSpecimenRoutine.invoke())
 // giuilo was here
-        add(Proto.drive.makeTrajectory(last.require(), map)
+        add(Proto.drive.makeTrajectory(last.get(), map)
             .strafeToLinearHeading(wallPickup.position, heading = wallPickup.heading)
             .withName("Return to Observation Zone")
             .build(last)
@@ -109,7 +109,7 @@ class TriSpecimenPlacer : AutonomousBunyipsOpMode() {
         add(wallToSubmersibleRoutine.invoke())
         add(hookSpecimenRoutine.invoke())
 
-        add(Proto.drive.makeTrajectory(last.require(), map)
+        add(Proto.drive.makeTrajectory(last.get(), map)
             .strafeTo(Vector2d(-39.0, 60.0))
             .withName("Park in Observation Zone")
             .build(last)
