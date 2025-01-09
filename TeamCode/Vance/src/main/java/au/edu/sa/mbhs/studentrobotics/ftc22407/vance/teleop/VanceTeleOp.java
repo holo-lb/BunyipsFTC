@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicLockingDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicTrackingDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
@@ -65,17 +66,12 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
                 .finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER));
 
-        HolonomicLockingDriveTask hvdt = new HolonomicLockingDriveTask(gamepad1, robot.drive, () -> FC);
-        HolonomicDriveTask hdt = new HolonomicDriveTask(gamepad1, robot.drive, () -> FC);
-        robot.drive.setDefaultTask(hvdt);
+        robot.drive.setDefaultTask(new HolonomicTrackingDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
         driver().whenPressed(Controls.BACK)
-                .run(hdt)
+                .run(new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC))
                 .finishIf(() -> gamepad1.getDebounced(Controls.BACK));
         driver().whenPressed(Controls.A)
-                .run("Reset FC Offset", () -> {
-                    hvdt.resetFieldCentricOrigin(robot.drive.getPose());
-                    hdt.resetFieldCentricOrigin(robot.drive.getPose());
-                });
+                .run("Reset FC Offset", () -> Task.cast(robot.drive.getCurrentTask(), FieldOrientableDriveTask.class).resetFieldCentricOrigin());
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
         robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));
